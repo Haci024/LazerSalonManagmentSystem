@@ -1,0 +1,61 @@
+﻿@model DTO.DTOS.LazerAppointmentDTO.CompletelySecondSessionStartDTO
+@{
+    ViewData["Title"] = "Yeni müştəri";
+}
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Giriş formu</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="form-group form-float">
+                            <label class="form-label">Müştəri</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="Customer" class="form-control" readonly>
+
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Lazeroloq</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="Lazeroloq" class="form-control" readonly>
+
+                            </div>
+                        </div>
+                        <label class="form-label">Giriş  saatı</label>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+
+                                <i class="material-icons">date_range</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="datetime-local" asp-for="StartDate2" class="form-control date" placeholder="Ex: 30/07/2016" wfd-id="id9">
+                            </div>
+                        </div>
+                             
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <a asp-controller="LazerAppointment" asp-action="InCompleteSessionList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
+
+<div class="container-fluid">
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        @ViewBag.Customer Seans Tarixçəsi
+                    </h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                          @if (ViewBag.Female)
+                            {
+                                <a asp-controller="Customer" asp-action="FemaleList" class="btn btn-success">
+                                    <i class="material-icons">keyboard_return</i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Customer" asp-action="MaleList" class="btn btn-success">
+                                    <i class="material-icons">keyboard_return</i>
+                                </a>
+                            }
+                           
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Lazeroloq</th>
+                                    <th>Nahiyələr</th>
+                                    <th>Giriş saatı</th>
+                                    <th>Çıxış saatı</th>
+                                    <th>Ödəniş</th>
+                                    
+                                  
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Lazeroloq</th>
+                                    <th>Nahiyələr</th>
+                                    <th>Giriş saatı</th>
+                                    <th>Çıxış saatı</th>
+                                    <th>Ödəniş</th>
+                                   
+                                   
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                 
+                                        <tr>
+                                            <th>@item.ReservationDate.ToString("dd.MM.yyyy")</th>
+                                            <td>@item.AppUser.UserName</td>
+                                            <td>@item.Customers.PhoneNumber</td>
+                                            <td>@item.LazerMaster.FullName</td>
+                                            <td style="display:flex">
+                                                @foreach (var categories in item.LazerAppointmentReports)
+                                                {
+                                                    if (categories.LazerCategory.MainCategoryId != null)
+                                                    {
+                                                        <div style="padding:2px">@categories.LazerCategory.Name,</div>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.StartTime == null)
+                                                {
+                                                    @item.ReservationDate.ToString("HH:mm")
+                                                }
+                                                else
+                                                {
+                                                    @item.StartTime.Value.ToString("HH:mm")
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.EndTime == null)
+                                                {
+                                                    <div>Bitməyib</div>
+                                                }
+                                                else
+                                                {
+                                                    @item.EndTime.Value.ToString("HH:mm")
+                                                }
+                                            </td>
+                                            <td>@item.Price.ToString("#0.##") AZN</td>                                      
+                                        </tr>
+                                    }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

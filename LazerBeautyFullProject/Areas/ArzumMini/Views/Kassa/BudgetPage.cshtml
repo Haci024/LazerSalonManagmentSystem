@@ -1,0 +1,287 @@
+﻿@model DTO.DTOS.ReportDTO.DailyReportDTO
+<div class="row clearfix">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-pink hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">point_of_sale</i>
+            </div>
+            <div class="content">
+                <div class="text">Kassadak pul</div>
+                <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">@Model.Budget.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-cyan hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">payments</i>
+            </div>
+            <div class="content">
+                <div class="text">Bu gün daxil olan pul</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.DailyTotalInComeMoney.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-red hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">money_off</i>
+            </div>
+            <div class="content">
+                <div class="text">Bu gün xərclənən pul</div>
+                <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20">@Model.DailyTotalOutMoney.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-orange hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">price_check</i>
+            </div>
+            <div class="content">
+                <div class="text">Bu günki qazanc</div>
+                <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">@Model.DailyBenefitMoney.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-green hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">woman</i>
+            </div>
+            <div class="content">
+                <div class="text">Ellada</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.Master1DailyEarnings.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-purple hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">woman</i>
+            </div>
+            <div class="content">
+                <div class="text">Aidə</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.Master2DailyEarnings.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-brown hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">price_check</i>
+            </div>
+            <div class="content">
+                <div class="text">Satışdan gələn pul</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.ProceedsFromSales.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-yellow hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">bolt</i>
+            </div>
+            <div class="content">
+                <div class="text">Bu gün vurulan impuls sayı</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.ImplusCount</div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+
+<div class="container-fluid">
+   
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:center;align-items:center">
+                        <h2>Filter ilə Hesabat</h2>
+                    </div>
+                </div>
+   
+                        
+                          
+                            <div class="body">
+                                <div class="row clearfix">
+                                    <div class="col-xs-6">
+                                        <h2 class="card-inside-title">Başlanıc tarix</h2>
+                                        <div class="form-group">
+                                            <div class="form-line" id="bs_datepicker_container">
+                                                <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h2 class="card-inside-title">Son tarix</h2>
+                                        <div class="input-group date" id="bs_datepicker_component_container">
+                                            <div class="form-line">
+                                                <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                                <div class="row container-fluid">    
+                                    <div class="col-lg-4 ">
+                                        <label for="email_address_2">Lazeroloqlarım ümumi gəliri</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="totalPriceInput" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="email_address_2">Ellada</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="lazerMaster1" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="email_address_2">Aidə</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="lazerMaster2" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="col-lg-4 ">
+                                <label for="email_address_2">Satışdan gələn gəlir</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="totalIncome" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">Xərclənən pul</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="lazerOutMoney" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">Qeydiyyatçı 1</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                    <input type="text" class="form-control" id="totalSellingForResepsionist1" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-lg-4 ">
+                            <label for="email_address_2">Qeydiyyatçı 2</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="totalSellingForResepsionist2" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Ellada işləddiyi impuls</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="totalImpulsCountForMaster1" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Aidə işləddiyi impuls</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="totalImpulsCountForMaster2" readonly>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="text-center">
+                              
+                                <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                            </div>
+                                </div>
+                                  
+                             
+                            </div>
+            </div>
+        </div>           
+   </div>                   
+</div>
+<div id="resultForMaster1"></div>
+ 
+<script src="~/js/pages/tables/jquery-datatable.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            $.ajax({
+                url: "/Reports/CalculateTotalPrice",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate,},
+                success: function (result) {
+                    $("#totalPriceInput").val(result.totalPrice+" "+"AZN");
+                    $("#lazerMaster1").val(result.totalPriceForMaster1+" "+"AZN");
+                    $("#lazerMaster2").val(result.totalPriceForMaster2+" "+"AZN");
+                    $("#totalIncome").val(result.totalIncomeMoney + " " + "AZN");
+                    $("#lazerOutMoney").val(result.totalOutMoney + " " + "AZN");
+                    $("#totalSellingForResepsionist1").val(result.totalSellingForResepsionist1 + " " + "AZN");
+                    $("#totalSellingForResepsionist2").val(result.totalSellingForResepsionist2 + " " + "AZN");
+                    $("#totalImpulsCountForMaster1").val(result.totalImpulsCount1);
+                    $("#totalImpulsCountForMaster2").val(result.totalImpulsCount2);
+                    
+                   
+                },
+                error: function () {
+                    Swal.fire(
+                        'Xəbərdarlıq!',
+                        'Tarixləri düzgün qeyd edin!',
+                        'warning'
+                    )
+                }
+            });
+        });
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            $.ajax({
+                url: "/Reports/SelectMasterInfo1",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate },
+                success: function (result) {
+
+                    $("#resultForMaster1").html(result);
+
+
+                },
+                error: function () {
+
+                }
+            });
+        });
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            $.ajax({
+                url: "/Reports/SelectMasterInfo2",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate },
+                success: function (result) {
+
+                    $("#resultForMaster2").html(result);
+
+
+                },
+                error: function () {
+
+                }
+            });
+        });
+    });
+</script>

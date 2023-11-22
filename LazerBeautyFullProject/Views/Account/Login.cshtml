@@ -1,0 +1,97 @@
+﻿@model DTO.DTOS.AppUserDto.AppUserLoginDto
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Arzum laser studio- Texniki dəstək</title>
+    <!-- Favicon-->
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="~/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="~/css/style.css" rel="stylesheet">
+  
+</head>
+
+
+<body class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <img src="~/logo png.png" width="350px" height="140px" />
+           
+        </div>
+        <div class="card">
+            <div class="body">
+                <form method="POST">
+                    <div class="text-center">
+                        <h3 class="msg">Daxil ol!</h3>
+                    </div>
+                  
+                    <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input asp-for="UserName" class="form-control" placeholder="İstifadəçi adı" autofocus>
+                        </div>
+                        <span class="font-bold col-pink" asp-validation-for="UserName"></span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input asp-for="Password" class="form-control" placeholder="Şifrə" type="password" >
+                        </div>
+                        <span class="font-bold col-pink" asp-validation-for="Password"></span>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4 text-center">
+                            <button class="btn btn-block bg-pink waves-effect" type="submit">Daxil ol</button>
+                        </div>
+                    </div>
+                  
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+   
+    <script src="~/plugins/bootstrap/js/bootstrap.js"></script>
+
+    
+    <script src="~/plugins/node-waves/waves.js"></script>
+
+   
+    <script src="~/plugins/jquery-validation/jquery.validate.js"></script>
+
+    
+    <script src="~/js/admin.js"></script>
+    <script src="~/js/pages/examples/sign-in.js"></script>
+</body>
+
+</html>

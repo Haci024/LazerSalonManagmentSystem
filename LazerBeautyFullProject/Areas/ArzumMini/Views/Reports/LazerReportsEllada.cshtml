@@ -1,0 +1,212 @@
+﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
+@{
+    ViewData["Title"] = "LazerReports";
+    Layout = null;
+}
+<html lang="en">
+<head>
+	<title>Arzum Lazer Salon mini</title>
+	<meta charset="UTF-8">
+
+
+
+
+	
+
+
+
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.bootstrap.min.css">
+
+	<style>
+		body {
+			margin: 2em;
+		}
+
+		thead input {
+			width: 100%;
+			padding: 3px;
+			box-sizing: border-box;
+		}
+	</style>
+
+
+
+
+
+</head>
+
+<body translate="no">
+	<div class="header">
+		<div style="display:flex;justify-content:space-between;align-items:center">
+			<h2>
+		        @ViewBag.Ellada
+			</h2>
+			
+			<div style="padding-right:30px;">
+				<a asp-controller="LazerAppointment" asp-action="AllReservations" class="btn btn-success">
+					Geri
+
+				</a>
+				<button  id="calculateTotalPrice"  class="btn btn-primary">
+					Hesabla
+
+				</button>
+			
+				
+			</div>
+		</div>
+		
+	</div>
+	<br />
+	
+
+			
+			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+	
+				<thead>
+					<tr>
+						<th>Tarix</th>
+						<th>Qeydiyyatçı</th>
+						<th>Müştəri</th>
+						<th>Nömrə</th>
+						<th>Nahiyələr</th>
+						<th>Giriş saatı</th>
+						<th>Çıxış saatı</th>
+						<th id="priceValueMaster1">Ödəniş</th>
+						<th id="TotalImpuls">Impuls sayı</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					@foreach (var item in Model)
+					{
+						if (item.IsCompleted==true && item.LazerMaster.FullName==ViewBag.Ellada)
+				{
+					<tr>
+
+						<td>@item.EndTime.Value.ToString("dd.MM.yyyy")</td>
+						<td>@item.AppUser.UserName</td>
+						<td>@item.Customers.FullName</td>
+						<td>@item.Customers.PhoneNumber</td>
+						<td style="display:flex">
+							@foreach (var categories in item.LazerAppointmentReports)
+							{
+								if (categories.LazerCategory.MainCategoryId != null)
+								{
+									<div style="padding:2px">@categories.LazerCategory.Name,</div>
+								}
+							}
+						</td>
+						<td>
+							@item.StartTime.Value.ToString("HH:mm")
+						</td>
+						<td>
+							@item.EndTime.Value.ToString("HH:mm")
+						</td>
+						<td>@item.Price.ToString("#0.##") AZN</td>
+						<td>@item.ImplusCount</td>
+
+					</tr>
+				}
+					
+					}
+
+
+
+				</tbody>
+			</table>
+	
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.colVis.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+	<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+	<script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+	<script id="rendered-js">
+		$(document).ready(function () {
+			function calculateTotalPrice() {
+				var total = 0;
+				// Loop through all the table rows and sum the prices
+				$("tbody tr").each(function () {
+					var price = parseFloat($(this).find("td:eq(7)").text().replace(" AZN", ""));
+					total += price;
+				});
+
+
+				// Display the total price in the th with id "priceValueMaster1"
+				$("#priceValueMaster1").text("Ümumi:" + total.toFixed(2).replace(/\.00$/, '') + " AZN");
+			}
+			function calculateTotalImpuls() {
+				var total = 0;
+				// Loop through all the table rows and sum the prices
+				$("tbody tr").each(function () {
+					var price = parseFloat($(this).find("td:eq(8)").text());
+					total += price;
+				});
+
+
+				// Display the total price in the th with id "priceValueMaster1"
+				$("#TotalImpuls").text("Impuls:" + total.toFixed(2).replace(/\.00$/, ''));
+			}
+			$("#calculateTotalPrice").click(function () {
+				calculateTotalPrice();
+				calculateTotalImpuls();
+			});
+			//Only needed for the filename of export files.
+			//Normally set in the title tag of your page.
+			document.title = "Simple DataTable";
+			// Create search inputs in footer
+			$("#example tfoot th").each(function () {
+				var title = $(this).text();
+				$(this).html('<input type="text" placeholder="Search ' + title + '" />');
+			});
+			// DataTable initialisation
+			var table = $("#example").DataTable({
+				dom: '<"dt-buttons"Bf><"clear">lirtp',
+				paging: true,
+				autoWidth: true,
+				buttons: [
+					"colvis",
+					"copyHtml5",
+					"csvHtml5",
+					"excelHtml5",
+					"pdfHtml5",
+					"print"
+				],
+				initComplete: function (settings, json) {
+					var footer = $("#example tfoot tr");
+					$("#example thead").append(footer);
+				}
+			});
+
+			// Apply the search
+			$("#example thead").on("keyup", "input", function () {
+				table.column($(this).parent().index())
+					.search(this.value)
+					.draw();
+			});
+	
+		});
+
+	</script>
+
+	
+
+
+</body>
+</html>
+		
+		
+
+
+			

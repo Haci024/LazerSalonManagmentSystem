@@ -1,0 +1,162 @@
+﻿@model DTO.DTOS.LazerAppointmentDTO.LazerAppointmentDTO
+@{
+    ViewData["Title"] = "AddLazerAppointment";
+    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Lazer Rezervasiya Forumu</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="form-group form-float">
+                            <label class="form-label">Müştəri adı və soyadı</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="CustomerName" class="form-control" readonly>
+
+                            </div>            
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Lazer ustası</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="LazerMasterName" class="form-control" readonly>
+
+                            </div>       
+                        </div>
+                       
+                        <div class="form-group form-float">
+                            <div>
+                                <select class="form-control show-tick" asp-for="lazerCategoriesId" id="childCategoryId" multiple>
+
+                                    @foreach (var item in Model.ChildCategory)
+                                    {
+
+                                        <option value="@item.Id" data-price="@item.Price">@item.Name</option>
+
+                                    }
+                                </select>
+                            </div>         
+                        </div>
+                        <p>
+                            <label>Rezervasiya tarixi</label>
+                        </p>
+                            <div class="input-group">
+                         
+                                <span class="input-group-addon">
+                                    <i class="material-icons">date_range</i>
+                                </span>
+                                <div class="form-line">
+                                    <input type="datetime-local" asp-for="ReservationDate" class="form-control datetime" placeholder="Ex: 30/07/2016 23:59">
+                                </div>
+                            </div>   
+                        <div class="form-group form-float" style="padding-top:14px">
+                            <label class="form-label">Ödəniləcək məbləğ <span class="font-bold col-pink"></span></label>
+                            <div class="form-line">
+                                <input type="number" asp-for="Price" class="form-control" id="totalPrice" readonly>
+                            </div>
+                            <span class="font-bold col-pink"></span>
+                        </div>
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <a asp-action="LazerMasterPage" asp-route-LazerMasterId="@ViewBag.LazerMasterId" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+        var totalPrice = 0;
+
+        $('#childCategoryId').change(function () {
+            var selectedOptions = $('#childCategoryId option:selected');
+            var selectedTotalPrice = 0;
+
+            selectedOptions.each(function () {
+                selectedTotalPrice += parseFloat($(this).data('price'));
+            });
+
+            totalPrice = selectedTotalPrice;
+
+            $('#totalPrice').val(totalPrice);
+        });
+        // $("#mainCategoryId").on("change", function () {
+        //     var selectedMainCategoryId = $(this).val();
+
+        //     $.ajax({
+        //         url: "/LazerAppointment/ChildCategoriesList",
+        //         method: "POST",
+        //         data: { mainCategoryId: selectedMainCategoryId },
+        //         success: function (data) {
+                    
+        //             $("#childCategoriesContainer").html(data);
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.log("Hata: " + error);
+        //         }
+        //     });
+        // });
+     
+    });
+</script>
+<script>
+    $(document).on('change', '#maincCategoryId', function () {
+
+        $.ajax({
+            url: "/LazerAppointment/ChildCategoriesList",
+            type: "GET",
+            data: {
+                "mainId": $("#maincCategoryId").val()
+            },
+            success: function (response) {
+                $("#childCategoryId").empty()
+                $("#childCategoryId").append(response)
+            }
+
+        });
+
+
+    })
+</script>
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

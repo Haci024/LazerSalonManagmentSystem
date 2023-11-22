@@ -1,0 +1,40 @@
+﻿@model DTO.DTOS.LazerAppointmentDTO.UpdateReservationTimeDTO
+@{
+    ViewData["Title"] = "UpdateReservationTime";
+    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Lazer Seans giriş Forumu</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                    
+                        <div class="col-md-12 dateInput1">
+                            <b id="timeLabel"> Giriş saatı</b>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">access_time</i>
+                                </span>
+                                <div class="form-line">
+                                    <input type="datetime-local" asp-for=NewStartTime class="form-control time24" placeholder="Ex: 23:59">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <a asp-controller="LazerAppointment" asp-action="AllReservations"  class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

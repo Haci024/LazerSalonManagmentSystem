@@ -1,0 +1,68 @@
+﻿@model DTO.DTOS.InComeDTO.UpdateInComeDTO
+@{
+    ViewData["Title"] = "Gəlir məlumatlarını yeinlə";
+}
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+            <div class="card">
+                <div class="header">
+                    <h2>Gəlir məlumatlarını yeinlə</h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="POST">
+                        <div class="form-group form-float">
+                            <label class="form-label">Gəlir adı</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="Name" class="form-control">
+                              
+                            </div>
+                        </div>
+
+                        <div class="form-group form-float">
+                            <label class="form-label">Qiymət</label>
+                            <div class="form-line">
+                                <input type="number" class="form-control" asp-for="Price">
+                             
+                            </div>
+                        </div>
+
+                     
+                        <div class="form-group form-float">
+                            <label class="form-label">Sayı qeyd edin...</label>
+                            <div class="form-line">
+                                <input type="number" class="form-control" asp-for="Count">
+                             
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Açıqlama</label>
+                            <div class="form-line">
+                                <input type="text" class="form-control" asp-for="Description">
+                               
+                            </div>
+                        </div>
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <a asp-action="InComeMoneyList" class="btn btn-success">Geri</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

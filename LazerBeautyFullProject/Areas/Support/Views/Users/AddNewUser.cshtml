@@ -1,0 +1,114 @@
+﻿@model DTO.DTOS.AppUserDto.NewUserDTO
+@{
+    ViewData["Title"] = "AddNewUser";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Yeni istifadəçi yarat</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <p>
+                            <label>Ad və Soyad</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">person</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="FullName" class="form-control" placeholder="Ad və Soyad">
+                            </div>
+                        </div>
+                        <p>
+                            <label>İstifadəçi adı</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">person</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="UserName" class="form-control" placeholder="İstifadəçi adı">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group form-float">
+
+                            <div>
+
+                                <select class="form-control show-tick" asp-for="FilialId">
+                                    <option>Filial seçin...</option>
+                                    @foreach (var item in Model.Filials)
+                                    {
+
+                                        <option value="@item.Id">@item.FilialName</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        
+                            
+                        <div class="form-group form-float">
+                          
+                            <div>
+                             
+                                <select class="form-control show-tick" asp-for="Role">
+                                    <option>Rol seçin...</option>
+                                    @foreach (var item in Model.IdentityRoles)
+                                    {
+
+                                        <option value="@item.Name">@item.Name</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                      
+                        <p>
+                            <label>Şifrə</label>
+                        </p>
+
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">password</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="Password" class="form-control" placeholder="Şifrə">
+                            </div>
+                        </div>
+                        <p>
+                            <label>Şifrə təkrarı</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">password</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="ConfirmPassword" class="form-control" placeholder="Şifrə təkrarı">
+                            </div>
+                        </div>
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <a asp-action="LazerMasterPage" asp-route-LazerMasterId="@ViewBag.LazerMasterId" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,156 @@
+﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
+@{
+    ViewData["Title"] = "KorreksionDateList";
+}
+
+<div class="container-fluid">
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        Yarım qalan seanslar siyahısı
+                    </h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Nahiyələr</th>
+                                    <th>Lazeroloq</th>
+                                    <th>Giriş saatı</th>
+                                    <th>Çıxış saatı</th>
+                                    <th>Qüvvədən düşməsinə qalan müddət</th>
+                                   
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Nahiyələr</th>
+                                    <th>Lazeroloq</th>
+                                    <th>Giriş saatı</th>
+                                    <th>Çıxış saatı</th>
+                                    <th>Qüvvədən düşməsinə qalan müddət</th>
+                                   
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    if ((item.EndTime.Value.Date.AddHours(168)>DateTime.Now))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (@item.InCompleteStartTime==null)
+                                                {
+                                                    <div>Seans tarixi təyin edilməyib!</div>
+                                                }
+                                                else
+                                                {
+                                                    <div>  @item.InCompleteStartTime.Value.ToString("dd.MM.yyyy")</div>
+                                                }
+                                            </td>
+                                            <td>@item.Customers.FullName</td>
+                                            <td>@item.Customers.PhoneNumber</td>
+                                            <td style="display:flex">
+                                                @foreach (var categories in item.LazerAppointmentReports)
+                                                {
+                                                    if (categories.LazerCategory.MainCategoryId != null)
+                                                    {
+                                                        <div style="padding:2px">@categories.LazerCategory.Name,</div>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>@item.LazerMaster.FullName</td>
+                                              <td>
+                                                @if (item.InCompleteStartTime==null)
+                                                {
+                                                    <div>Seans başlamayıb!</div>
+                                                }
+                                                else
+                                                {
+                                                    <div>  @item.InCompleteStartTime.Value.ToString("HH:mm")</div>
+                                                }
+                                                </td>
+                                                <td>
+                                                    @if (item.EndForSecond == false)
+                                                    {
+                                                    <div>Seans başlamayıb!</div>
+                                                    }
+                                                    else
+                                                    {
+                                                    <div>  @item.InCompleteEndTime.Value.ToString("HH:mm")</div>
+                                                    }
+
+                                            </td>
+                                            <td>
+                                                @{
+                                                    TimeSpan kalanSure = item.EndTime.Value.AddDays(7) - DateTime.Now;
+                                                    string kalanSureMetni = string.Format("{0} gün {1} saat", (int)kalanSure.TotalDays, kalanSure.Hours,kalanSure.Minutes);
+                                                }
+                                                <span id="geriSayim">@kalanSureMetni</span>
+                                            </td>
+                                            <td style="padding-top:17px" class="text-center">
+
+                                              
+                                                    @if (item.StartForSecond==false)
+                                                        {
+                                                    <div>
+                                                        <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect ">
+                                                            <i class="material-icons">directions_run</i>
+                                                        </a>
+
+                                                        <a asp-action="SesstionTime" asp-route-AppointmentId="@item.Id" class="btn bg-green waves-effect ">
+                                                            <i class="material-icons">timer</i>
+                                                        </a>
+                                                    </div>
+                                                   
+                                                        }
+                                                        else
+                                                        {
+                                                        <div>   
+                                                            <a asp-action="CompletelySecondSessionEnd" asp-route-AppointmentId="@item.Id" class="btn bg-primary waves-effect ">
+                                                                <i class="material-icons">hourglass_empty</i>
+                                                            </a>
+                                                        </div>
+                                                        }
+                                            </td>
+                                        </tr>
+                                    }
+                                  
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+

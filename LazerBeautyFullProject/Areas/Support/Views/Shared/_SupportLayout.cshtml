@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Arzum Laser Salonu</title>
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="~/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="~/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+
+    <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
+    <link href="~/plugins/jquery-datatable/skin/bootstrap/css/datatables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/plugins/jquery-datatable/skin/bootstrap/css/datatables.bootstrap.css" rel="stylesheet" />
+
+    <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
+
+
+    <link href="~/plugins/morrisjs/morris.css" rel="stylesheet" />
+
+
+
+    <link href="~/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" />
+
+
+    <link href="~/plugins/dropzone/dropzone.css" rel="stylesheet">
+
+
+    <link href="~/plugins/multi-select/css/multi-select.css" rel="stylesheet">
+
+
+    <link href="~/plugins/jquery-spinner/css/bootstrap-spinner.css" rel="stylesheet">
+
+
+    <link href="~/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+
+    <link href="~/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+
+    <link href="~/plugins/nouislider/nouislider.min.css" rel="stylesheet" />
+
+
+    <link href="~/css/style.css" rel="stylesheet">
+
+
+    <style>
+        #nav {
+            background-color: #8C52FF;
+        }
+    </style>
+
+
+    <link href="~/css/style.css" rel="stylesheet">
+
+
+    <link href="~/css/themes/all-themes.css" rel="stylesheet" />
+</head>
+
+<body class="theme-red">
+
+    <nav class="navbar" id="nav">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand">Arzum Mini Lazer Studio</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <section>
+        <aside id="leftsidebar" class="sidebar">
+            <div class="user-info">
+                <div class="image" style="margin-bottom:52px">
+                </div>
+                <div class="info-container">
+                    <h3 class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orxan Aslan</h3>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Account" asp-action="Logout"><i class="material-icons">input</i>Hesabdan çıxış</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">Idarə Paneli</li>
+
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                person
+                            </i>
+                            <span>Lazeroloqlar</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="LazerMaster" asp-action="BudgetPage">Lazeroloqlar</a>
+                            </li>
+
+                            <li>
+                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni usta</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">person</i>
+                            <span>Kosmetoloqlar</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="Kassa" asp-action="BudgetPage">Kosmetoloqlar</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni usta</a>
+                            </li>
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                person
+                            </i>
+                            <span>Solarium</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="LazerMaster" asp-action="BudgetPage">Solarium ustaları</a>
+                            </li>
+
+                            <li>
+                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni  usta</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                person
+                            </i>
+                            <span>Bədən şəkilləndirmə</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="LazerMaster" asp-action="BudgetPage">Bədən şəkilləndirmə  ustaları</a>
+                            </li>
+
+                            <li>
+                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni usta</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">groups</i>
+                            <span>Müştərilər</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="Customer" asp-action="CustomerList">Müştərilər</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                receipt_long
+                            </i>
+                            <span>Hesablar</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="Users" asp-action="AllUsers">Bütün İstifadəçilər</a>
+                            </li>
+                            <li>
+                                <a  asp-controller="Users" asp-action="AddNewUser">Yeni istifadəçi</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Users" asp-action="MyProfile">Hesabım</a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </aside>
+
+
+
+
+    </section>
+
+    <section class="content">
+        @RenderBody()
+    </section>
+
+
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+
+    <script src="~/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <script src="~/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="~/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+
+    <script src="~/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+
+    <script src="~/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+
+    <!-- Dropzone Plugin Js -->
+    <script src="~/plugins/dropzone/dropzone.js"></script>
+
+    <!-- Input Mask Plugin Js -->
+    <script src="~/plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script>
+
+    <!-- Multi Select Plugin Js -->
+    <script src="~/plugins/multi-select/js/jquery.multi-select.js"></script>
+
+    <script src="~/plugins/momentjs/moment.js"></script>
+
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <!-- Jquery Spinner Plugin Js -->
+    <script src="~/plugins/jquery-spinner/js/jquery.spinner.js"></script>
+
+    <!-- Bootstrap Tags Input Plugin Js -->
+    <script src="~/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+
+    <!-- noUISlider Plugin Js -->
+    <script src="~/plugins/nouislider/nouislider.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="~/plugins/node-waves/waves.js"></script>
+
+
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="~/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+    <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script src="~/plugins/jquery-countto/jquery.countTo.js"></script>
+    <script src="~/js/pages/tables/jquery-datatable.js"></script>
+    <script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+
+    <!-- Custom Js -->
+    <script src="~/js/admin.js"></script>
+
+
+
+
+
+    <script src="~/js/demo.js"></script>
+</body>
+
+</html>

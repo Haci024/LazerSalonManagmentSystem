@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
+@{
+    ViewData["Title"] = "FilterLazerReports";
+}
+
+<div class="container-fluid">   
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>Filter ilə Hesabat</h2>
+                    </div>
+                </div>
+                        <div class="card">    
+                            <div class="body">
+                                <div class="row clearfix">
+                                    <div class="col-xs-6">
+                                        <h2 class="card-inside-title">Başlanıc tarix</h2>
+                                        <div class="form-group">
+                                            <div class="form-line" id="bs_datepicker_container">
+                                                <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h2 class="card-inside-title">Son tarix</h2>
+                                        <div class="input-group date" id="bs_datepicker_component_container">
+                                            <div class="form-line">
+                                                <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                                <div class="row container-fluid">    
+                                    <div class="col-lg-4 ">
+                                        <label for="email_address_2">Mənfəət</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="totalPriceInput" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="email_address_2">Satışdan gələn gəlir</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"   id="IncomeMoney" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="email_address_2">Xərclənən pul</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control" id="OutMoney" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="text-center">
+                              
+                                <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                            </div>
+                                </div>
+                                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+</div>
+
+
+<div class="container-fluid" id="resultIncomeList"></div>
+<div class="container-fluid" id="resultOutMoneyList"></div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            $.ajax({
+                url: "/Reports/CalculateTotalPrice",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate},
+                success: function (result) {
+                    $("#totalPriceInput").val((result.totalIncomeMoney-result.totalOutMoney) + " AZN");
+                    $("#OutMoney").val(result.totalOutMoney + " AZN");
+                    $("#IncomeMoney").val(result.totalIncomeMoney + " AZN");
+                },
+                error: function () {
+                    Swal.fire(
+                        'Xəbərdarlıq!',
+                        'Tarixləri düzgün qeyd edin!',
+                        'warning'
+                    )
+                }
+            });
+        });
+       
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            $.ajax({
+                url: "/Reports/SelectInComeMoney",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate },
+                success: function (result) {
+
+                    $("#resultIncomeList").html(result);
+
+
+                },
+                error: function () {
+
+                }
+            });
+        });
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            $.ajax({
+                url: "/Reports/SelectOutMoney",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate },
+                success: function (result) {
+
+                    $("#resultOutMoneyList").html(result);
+
+
+                },
+                error: function () {
+
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
