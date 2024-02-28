@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Entity.Concrete.Customer>
+@{
+    ViewData["Title"] = " Qadın Müştərilər";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+    int num = 0;
+}
+<div class="container-fluid">
+
+    <!-- Exportable Table -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                         Müştərilər
+                        </h2>
+                        <div style="padding-right:30px">
+                            <a asp-action="AddCustomer" class="btn bg-deep-purple waves-effect ">
+                                <i class="material-icons">person_add</i>
+                            </a>
+                        </div>
+                    </div>
+                  
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Telefon</th>
+                                    <th>Doğum günü</th>
+                                    <th class="text-right">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Telefon</th>
+                                    <th>Doğum günü</th>
+                                    <th class="text-right">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@(num = num + 1)</td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.PhoneNumber.ToString("0000000000")</td>
+                                        <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+                                        <td style="display:flex;justify-content:end">
+                                         
+                                            <div style="margin-right:10px">
+                                                <a asp-action="CustomerHistory" asp-route-CustomerId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                    <i class="material-icons">list</i>
+                                                </a>
+                                            </div>
+                                            <div style="margin-right:10px">
+                                                <a asp-action="UpdateCustomer" asp-route-CustomerId="@item.Id" class="btn bg-indigo waves-effect">
+                                                    <i class="material-icons">edit</i>
+                                                </a>
+                                            </div>
+                                     
+
+
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Exportable Table -->
+</div>

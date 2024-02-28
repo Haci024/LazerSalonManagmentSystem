@@ -21,11 +21,11 @@ namespace Data.Repositories
 
         }
 
-        public T GetById(int id)
+        public   T GetById(int id)
         {
             using AppDbContext dbContext = new AppDbContext();
 
-            return dbContext.Set<T>().Find(id);
+            return  dbContext.Set<T>().Find(id);
         }
 
         public List<T> GetList()

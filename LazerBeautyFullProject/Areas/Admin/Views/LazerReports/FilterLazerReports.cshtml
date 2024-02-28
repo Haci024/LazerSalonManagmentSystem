@@ -1,0 +1,259 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterCosmetologyReports";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid container">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header text-center">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+
+                        <h2>Lazer Epilyasiya Hesabatı</h2>
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-6">
+                            <h2 class="card-inside-title">Başlanıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Filial</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" name="filialId" id="FilialId" multiple>
+                                    <option value="" selected>Hamısı</option>
+                                    @foreach (var item in Model.Filials)
+                                    {
+                                        <option value="@item.Id">@item.FilialName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Lazeroloq</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="lazeroloqId" multiple>
+                                    <option value="" selected>Hamısı</option>
+                                    @foreach (var item in Model.LazerMasters)
+                                    {
+
+                                        <option value="@item.Id">@item.FullName </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Kategoriya</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="CategoriesId" multiple>
+                                    <option value="" selected>Hamısı</option>
+                                    @foreach (var item in Model.LazerCategories)
+                                    {
+                                        <option value="@item.Id">@item.MainCategory.Name @item.Name </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div>
+
+                    <div class="col-lg-4">
+                        <label for="email_address_2">Seçilmiş kategoriyalar üzrə gəlir</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" class="form-control" id="TotalPrice" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="email_address_2">İmpuls sayı</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" class="form-control" id="ImpulsCount" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="email_address_2">Seans  sayı</label>
+                        <div class="form-group">
+                            <div class="form-line">
+                                <input type="text" class="form-control" id="SessionCount" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="text-center" style="padding-bottom:10px">
+
+                    <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="resultLazerAppointmentReports"></div>
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+<script>
+    $(document).ready(function () {
+        $('#FilialId').change(function () {
+            var selectedFilials = $(this).val();
+
+            $.ajax({
+                url: '/Admin/LazerReports/GetLazerMastersAndCategories', 
+                type: 'POST', 
+                dataType: 'json',
+                data: { filialIds: selectedFilials },
+                success: function (response) {
+                    
+                    var lazeroloqSelect = $('#lazeroloqId');
+                    var categoriesSelect = $('#CategoriesId');
+
+                    lazeroloqSelect.empty();
+                    categoriesSelect.empty();
+
+                    
+                    lazeroloqSelect.append('<option value="all" selected>Hamısı</option>');
+                    categoriesSelect.append('<option value="all" selected>Hamısı</option>');
+
+                    
+                    $.each(response.lazerMasters, function (index, item) {
+                        lazeroloqSelect.append('<option value="' + item.Id + '">' + item.FullName + '</option>');
+                    });
+
+                    
+                    $.each(response.lazerCategories, function (index, item) {
+                        categoriesSelect.append('<option value="' + item.Id + '">' + item.MainCategory.Name + ' ' + item.Name + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                   
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+
+
+    // $(document).ready(function () {
+    //     $('#calculateButton').on('click', function () {
+    //         var startDate = $('#startDate').val();
+    //         var endDate = $('#endDate').val();
+    //         var filialId = $('#FilialId').val();
+    //         var lazeroloqId = $('#lazeroloqId').val();
+    //         var categoryId = $('#CategoriesId').val();
+
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: '/Admin/LazerReports/CalculateLazerEarnings',
+    //             data: {
+    //                 startDate: startDate,
+    //                 endDate: endDate,
+    //                 filialId: filialId,
+    //                 lazeroloqId:lazeroloqId,
+    //                 categoryId: categoryId
+    //             },
+    //             success: function (response) {
+                    
+    //                 if (filialId == 'all' && lazeroloqId == 'all' && categoryId == 'all') {
+    //                     $('#TotalPrice').val(response.totalEarning + " " + " AZN");
+    //                     $('#SessionCount').val(response.totalSession);
+    //                     $('#ImpulsCount').val(response.totalImpuls);
+    //                 }
+    //                 else if (filialId=='all' && lazeroloqId=='all' categoryId!='all') {
+    //                     $('#TotalPrice').val(response.totalEarning + " " + " AZN");
+    //                     $('#SessionCount').val(response.totalSession);
+    //                     $('#ImpulsCount').val(response.totalImpuls);
+    //                 }
+    //                 else if (filialId == 'all' && lazeroloqId != 'all' categoryId == 'all') {
+    //                  $('#TotalPrice').val(response.totalEarning + " " + " AZN");
+    //                  $('#SessionCount').val(response.totalSession);
+    //                  $('#ImpulsCount').val(response.totalImpuls);
+    //                 }
+    //                  else if (filialId == 'all' && lazeroloqId != 'all' categoryId == 'all') {
+    //                  $('#TotalPrice').val(response.totalEarning + " " + " AZN");
+    //                  $('#SessionCount').val(response.totalSession);
+    //                  $('#ImpulsCount').val(response.totalImpuls);
+    // }
+                      
+                    
+    //                 // else if(filialId=='all' && lazeroloqId!='all') {
+    //                 //     $('#TotalPrice').val(response.totalEarning + " " + " AZN");
+    //                 //     $('#SessionCount').val(response.totalSession + " " + "Seans");
+    //                 //     $('#ImpulsCount').val(response.totalImpuls + " " + "İmpuls");
+    //                 // }
+    //             },
+    //         });
+    //         if (categoryId == 'all' && filialId == 'all' && lazeroloqId == 'all') {
+    //             $.ajax({
+    //                 type: 'POST',
+    //                 url: "/Admin/LazerReports/SelectAllLazerReports",
+    //                 data: {
+    //                     startDate: startDate,
+    //                     endDate: endDate,
+    //                     filialId: filialId,
+    //                     lazeroloqId: lazeroloqId,
+    //                     categoryId: categoryId
+    //                 },
+    //                 success: function (result) {
+
+    //                     $("#resultLazerAppointmentReports").html(result);
+    //                 },
+    //             });
+    //         }
+    //         else {
+    //             $.ajax({
+    //                 type: 'POST',
+    //                 url: "/Admin/LazerReports/SelectCosmetologyListForAllFilter",
+
+    //                 data: {
+    //                     startDate: startDate,
+    //                     endDate: endDate,
+    //                     filialId: filialId,
+    //                     lazeroloqId: lazeroloqId,
+    //                     categoryId: categoryId
+    //                 },
+    //                 success: function (result) {
+
+
+    //                     $("#resultLazerAppointmentReports").html(result);
+
+
+    //                 },
+
+    //             });
+    //         }
+
+    //     });
+    // });
+</script>

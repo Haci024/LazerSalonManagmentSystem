@@ -12,33 +12,42 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
 {
-    [Authorize]
+    
     [Area("ArzumMini")]
+    [Authorize]
     public class OutMoneyController : Controller
     {
        
         private readonly IOutMoneyService _outMoneyService;
+        private readonly ISpendCategoryService _spendCategoryService;
         private readonly AppDbContext _db;
+        private readonly TimeHelper _timeHelper;
         private readonly UserManager<AppUser> _userManager;
-        public OutMoneyController(IOutMoneyService OutMoneyService,AppDbContext db,UserManager<AppUser> userManager )
+        public OutMoneyController(IOutMoneyService OutMoneyService,AppDbContext db,ISpendCategoryService spendCategoryService,UserManager<AppUser> userManager )
         {
             _outMoneyService = OutMoneyService;
             _db = db;
+            _timeHelper = new TimeHelper();
             _userManager = userManager;
-            
+            _spendCategoryService=spendCategoryService;
+
+
+
         }
         [HttpGet]
         public IActionResult OutMoneyList()
         {
-            List<OutMoney> outMoneys =_db.OutMoney.Include(x=>x.AppUser).ToList();
+            List<OutMoney> outMoneys =_db.OutMoney.Include(x=>x.AppUser).Include(x=>x.SpendCategory).Where(x=>x.SpendCategory.FilialId==1).ToList();
            
             return View(outMoneys);
         }
         [HttpGet]
-        public async Task<IActionResult> AddOutMoney() {
+        public async Task<IActionResult> AddOutMoney()
+        {
 
-            OutMoneyAddDTO outMoneyAddDTO= new OutMoneyAddDTO();
+            OutMoneyAddDTO outMoneyAddDTO = new OutMoneyAddDTO();
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            outMoneyAddDTO.SpendCategories = _db.SpendCategories.Include(x => x.Filial).Where(x => x.FilialId == 1 && x.Status == false).ToList();
 
             return View(outMoneyAddDTO);
         }
@@ -46,7 +55,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOutMoney(OutMoneyAddDTO outMoneyAddDTO)
         {
-          
+            outMoneyAddDTO.SpendCategories = _db.SpendCategories.Include(x => x.Filial).Where(x => x.FilialId == 1 && x.Status == false).ToList();
             var validator = new OutMoneyValidator();
             var validationResult = validator.Validate(outMoneyAddDTO);
             if (!validationResult.IsValid)
@@ -54,24 +63,22 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
                 foreach (var error in validationResult.Errors)
                 {
                     ModelState.AddModelError("", error.ErrorMessage);
-                   
+
                     return View(outMoneyAddDTO);
                 }
             }
             OutMoney outMoney = new OutMoney();
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            Kassa kassa = _db.Budget.FirstOrDefault();
-            kassa.Budget = kassa.Budget - outMoneyAddDTO.Price;
             outMoney.Description = outMoneyAddDTO.Description;
-            outMoney.Product = outMoneyAddDTO.Product;
+
             outMoney.Price = outMoneyAddDTO.Price;
-            outMoney.CreateTime = DateTime.Now;
+            outMoney.AddingDate = _timeHelper.GetAzerbaijanTime();
             outMoney.AppUserId = appUser.Id;
-              
+            outMoney.SpendCategoryId = outMoneyAddDTO.SpendCategoryId;
+
             _outMoneyService.Create(outMoney);
-            _db.Update(kassa);
-            _db.SaveChanges();
-            return RedirectToAction("OutMoneyList","OutMoney");
+
+            return RedirectToAction("OutMoneyList", "OutMoney");
         }
         [HttpGet]
         public async Task<IActionResult> UpdateOutMoney(int Id)
@@ -83,12 +90,12 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             AppUser appUser =await _userManager.FindByNameAsync(User.Identity.Name);
             updateOutMoneyDTO.Description = outMoney.Description;
             updateOutMoneyDTO.Price= outMoney.Price;
-            updateOutMoneyDTO.Product = outMoney.Product;
 
             return View(updateOutMoneyDTO);
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateOutMoney(int Id,UpdateOutMoneyDTO updateOutMoneyDTO)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateOutMoney(int Id, UpdateOutMoneyDTO updateOutMoneyDTO)
         {
             var validator = new UpdateOutMoneyValidator();
             var validationResult = validator.Validate(updateOutMoneyDTO);
@@ -102,23 +109,107 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
                 }
                 return View(updateOutMoneyDTO);
             }
-            Kassa budget = _db.Budget.FirstOrDefault();
            
+
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
 
             OutMoney outMoney = _outMoneyService.GetById(Id);
-            budget.Budget = ((budget.Budget + outMoney.Price) - updateOutMoneyDTO.Price);
-           outMoney.AppUserId = appUser.Id;
-           
-            
-            outMoney.Product = updateOutMoneyDTO.Product;
-            outMoney.Price = updateOutMoneyDTO.Price;
-            outMoney.CreateTime = DateTime.Now;
-            outMoney.Description=updateOutMoneyDTO.Description;
-            _outMoneyService.Update(outMoney);
-            _db.Update(budget);
-            _db.SaveChanges();
-            return RedirectToAction("OutMoneyList");
+            outMoney.AppUserId = appUser.Id;
+            outMoney.AddingDate = _timeHelper.GetAzerbaijanTime();;
+            outMoney.Description = updateOutMoneyDTO.Description;
+            if (updateOutMoneyDTO.Price < outMoney.Price)
+            { 
+                outMoney.Price = updateOutMoneyDTO.Price;
+                _outMoneyService.Update(outMoney);
+               
+                return RedirectToAction("OutMoneyList");
+
+            }
+            else
+            {
+             
+                outMoney.Price = updateOutMoneyDTO.Price;
+                _outMoneyService.Update(outMoney);
+                
+                return RedirectToAction("OutMoneyList");
+            }
+
+
+
+        }
+        [HttpGet]
+        public IActionResult SpendCategoryList()
+        {
+            List<SpendCategory> spendCategories = _db.SpendCategories.Where(x => x.FilialId == 1).ToList();
+            return View(spendCategories);
+        }
+        [HttpGet]
+        public IActionResult AddSpendCategory()
+        {
+            AddSpendCategoryDTO spendCategoryDTO = new AddSpendCategoryDTO();
+
+            return View(spendCategoryDTO);
+        }
+        [HttpPost]
+        public IActionResult AddSpendCategory(AddSpendCategoryDTO spendCategoryDTO)
+        {
+            SpendCategory spendCategory = new SpendCategory();
+            bool SpendCategoryExists = _db.SpendCategories.Any(x => x.Category == spendCategoryDTO.Category && x.FilialId == 1);
+            if (SpendCategoryExists)
+            {
+                ModelState.AddModelError("", "Bu kategoriya artıq mövcuddur!");
+                return View(spendCategoryDTO);
+            }
+            if (spendCategoryDTO.Category==null)
+            {
+                ModelState.AddModelError("", "Kategoriya daxil edilməyib!");
+              
+                return View(spendCategoryDTO);
+            }
+            spendCategory.Category = spendCategoryDTO.Category;
+            spendCategory.Status = false;
+            spendCategory.FilialId = 1;
+            _spendCategoryService.Create(spendCategory);
+            return RedirectToAction("SpendCategoryList");
+        }
+        [HttpGet]
+        public IActionResult UpdateSpendCategory(int Id)
+        {
+            SpendCategory spendCategory = _spendCategoryService.GetById(Id);
+            AddSpendCategoryDTO addSpendCategoryDTO = new AddSpendCategoryDTO();
+            addSpendCategoryDTO.Category = spendCategory.Category;
+
+
+            return View(addSpendCategoryDTO);
+        }
+        [HttpPost]
+        public IActionResult UpdateSpendCategory(int Id, AddSpendCategoryDTO spendCategoryDTO)
+        {
+
+            SpendCategory spendCategory = _spendCategoryService.GetById(Id);
+            spendCategory.Category = spendCategoryDTO.Category;
+            _spendCategoryService.Update(spendCategory);
+            return RedirectToAction("SpendCategoryList");
+        }
+        [HttpGet]
+        public IActionResult SpendCategoryOFF(int Id)
+        {
+            SpendCategory category = _spendCategoryService.GetById(Id);
+            if (category.Status == false)
+            {
+                category.Status = true;
+                _spendCategoryService.Update(category);
+
+                return RedirectToAction("SpendCategoryList");
+            }
+            else
+            {
+                category.Status = false;
+                _spendCategoryService.Update(category);
+                return RedirectToAction("SpendCategoryList");
+            }
+
+
         }
     }
 }

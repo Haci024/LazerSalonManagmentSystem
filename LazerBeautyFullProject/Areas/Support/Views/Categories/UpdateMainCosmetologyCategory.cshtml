@@ -1,0 +1,38 @@
+﻿@model DTO.DTOS.CosmetologyDTO.AddCosmetologyMainCategoryDTO
+@{
+    ViewData["Title"] = "UpdateLazerCategory";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Kosmetologiya Əsas kateqoriya yenilə</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="form-group form-float">
+
+                            <label class="form-label">Nahiyə</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="CategoryName" class="form-control">
+
+                            </div>
+                        </div>
+
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
+                            <a asp-action="CosmetologyMainCategoryList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

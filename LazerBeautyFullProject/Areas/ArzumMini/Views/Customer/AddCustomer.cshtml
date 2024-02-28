@@ -1,6 +1,7 @@
 ﻿@model DTO.DTOS.CustomerDTO.AddCustomerDTO
 @{
     ViewData["Title"] = "Yeni müştəri";
+    Layout = "~/Areas/ArzumMini/Views/Shared/_LazerMiniLayout.cshtml";
 }
 
 <div class="container">
@@ -26,7 +27,7 @@
                             <label class="form-label">Mobil nömrə <span class="font-bold col-pink"> - Nümunə:(0553454532) *</span></label>
         
                             <div class="form-line">
-                                <input  asp-for="PhoneNumber" class="form-control">
+                                <input  asp-for="PhoneNumber" class="form-control" value="0">
                             </div>
                             <span  class="font-bold col-pink"></span>
                         </div>
@@ -54,9 +55,9 @@
                       
                       
 
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
                             <a asp-action="FemaleList" class="btn btn-success">Geri</a>
                         </div>
                     </form>

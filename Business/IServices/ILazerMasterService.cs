@@ -9,6 +9,7 @@ namespace Business.IServices
 {
     public interface ILazerMasterService:IGenericService<LazerMaster>
     {
-
+        public Task<List<LazerMaster>> GetLazeroloqListByFilial(int filialId);
+        public Task<List<LazerMaster>> AllLazeroloq();
     }
 }

@@ -1,114 +1,505 @@
-﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
-
+﻿@model DTO.DTOS.CustomerDTO.CustomerUsingHistoryDTO
+@{
+    ViewData["Title"] = "CustomerHistory";
+    Layout = "~/Areas/ArzumMini/Views/Shared/_LazerMiniLayout.cshtml";
+}
 <div class="container-fluid">
-
     <div class="row clearfix">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="card">
-                <div class="header">
-                    <h2>
-                        @ViewBag.Customer Seans Tarixçəsi
-                    </h2>
-                    <ul class="header-dropdown m-r--5">
-                        <li class="dropdown">
-                          @if (ViewBag.Female)
-                            {
-                                <a asp-controller="Customer" asp-action="FemaleList" class="btn btn-success">
-                                    <i class="material-icons">keyboard_return</i>
-                                </a>
-                            }
-                            else
-                            {
-                                <a asp-controller="Customer" asp-action="MaleList" class="btn btn-success">
-                                    <i class="material-icons">keyboard_return</i>
-                                </a>
-                            }
-                           
 
-                        </li>
-                    </ul>
-                </div>
+        <div class="col-xs-12 col-sm-12">
+            <div class="card">
                 <div class="body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Lazer Epilyasiya</a></li>
+                            @* <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Kosmetologiya</a></li> *@
+                            @*  <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Solarium</a></li>
+                            <li role="presentation"><a href="#change_password" aria-controls="settings" role="tab" data-toggle="tab">Bədən Şəkilləndirmə</a></li> *@
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <h2>
+                                                    @Model.FullName - Lazer Epilyasiya
+                                                </h2>
+                                                <ul class="header-dropdown m-r--5">
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Filial
+                                                                        </div>
+                                                                    </th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Filial
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.LazerAppointmentsHistory)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.ReservationDate.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.Customers.FullName</td>
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.LazerAppointmentReports)
+                                                                            {
+                                                                                if (categories.LazerCategory.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.LazerCategory.Name,</div>
+                                                                                }
+
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                @item.ReservationDate.ToString("HH:mm")
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.EndTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.EndTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                                                        <td>
+                                                                            @if (item.IsStart == true && item.IsCompleted == false)
+                                                                            {
+                                                                                <b style="color:#2196F3">Seans başladı</b>
+                                                                            }
+                                                                            else if (item.IsCompleted == true && item.IsContiued == true && item.IsCompleted == true)
+                                                                            {
+                                                                                <b style="color:#FF9800">Bədən ardı</b>
+                                                                            }
+                                                                            else if (item.IsCompleted == true && item.IsContiued == false && item.IsStart == true && item.IsContiued == false)
+                                                                            {
+                                                                                <b style="color:#8BC34A">Uğurlu</b>
+                                                                            }
+                                                                            else if (item.IsDeleted == true && item.IsCompleted == false)
+                                                                            {
+                                                                                <b style="color:#F44336">İmtina edilmiş</b>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <b style="color:#4CAF50">Rezervasiya</b>
+                                                                            }
+
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.PriceUpdateDescription == null)
+                                                                            {
+                                                                                @item.Decription
+                                                                            }
+                                                                            else if (item.Decription == null)
+                                                                            {
+                                                                                <div>@item.PriceUpdateDescription</div>
+                                                                            }
+                                                                            else if (item.Price == null && item.PriceUpdateDescription == null)
+                                                                            {
+                                                                                <div>Qeyd yoxdur!</div>
+                                                                            }
+
+
+                                                                        </td>
+
+                                                                        <td style="padding-top:17px" class="text-center">
+
+                                                                            @item.Filial.FilialName
+                                                                        </td>
+                                                                    </tr>
+
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                          @*   <div role="tabpanel" class="tab-pane fade in " id="profile_settings">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <h2>
+                                                        @Model.FullName - Kosmetologiya
+                                                    </h2>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Telefon nömrəsi</th>
+                                                                    <th>Kategoriyalar</th>
+                                                                    <th>Giriş saatı</th>
+                                                                    <th>Çıxış saatı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Filial</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Telefon nömrəsi</th>
+                                                                    <th>Kategoriyalar</th>
+                                                                    <th>Giriş saatı</th>
+                                                                    <th>Çıxış saatı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Filial</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.CosmetologyAppointments)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td> @item.StartTime.Value.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.Customers.FullName</td>
+                                                                        <td>@item.Customers.PhoneNumber</td>
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.CosmetologyReports)
+                                                                            {
+                                                                                if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.CosmetologyCategory.CategoryName,</div>
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+
+                                                                            @item.StartTime.Value.ToString("HH:mm")
+
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.OutTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.OutTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                                                        <td>
+                                                                            @if (item.IsStart == true)
+                                                                            {
+                                                                                <b style="color:#2196F3">Seans başladı</b>
+                                                                            }
+                                                                            else if (item.IsCompleted == true)
+                                                                            {
+                                                                                <b style="color:#8BC34A">Uğurlu</b>
+                                                                            }
+
+
+                                                                        </td>
+
+                                                                        <td style="padding-top:17px" class="text-center">
+
+                                                                            @item.Filial.FilialName
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div> *@
+                            @*   <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                            <div class="container-fluid">
+
+                            <!-- Exportable Table -->
+                            <div class="row clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card">
+                            <div class="header">
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                            <h2>
+                            @Model.FullName - Solarium
+                            </h2>
+
+                            </div>
+                            <ul class="header-dropdown m-r--5">
+                            <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>
+                            </a>
+
+                            </li>
+                            </ul>
+                            </div>
+                            <div class="body">
+                            <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                             <thead>
-                                <tr>
-                                    <th>Tarix</th>
-                                    <th>Qeydiyyatçı</th>
-                                    <th>Telefon nömrəsi</th>
-                                    <th>Lazeroloq</th>
-                                    <th>Nahiyələr</th>
-                                    <th>Giriş saatı</th>
-                                    <th>Çıxış saatı</th>
-                                    <th>Ödəniş</th>
-                                    
-                                  
-                                </tr>
+                            <tr>
+
+                            <th>Ad Soyad</th>
+                            <th>Qeydiyyatçı</th>
+                            <th>Nömrə</th>
+                            <th>Ödəniş</th>
+                            <th>İstifadə olunan müddət</th>
+                            <th>Qalan müddət</th>
+                            <th>Paket limiti</th>
+                            <th>Bitməsinə qalan müddət</th>
+                            <th class="text-right ">
+                            <div style="margin-right:20px">
+                            Filial
+                            </div>
+                            </th>
+                            </tr>
                             </thead>
                             <tfoot>
-                                <tr>
-                                    <th>Tarix</th>
-                                    <th>Qeydiyyatçı</th>
-                                    <th>Telefon nömrəsi</th>
-                                    <th>Lazeroloq</th>
-                                    <th>Nahiyələr</th>
-                                    <th>Giriş saatı</th>
-                                    <th>Çıxış saatı</th>
-                                    <th>Ödəniş</th>
-                                   
-                                   
-                                </tr>
+                            <tr>
+
+                            <th>Ad Soyad</th>
+                            <th>Qeydiyyatçı</th>
+                            <th>Nömrə</th>
+                            <th>Ödəniş</th>
+                            <th>İstifadə olunan müddət</th>
+                            <th>Qalan müddət</th>
+                            <th>Paket limiti</th>
+                            <th>Bitməsinə qalan müddət</th>
+                            <th class="text-right ">
+                            <div style="margin-right:20px">
+                            Filial
+                            </div>
+                            </th>
+
+                            </tr>
                             </tfoot>
                             <tbody>
+                            @foreach (var item in Model.SolariumAppointments)
+                            {
+                            @if (item.RemainingMinute != 0 && item.RemainingTime > DateTime.Today.Date)
+                            {
 
-                                @foreach (var item in Model)
-                                {
-                                 
-                                        <tr>
-                                            <th>@item.ReservationDate.ToString("dd.MM.yyyy")</th>
-                                            <td>@item.AppUser.UserName</td>
-                                            <td>@item.Customers.PhoneNumber</td>
-                                            <td>@item.LazerMaster.FullName</td>
-                                            <td style="display:flex">
-                                                @foreach (var categories in item.LazerAppointmentReports)
-                                                {
-                                                    if (categories.LazerCategory.MainCategoryId != null)
-                                                    {
-                                                        <div style="padding:2px">@categories.LazerCategory.Name,</div>
-                                                    }
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.StartTime == null)
-                                                {
-                                                    @item.ReservationDate.ToString("HH:mm")
-                                                }
-                                                else
-                                                {
-                                                    @item.StartTime.Value.ToString("HH:mm")
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.EndTime == null)
-                                                {
-                                                    <div>Bitməyib</div>
-                                                }
-                                                else
-                                                {
-                                                    @item.EndTime.Value.ToString("HH:mm")
-                                                }
-                                            </td>
-                                            <td>@item.Price.ToString("#0.##") AZN</td>                                      
-                                        </tr>
-                                    }
+                            <tr>
+                            <td>@item.Customer.FullName</td>
+                            <td>@item.AppUser.UserName</td>
+                            <td>@item.Customer.PhoneNumber</td>
+                            <td>@item.Price.ToString("#0.#") AZN</td>
+                            <td>@item.UsingMinute dəqiqə</td>
+                            <td>@item.RemainingMinute dəqiqə</td>
+                            <td>@item.MinuteLimit dəqiqə</td>
+                            <td>
+                            @{
+                            TimeSpan kalanSure = item.RemainingTime - DateTime.Now;
+                            string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
+                            }
+                            <span id="geriSayim">@kalanSureMetni</span>
+                            </td>
+                            <td style="display:flex;justify-content:end">
+                            @item.Filial.FilialName
+                            </td>
+                            </tr>
+                            }
+
+                            }
+
+
                             </tbody>
-                        </table>
+                            </table>
+                            </div>
+                            </div>
+                            </div>
+
+                            </div>
+                            </div>
+
+                            </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password">
+                            <div class="container-fluid">
+
+                            <!-- Exportable Table -->
+                            <div class="row clearfix">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card">
+                            <div class="header">
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                            <h2>
+                            @Model.FullName - Bədən Şəkilləndirmə
+                            </h2>
+
+                            </div>
+                            <ul class="header-dropdown m-r--5">
+                            <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>
+                            </a>
+
+                            </li>
+                            </ul>
+                            </div>
+                            <div class="body">
+                            <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                            <tr>
+                            <th>Tarix</th>
+                            <th>Ad və Soyad</th>
+                            <th>Paket</th>
+                            <th>Seans sayı</th>
+                            <th>Ödəniş</th>
+                            <th class="text-center">
+                            <div style="margin-right:20px">
+                            Filial
+                            </div>
+                            </th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                            <th>Tarix</th>
+                            <th>Ad və Soyad</th>
+                            <th>Paket</th>
+                            <th>Seans sayı</th>
+                            <th>Ödəniş</th>
+                            <th class="text-center">
+                            <div style="margin-right:20px">
+                            Filial
+                            </div>
+                            </th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach (var item in Model.BodyshapingAppointments)
+                            {
+                            <tr>
+                            <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                            <td>@item.Customer.FullName</td>
+                            @foreach (var packetName in item.BodyShapingPacketReports)
+                            {
+                            <td>
+                            @packetName.BodyShapingPackets.Packet
+
+                            </td>
+                            <td>
+                            @packetName.BodyShapingPackets.SessionCount
+                            </td>
+                            }
+                            <td>@item.Price.ToString("#.##") AZN</td>
+                            <td style="display:flex;justify-content:center">
+
+                            <div style="margin-right:10px">
+                            @item.Filial.FilialName
+                            </div>
+
+
+
+
+
+                            </td>
+                            </tr>
+
+                            }
+                            </tbody>
+                            </table>
+                            </div>
+                            </div>
+                            </div>
+
+                            </div>
+                            </div>
+
+                            </div>
+                            </div> *@
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
-

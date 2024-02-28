@@ -38,7 +38,6 @@
                                 <input name="IsFemale" asp-for="IsFemale" type="radio" value="False" id="radio_31" class="with-gap radio-col-blue">
                                 <label for="radio_31">Kişi</label>
                             </div>
-
                         </div>
                         <label class="form-label">Doğum tarixi <span class="font-bold col-pink"> - gün/ay/il</span></label>
                         <div class="input-group">
@@ -54,7 +53,7 @@
                       
                       
 
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
                             <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
                             <a asp-action="FemaleList" class="btn btn-success">Geri</a>

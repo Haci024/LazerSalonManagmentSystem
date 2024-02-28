@@ -1,7 +1,7 @@
 ﻿@model DTO.DTOS.LazerAppointmentDTO.UpdateReservationTimeDTO
 @{
     ViewData["Title"] = "UpdateReservationTime";
-    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumEsteticLayout.cshtml";
+    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumBeautyLayout.cshtml";
 }
 
 <div class="container">
@@ -27,10 +27,10 @@
                         </div>
 
 
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
                             <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
-                            <a asp-controller="LazerAppointment" asp-action="AllReservations" class="btn btn-success">Geri</a>
+                            <a asp-controller="LazerAppointment" asp-action="IncompleteSessionList" class="btn btn-success">Geri</a>
                         </div>
                     </form>
                 </div>

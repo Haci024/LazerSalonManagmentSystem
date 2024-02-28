@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Entity.Concrete.LazerCategory>
+
+@foreach (var item in Model)
+{
+    <option value="@item.Id" data-price="@item.Price">@item.Name</option>
+}

@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Yarım qalan seanslar siyahısı
+                        Bədən ardı
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -27,7 +27,7 @@
                             <thead>
                                 <tr>
                                     <th>Tarix</th>
-                                    <th>Ad və Soyad</th>
+                                    <th>Ad  Soyad</th>
                                     <th>Telefon nömrəsi</th>
                                     <th>Nahiyələr</th>
                                     <th>Lazeroloq</th>
@@ -41,7 +41,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Tarix</th>
-                                    <th>Ad və Soyad</th>
+                                    <th>Ad  Soyad</th>
                                     <th>Telefon nömrəsi</th>
                                     <th>Nahiyələr</th>
                                     <th>Lazeroloq</th>
@@ -56,11 +56,10 @@
 
                                 @foreach (var item in Model)
                                 {
-                                    if ((item.EndTime.Value.Date.AddHours(168)>DateTime.Now))
-                                    {
+                                 
                                         <tr>
                                             <td>
-                                                @if (@item.InCompleteStartTime==null)
+                                                @if (item.InCompleteStartTime==null)
                                                 {
                                                     <div>Seans tarixi təyin edilməyib!</div>
                                                 }
@@ -70,7 +69,7 @@
                                                 }
                                             </td>
                                             <td>@item.Customers.FullName</td>
-                                            <td>@item.Customers.PhoneNumber</td>
+                                            <td>@item.Customers.PhoneNumber.ToString("0000000000")</td>
                                             <td style="display:flex">
                                                 @foreach (var categories in item.LazerAppointmentReports)
                                                 {
@@ -98,47 +97,69 @@
                                                     }
                                                     else
                                                     {
-                                                    <div>  @item.InCompleteEndTime.Value.ToString("HH:mm")</div>
+                                                    <div>@item.InCompleteEndTime.Value.ToString("HH:mm")</div>
                                                     }
 
                                             </td>
                                             <td>
                                                 @{
-                                                    TimeSpan kalanSure = item.EndTime.Value.AddDays(7) - DateTime.Now;
-                                                    string kalanSureMetni = string.Format("{0} gün {1} saat", (int)kalanSure.TotalDays, kalanSure.Hours,kalanSure.Minutes);
+                                                    TimeSpan kalanSure = item.EndTime.Value.AddHours(168) - DateTime.Now;
+                                                    string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə {3} saniyə", (int)kalanSure.TotalDays, kalanSure.Hours,kalanSure.Minutes,(int)kalanSure.Seconds);
                                                 }
-                                                <span id="geriSayim">@kalanSureMetni</span>
-                                            </td>
+                                            @if (kalanSure.TotalMinutes >= 0)
+                                            {
+                                                <span class="geriSayim">@kalanSureMetni</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="geriSayimBitmis" style="color:red">Vaxt bitib!</span>
+                                            }
+                                        </td>
+
                                             <td style="padding-top:17px" class="text-center">
-
+                                                @if (kalanSure.TotalMinutes >= 0)
+                                                {
                                               
-                                                    @if (item.StartForSecond==false)
-                                                        {
-                                                    <div>
-                                                        <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect ">
-                                                            <i class="material-icons">directions_run</i>
-                                                        </a>
+                                                    @if (item.StartForSecond == false)
+                                                    {
+                                                        <div>
+                                                            <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect ">
+                                                                <i class="material-icons">directions_run</i>
+                                                            </a>
 
-                                                        <a asp-action="SesstionTime" asp-route-AppointmentId="@item.Id" class="btn bg-green waves-effect ">
-                                                            <i class="material-icons">timer</i>
-                                                        </a>
-                                                    </div>
-                                                   
-                                                        }
-                                                        else
-                                                        {
-                                                        <div>   
+                                                            <a asp-action="SessionTime" asp-route-AppointmentId="@item.Id" class="btn bg-green waves-effect ">
+                                                                <i class="material-icons">timer</i>
+                                                            </a>
+                                                        </div>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div>
                                                             <a asp-action="CompletelySecondSessionEnd" asp-route-AppointmentId="@item.Id" class="btn bg-primary waves-effect ">
                                                                 <i class="material-icons">hourglass_empty</i>
                                                             </a>
                                                         </div>
-                                                        }
+                                                    }
+                                                  
+                                                }
+                                                else
+                                                {
+                                                <a asp-controller="LazerAppointment" asp-action="DeleteSessionFromIncompleteList" asp-route-AppointmentId="@item.Id" class="btn bg-red waves-effect ">
+                                                    <i class="material-icons">delete</i>
+                                                </a>
+                                                }
                                             </td>
-                                        </tr>
-                                    }
-                                  
-                                }
+                                               
+                                          
 
+                                         
+                                        </tr>
+                                    
+                                  
+
+                                    }
+                               
 
 
                             </tbody>
@@ -152,5 +173,31 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@* <script>
+    $(document).ready(function () {
+        $('.geriSayim').each(function () {
+            var kalanSureMetni = $(this).data('kalanSureMetni');
+            var countDownDate = new Date().getTime() + (kalanSureMetni * 1000); // Süreyi milisaniyeye çevirin
 
+            var element = $(this);
 
+            var x = setInterval(function () {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                element.text(days + " gün " + hours + " saat " + minutes + " dəqiqə " + seconds + " saniyə ");
+                console.log(days + " gün " + hours + " saat " + minutes + " dəqiqə " + seconds + " saniyə ");
+                if (distance < 0) {
+                    clearInterval(x);
+                    element.text("Süre doldu");
+                }
+            }, 1000);
+        });
+    });
+</script>
+ *@

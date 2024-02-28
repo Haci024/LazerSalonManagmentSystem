@@ -32,7 +32,7 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                             <thead>
                                 <tr>
                                     <th>Tarix</th>
@@ -62,13 +62,13 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach (Entity.Concrete.OutMoney item in Model)
+                                @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.CreateTime.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AddingDate.ToString("dd.MM.yyyy")</td>
                                         <td>@item.AppUser.UserName</td>
-                                        <td>@item.Product</td>
-                                        <td>@item.Price.ToString("00") AZN</td>
+                                        <td>@item.SpendCategory.Category</td>
+                                        <td>@item.Price.ToString(".0") AZN</td>
                                         <td>@item.Description</td>
                                         <td style="display:flex;justify-content:end">
                                             <div style="margin-right:5px">
@@ -102,7 +102,7 @@
             });
 
             // Display the total price in the th with id "priceValueMaster1"
-            $("#priceValueMaster1").text("Ümumi:" + total.toFixed(2).replace(/\.00$/, '') + " AZN");
+            $("#priceValueMaster1").text("Ümumi:" + total.toFixed(2).replace(/\.0$/, '') + " AZN");
         }
 
         // Add a click event handler to the "Hesabla" button

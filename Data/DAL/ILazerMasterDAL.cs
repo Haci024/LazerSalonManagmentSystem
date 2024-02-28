@@ -9,5 +9,8 @@ namespace Data.DAL
 {
     public interface ILazerMasterDAL:IGenericDAL<LazerMaster>
     {
+        public  Task<List<LazerMaster>> GetLazeroloqListByFilial(int filialId);
+        public Task<List<LazerMaster>> AllLazeroloq();
     }
+    
 }

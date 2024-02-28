@@ -20,7 +20,18 @@ namespace Entity.Concrete
 
         public int FilialId { get; set;}
 
-        
+        public  List<LazerAppointment> LazerAppointments { get; set;}
+
+        public List<SolariumAppointment> SolariumAppointments { get;set;}
+
+        public List<BodyshapingAppointment> BodyshapingAppointments { get; set; }
+
+        public List<SolariumUsingList> SolariumUsingList { get; set; }
+
+        public List<BodyShapingSessionList> BodyshapingSessionList { get; set; }
+
+
+        public List<CosmetologyAppointment> CosmetologyAppointments { get; set; }
 
     }
 }

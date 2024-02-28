@@ -57,8 +57,7 @@
 
                                 @foreach (var item in Model)
                                 {
-                                    if ((item.EndTime.Value.Date.AddHours(168)>DateTime.Now))
-                                    {
+                                   
                                         <tr>
                                             <td>
                                                 @if (@item.InCompleteStartTime==null)
@@ -101,18 +100,24 @@
                                                     {
                                                     <div>  @item.InCompleteEndTime.Value.ToString("HH:mm")</div>
                                                     }
-
                                             </td>
                                             <td>
+                                           
                                                 @{
                                                     TimeSpan kalanSure = item.EndTime.Value.AddDays(7) - DateTime.Now;
-                                                    string kalanSureMetni = string.Format("{0} gün {1} saat", (int)kalanSure.TotalDays, kalanSure.Hours,kalanSure.Minutes);
+                                                    string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
                                                 }
+                                            @if ((item.EndTime.Value.Date.AddDays(7)>=DateTime.Today.Date))
+                                            {
                                                 <span id="geriSayim">@kalanSureMetni</span>
-                                            </td>
+                                            }
+                                            else
+                                            {
+                                                <span style="color:red">Vaxt bitib!</span>
+                                            }
+                                                </td>
+                                            
                                             <td style="padding-top:17px" class="text-center">
-
-                                              
                                                     @if (item.StartForSecond==false)
                                                         {
                                                     <div>
@@ -136,9 +141,10 @@
                                                         }
                                             </td>
                                         </tr>
+                                    
                                     }
                                   
-                                }
+                                
 
 
 
@@ -154,4 +160,17 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
 
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
+
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
+
+</script>

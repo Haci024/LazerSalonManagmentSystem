@@ -32,6 +32,7 @@ namespace LazerBeautyFullProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AppUserLoginDto loginVM)
         {
+            
             if (string.IsNullOrEmpty(loginVM.UserName) || string.IsNullOrEmpty(loginVM.Password))
             {
                 ModelState.AddModelError("", "İstifadəçi adı və şifrə mütləq doldurulmalıdır.");
@@ -42,9 +43,16 @@ namespace LazerBeautyFullProject.Controllers
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(loginVM.UserName);
+                if (user.IsBlock==true)
+                {
+                  
+                    ModelState.AddModelError("", "İstifadəçi adı və ya Şifrə yalnışdır!");
+                    return View(loginVM);
+                
+                }
                 if(user.FilialId == 1)
                 {
-                    return RedirectToAction("AllReservations", "LazerAppointment", new { area = "ArzumMini" });
+                    return RedirectToAction("AllReservations", "Customer", new { area = "ArzumMini" });
                 }
                 else if (user.FilialId==2) 
                 {
@@ -56,17 +64,17 @@ namespace LazerBeautyFullProject.Controllers
                 }
                 else if (user.FilialId==4)
                 {
-                    return RedirectToAction("BydgetPage", "Budget", new { area = "Admin" });
+                    return RedirectToAction("BudgetPage", "TotalKassa", new { area = "Admin" });
                 }
 
                 else if (user.FilialId==5)
                 {
-                    return RedirectToAction("Index", "Statistics", new { area = "Support" });
+                    return RedirectToAction("AllUsers", "Users", new { area = "Support" });
                 }
 
             
             }
-            ModelState.AddModelError("", "Xəta!");
+            ModelState.AddModelError("", "İstifadəçi adı və ya Şifrə yalnışdır!");
 
           
             return View(loginVM);

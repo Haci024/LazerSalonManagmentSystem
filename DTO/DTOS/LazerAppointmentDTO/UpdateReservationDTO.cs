@@ -20,7 +20,6 @@ namespace DTO.DTOS.LazerAppointmentDTO
 
         public bool IsStart { get; set; }
 
-
         public DateTime EnterTime { get; set; }
 
         public DateTime? StartTime { get; set; }

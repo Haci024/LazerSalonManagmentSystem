@@ -36,7 +36,7 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                             <thead>
                                 <tr>
                                     <th>Tarix</th>
@@ -46,10 +46,8 @@
                                     <th id="priceValueMaster1">Qiymət</th>
                                     <th>Say</th>
                                     <th >Açıqlama</th>
-                                    <th class="text-right ">
-                                        <div style="margin-right:20px">
-                                            Əməliyyatlar
-                                        </div>
+                                    <th class="text-center">
+                                        Əməliyyatlar
                                     </th>
                                 </tr>
                             </thead>
@@ -62,7 +60,7 @@
                                     <th>Say</th>
                                     <th>Açıqlama</th>
                                     <th class="text-right ">
-                                        <div style="margin-right:20px">
+                                        <div >
                                             Əməliyyatlar
                                         </div>
                                     </th>
@@ -76,10 +74,10 @@
                                         <td>@item.IncomeDate.ToString("dd.MM.yyyy")</td>
                                         <td>@item.AppUser.UserName</td>
                                         <td>@item.ProductName</td>
-                                        <td>@item.Price.ToString("00") AZN</td>
+                                        <td>@item.Price.ToString("#.0#") AZN</td>
                                         <td>@item.Count</td>
                                         <td>@item.Description</td>
-                                        <td style="display:flex;justify-content:end">
+                                        <td style="display:flex;justify-content:center">
                                             <div style="margin-right:10px">
                                                 <a asp-action="UpdateIncome" asp-route-Id="@item.Id" class="btn bg-green waves-effect">
                                                     <i class="material-icons">edit</i>

@@ -11,13 +11,13 @@ namespace Entity.Concrete
         public int Id { get; set; }
 
         public string FullName { get; set;}
-
-        public bool IsDeactive = false;
-
+   
         public List<CosmetologyAppointment> CosmetologAppointments { get; set; }
 
-        public Filial Filial { get; set; }
+        public List<CosmetologFilial> CosmetologsFilial { get; set; }
 
-        public int FilialId { get; set; }
+       public bool IsDeactive { get; set; }
+
+
     }
 }

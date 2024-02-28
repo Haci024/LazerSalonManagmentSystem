@@ -18,6 +18,8 @@ namespace Entity.Concrete
 
         public decimal Price { get; set; }
 
+        public decimal BuyingPrice { get; set; }
+
         public string Description { get; set;}
 
         public AppUser AppUser { get; set; }

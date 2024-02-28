@@ -1,0 +1,568 @@
+﻿@model DTO.DTOS.SolariumDTO.SolariumPageDTO
+@{
+    ViewData["Title"] = "SolariumAppointmentList";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+
+
+
+  
+
+    
+<style>
+    .size {
+        width: 30px;
+        height: 10px;
+    }
+</style>
+<style>
+    .size {
+        width: 30px;
+        height: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row clearfix">
+
+        <div class="col-xs-12 col-sm-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Aktiv paketlər</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni Solarium paketi</a></li>
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">İstifadə müddəti bitmiş paketlər</a></li>
+                            <li role="presentation"><a href="#change_password_settings_inject" aria-controls="settings" role="tab" data-toggle="tab">İmtina edilmiş paketlər</a></li>
+                            <li role="presentation"><a href="#change_password_settings_successfully" aria-controls="settings" role="tab" data-toggle="tab">Tamamlanmış paketlər</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                <div class="panel panel-default panel-post">
+                                  <div class="row clearfix">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card">
+                                    <div class="header">
+                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                    <h2>
+                                    Aktiv Solarium Paketləri
+                                    </h2>
+
+          
+
+
+
+                                    </div>
+                                    <ul class="header-dropdown m-r--5">
+                                    <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+
+                                    </ul>
+                                    </li>
+                                    </ul>
+                                    </div>
+                                    <div class="body">
+                                    <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                                    <thead>
+                                    <tr>
+
+                                    <th>Ad Soyad</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Nömrə</th>
+                                    <th>Ödəniş</th>
+                                    <th>İstifadə olunan müddət</th>
+                                    <th>Qalan müddət</th>
+                                    <th>Paket limiti</th>
+                                    <th>Bitməsinə qalan müddət</th>
+                                    <th class="text-right ">
+                                    <div style="margin-right:20px">
+                                    Əməliyyatlar
+                                    </div>
+                                    </th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+
+                                    <th>Ad Soyad</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Nömrə</th>
+                                    <th>Ödəniş</th>
+                                    <th>İstifadə olunan müddət</th>
+                                    <th>Qalan müddət</th>
+                                    <th>Paket limiti</th>
+                                    <th>Bitməsinə qalan müddət</th>
+                                    <th class="text-right ">
+                                    <div style="margin-right:20px">
+                                    Əməliyyatlar
+                                    </div>
+                                    </th>
+
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    @foreach (var item in Model.ActivePackets)
+                                    {
+
+                                    <tr>
+                                    <td>@item.Customer.FullName</td>
+                                    <td>@item.AppUser.UserName</td>
+                                    <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+                                    <td>@item.Price.ToString("#0.#") AZN</td>
+                                    <td>@item.UsingMinute dəqiqə</td>
+                                    <td>@item.RemainingMinute dəqiqə</td>
+                                    <td>@item.MinuteLimit dəqiqə</td>
+                                    <td>
+                                    @{
+                                    TimeSpan kalanSure = item.RemainingTime - DateTime.Now;
+                                    string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
+                                    }
+                                    @if (kalanSure.TotalMinutes >= 0)
+                                    {
+                                    <span class="geriSayim">@kalanSureMetni</span>
+                                    }
+                                    else
+                                    {
+                                    <span class="geriSayimBitmis" style="color:red"><b>Vaxt bitib!</b></span>
+                                    }
+                                    </td>
+                                    <td style="display:flex;justify-content:center">
+                                    @if (kalanSure.TotalMinutes>=0)
+                                    {
+
+
+                                                                                <a asp-action="MonthlySessionList" asp-route-CustomerId="@item.Customer.Id" asp-route-SolariumId="@item.Id" class="btn bg-blue-grey waves-effect" style=" margin-right:5px">
+                                    <i class="material-icons">list</i>
+                                    </a>
+
+
+                                                                                <a asp-action="AddSolariumUsingSession" asp-route-CustomerId="@item.Customer.Id" asp-route-SolariumId="@item.Id" class="btn bg-indigo waves-effect" style=" margin-right:5px">
+                                    <i class="material-icons">edit</i>
+                                    </a>
+                                   
+
+                                    }
+                                    else
+                                    {
+
+                                                                                <a asp-action="DeleteAppointment" asp-route-AppointmentId="@item.Id" class="btn bg-red waves-effect" style=" margin-right:5px">
+                                    <i class="material-icons">delete</i>
+                                    </a>
+                                   
+                                    }
+                                    @if (!User.IsInRole("Reservator"))
+                                         {
+                                                      <div style="margin-right:10px">
+                                                               <a asp-action="InjectionPacket" asp-route-AppointmentId="@item.Id" class="btn bg-orange waves-effect">
+                                                                          <i class="material-icons">currency_exchange</i>
+                                                           </a>
+                                                     </div>
+                                       }
+                                    </td>
+                                    </tr>
+                                    }
+
+
+
+
+                                    </tbody>
+                                    </table>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="profile_settings">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <h2>
+                                                   Yeni Solarium Paketi
+                                                </h2>
+                                             
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Telefon nömrəsi</th>
+                                                                <th>Doğum günü</th>
+                                                                <th class="text-right ">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Telefon nömrəsi</th>
+                                                                <th>Doğum günü</th>
+                                                                <th class="text-right ">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            @foreach (var item in Model.Customers)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.FullName</td>
+                                                                    <td>@item.PhoneNumber.ToString("0000000000")</td>
+                                                                    <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+
+                                                                    <td style="display:flex;justify-content:end">
+
+                                                                     
+
+                                                                        <div style="padding-right:30px">
+                                                                            <a asp-action="AddSolariumAppointment"  asp-route-CustomerId="@item.Id" class="btn bg-deep-purple waves-effect ">
+                                                                                <i class="material-icons">assignment_add</i>
+
+                                                                            </a>
+                                                                        </div>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                <div class="container-fluid">
+
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            İstifadə tarixi bitmiş paketlər
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+                                                            </a>
+                                                            <ul class="dropdown-menu pull-right">
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th>Ad Soyad</th>
+                                                                    <th>Nömrə</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>İstifadə olunub</th>
+                                                                    <th>Qalan müddət</th>
+                                                                    <th>Paket limiti</th>
+                                                                    
+                                                                 
+                                                                    <th>Bitmə tarixi</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th>Status</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Ad Soyad</th>
+                                                                    <th>Nömrə</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>İstifadə olunub</th>
+                                                                    <th>Qalan müddət</th>
+                                                                    <th>Paket limiti</th>                          
+                                                                    <th>Bitmə tarixi</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th>Status</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.TimeOutPackets)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@item.Customer.FullName</td>
+                                                                        <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+                                                                        <td>@item.Price.ToString("#0.#") AZN</td>
+                                                                        <td>@item.UsingMinute dəqiqə</td>
+                                                                        <td>@item.RemainingMinute dəqiqə</td>
+                                                                        <td>@item.MinuteLimit dəqiqə</td>
+                                                                        <td>@item.RemainingTime.ToString("dd.MM.yyyy")</td>
+                                                                        <td>
+                                                                                <div>@item.Description</div>                        
+                                                                        </td>
+                                                                        <td><span style="color:orange"><b> Tarixi keçmiş!</b></span></td>
+                                                                        <td style="display:flex;justify-content:center">
+                                                                            <div style="margin-right:10px">
+                                                                                <a asp-action="MonthlySessionList" asp-route-SolariumId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                    <i class="material-icons">list</i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                }
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>    
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings_inject">
+                                <div class="container-fluid">
+
+                                     <div class="row clearfix">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    
+                                    <div class="header">
+                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                    <h2>
+                                    İmtina edilmiş paketlər
+                                    </h2>
+
+                                    </div>
+                                    <div class="body">
+                                    <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                                    <thead>
+                                    <tr>
+                                    <th>Ad Soyad</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Nömrə</th>
+                                    <th>Ödəniş</th>
+                                    <th>İstifadə olunan müddət</th>
+                                    <th>Qalan müddət</th>
+                                    <th>Paket limiti</th>
+                                    <th>Status</th>
+                                  <th>Qaytarılan pul</th>
+                                    <th>Qeyd</th>
+                                    <th>Əməliyyatlar</th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                        <th>Ad Soyad</th>
+                                        <th>Qeydiyyatçı</th>
+                                        <th>Nömrə</th>
+                                        <th>Ödəniş</th>
+                                        <th>İstifadə olunan müddət</th>
+                                        <th>Qalan müddət</th>
+                                        <th>Paket limiti</th>
+                                        <th>Status</th>
+                                       <th>Qaytarılan pul</th>
+                                        <th>Qeyd</th>
+                                       <th>Əməliyyatlar</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    @foreach (var item in Model.InjectionList)
+                                    {
+                                        <tr>
+                                        <td>@item.Customer.FullName</td>
+                                        <td>@item.AppUser.UserName</td>
+                                        <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+                                        <td>@item.Price.ToString("#0.#") AZN</td>
+                                        <td>@item.UsingMinute dəqiqə</td>
+                                        <td>@item.RemainingMinute dəqiqə</td>
+                                        <td>@item.MinuteLimit dəqiqə</td>
+                                        <td><span style="color:red"><b>İmtina edilib!</b></span></td>
+
+                                          <td>@item.ReturnMoney AZN</td>
+                                               <td>
+                                                 @if (item.Description == null)
+                                                  {
+                                                 <div>Qeyd yoxdur</div>
+                                                  }
+                                                else
+                                                 {
+                                                  <div>@item.Description</div>
+                                                 }
+                                                 </td>
+                                                  <td>
+                                                     <a asp-area="ArzumEstetic" asp-controller="SolariumAppointment" asp-action="MonthlySessionList" asp-route-CustomerId="@item.Customer.Id" asp-route-SolariumId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                       <i class="material-icons">list</i>
+                                                     </a>
+                                                 </td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                    </table>
+                                    </div>
+                                    </div>
+                                    </div>
+                                   
+                                    </div> 
+
+
+                                </div>
+                            </div>
+                        </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings_successfully">
+                                <div class="container-fluid">
+
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            Uğurla tamamlanmış paketlər
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+                                                            </a>
+                                                            <ul class="dropdown-menu pull-right">
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th>Ad Soyad</th>
+
+                                                                    <th>Nömrə</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>İstifadə olunub</th>
+                                                                    <th>Qalan müddət</th>
+                                                                    <th>Paket limiti</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+
+                                                                    <th>Ad Soyad</th>
+                                                                    <th>Nömrə</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>İstifadə olunub</th>
+                                                                    <th>Qalan müddət</th>
+                                                                    <th>Paket limiti</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.SuccessfullyPackets)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.Customer.FullName</td>
+                                                                        <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.Price.ToString("#0.#") AZN</td>
+                                                                        <td>@item.UsingMinute dəqiqə</td>
+                                                                        <td>@item.RemainingMinute dəqiqə</td>
+                                                                        <td>@item.MinuteLimit dəqiqə</td>
+                                                                        <td><span style="color:green"><b>Uğurlu!</b></span></td>
+                                                                        <td>
+                                                                            @if (item.Description == null)
+                                                                            {
+                                                                                <div>Qeyd yoxdur</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div>@item.Description</div>
+                                                                            }
+                                                                        </td>
+
+                                                                        <td style="display:flex;justify-content:center">
+                                                                            <div style="margin-right:10px">
+                                                                                <a asp-action="MonthlySessionList" asp-route-CustomerId="@item.Customer.Id" asp-route-SolariumId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                    <i class="material-icons">list</i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                }
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

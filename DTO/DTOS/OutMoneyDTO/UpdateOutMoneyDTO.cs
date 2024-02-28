@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,9 @@ namespace DTO.DTOS.OutMoneyDTO
 
         public string Description { get; set; }
 
-        public string Product { get; set; }
+       
+        public List<SpendCategory> SpendCategories { get; set; }
+
+        public int SpendCategoryId { get; set; }
     }
 }

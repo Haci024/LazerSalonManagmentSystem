@@ -1,0 +1,99 @@
+﻿@model DTO.DTOS.BodyShapingDTO.NewSessionDTO
+@{
+    ViewData["Title"] = "Seans";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Seans tarixçəsi formu</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="col-md-6 dateInput">
+                            <b>Giriş saatı</b>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">access_time</i>
+                                </span>
+                                <div class="form-line">
+                                    <input type="time" asp-for='StartDate' id="startDateInput" class="form-control time24" placeholder="Ex: 23:59">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 dateInput">
+                            <b>Çıxış saatı</b>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">access_time</i>
+                                </span>
+                                <div class="form-line">
+                                    <input type="time" asp-for='EndDate' id="endDateInput" class="form-control time24" placeholder="Ex: 23:59">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <b>Seans müddəti</b>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">timer</i>
+                                </span>
+                                <div class="form-line">
+                                    <input type="number" asp-for='Duration' id="durationInput" class="form-control" step="1" min="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
+                            <a asp-action="SessionList" asp-route-BodyShapingAppointmentId="@Model.SessionId" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#endDateInput').on('change', function () {
+            var startTime = new Date('2000-01-01T' + $('#startDateInput').val() + ':00'); 
+            var endTime = new Date('2000-01-01T' + $(this).val() + ':00'); 
+
+            var diff = endTime - startTime; 
+            var minutes = diff / 1000 / 60; 
+
+            $('#durationInput').val(minutes);
+        });
+
+        $('#startDateInput').on('change', function () {
+            var startTime = new Date('2000-01-01T' + $(this).val() + ':00'); // Start time
+            var endTime = new Date('2000-01-01T' + $('#endDateInput').val() + ':00'); // End time
+
+            var diff = endTime - startTime; // Difference in milliseconds
+            var minutes = diff / 1000 / 60; // Convert milliseconds to minutes
+
+            $('#durationInput').val(minutes);
+        });
+    });
+</script>
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+        document.getElementById("submitButton").disabled = true;
+
+
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000);
+    });
+
+</script>

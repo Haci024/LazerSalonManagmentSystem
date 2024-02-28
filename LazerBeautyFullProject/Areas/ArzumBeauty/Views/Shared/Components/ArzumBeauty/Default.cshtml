@@ -1,0 +1,225 @@
+﻿<aside id="leftsidebar" class="sidebar">
+   
+    <div class="user-info">
+        <img src="~/2.png" />
+        <div class="image" style="margin-bottom:52px">
+        </div>
+        <div class="info-container">
+            <h3 class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@User.Identity.Name</h3>
+            <div class="btn-group user-helper-dropdown">
+                <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                <ul class="dropdown-menu pull-right">
+                    <li role="separator" class="divider"></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Logout"><i class="material-icons">input</i>Hesabdan çıxış</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="menu">
+        <ul class="list">
+            <li class="header" style="color:red">@User.Identity.Name</li>
+          
+              @if (!User.IsInRole("Reservator"))
+            {
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">store</i>
+                        <span>Filial keçid</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a asp-area="ArzumMini" asp-controller="Kassa" asp-action="BudgetPage">Arzum Mini Laser Studio</a>
+                        </li>
+                        <li>
+                            <a asp-area="ArzumEstetic" asp-controller="Kassa" asp-action="BudgetPage">Arzum Estetic  Studio</a>
+                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperSupporter") || User.IsInRole("Supporter"))
+                        {
+                            <li>
+                                <a asp-area="Admin" asp-controller="TotalKassa" asp-action="BudgetPage">İdarə paneli</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("SuperSupporter") || User.IsInRole("Supporter"))
+                        {
+                            <li>
+                                <a asp-area="Support" asp-controller="Statistics" asp-action="Index">Texniki dəstək</a>
+                            </li>
+                        }
+                </ul>
+            </li>
+            }
+         
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">edit_calendar</i>
+                    <span>Gündəlik işlər</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-controller="Customer" asp-action="DailyBirthDate">Ad günləri</a>
+                    </li>
+                    <li>
+                        <a asp-controller="LazerAppointment" asp-action="RememberedMonthlySession">Növbəti seans</a>
+                    </li>
+                    <li>
+                        <a asp-controller="LazerAppointment" asp-action="InCompleteSessionList">Bədən ardı</a>
+                    </li>
+                </ul>
+            </li>
+          
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">groups</i>
+                    <span>Müştərilər</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-controller="Customer" asp-action="AddCustomer">Yeni müştəri</a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Customer" asp-action="FemaleList">Xanımlar</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Customer" asp-action="MaleList">Bəylər</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">format_list_bulleted_add</i>
+                    <span>Xidmətlər</span>
+                </a>
+                <ul class="ml-menu">
+
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <span>Lazer Epilyasiyası</span>
+                        </a>
+                        <ul class="ml-menu">
+                            @foreach (var item in ViewBag.LazerMasters as List<Entity.Concrete.LazerMaster>)
+                            {
+                                <li>
+                                    <a asp-controller="LazerAppointment" asp-action="LazerMasterPage" asp-route-LazerMasterId="@item.Id">@item.FullName</a>
+                                </li>
+                            }
+                         
+                        </ul>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                        
+                            <span>Kosmetologiya</span>
+                        </a>
+                        <ul class="ml-menu">
+                            @foreach (var item in ViewBag.Cosmetologs as List<Entity.Concrete.Cosmetologs>)
+                            {
+                                <li>
+                                    <a asp-controller="Cosmetology" asp-action="CosmetologPage" asp-route-CosmetologId="@item.Id">@item.FullName</a>
+                                </li>
+                            }
+
+                        </ul>
+
+
+                        <a href="javascript:void(0);" class="menu-toggle">
+
+                            <span>Lipuçka</span>
+                        </a>
+                        <ul class="ml-menu">
+                            @foreach (var item in ViewBag.LazerMasters as List<Entity.Concrete.LazerMaster>)
+                            {
+                                <li>
+                                    <a asp-controller="LipuckaAppointment" asp-action="LipuckaMasterPage" asp-route-LipuckaMasterId="@item.Id">@item.FullName</a>
+                                </li>
+                            }
+                       
+                        </ul>
+                        <a href="javascript:void(0);" class="menu-toggle">
+
+                            <span>Pirsinq</span>
+                        </a>
+                        <ul class="ml-menu">
+                            @foreach (var item in ViewBag.LazerMasters as List<Entity.Concrete.LazerMaster>)
+                            {
+                                <li>
+                                    <a asp-controller="PirsinqAppointment" asp-action="PirsinqMasterPage" asp-route-PirsinqMasterId="@item.Id">@item.FullName</a>
+                                </li>
+                            }
+                        
+                        </ul>
+                    </li>
+                </ul>
+            </li>   
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_bag</i>
+                    <span>Satış</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-controller="Income" asp-action="IncomeMoneyList">Satış</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Income" asp-action="ProductList">Stok</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">
+                        payments
+                    </i>
+                    <span>Kassa</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-controller="OutMoney" asp-action="OutMoneyList">Xərclər</a>
+                    </li>
+                    <li>
+                        <a asp-controller="OutMoney" asp-action="SpendCategoryList">Yeni Xərc</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Kassa" asp-action="KassaActionList">Mədaxil/Məxaric</a>
+                    </li>
+                   
+
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">
+                        receipt_long
+                    </i>
+                    <span>Hesabatlar</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a asp-controller="Kassa" asp-action="BudgetPage">Ümumi hesabat</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Reports" asp-action="FilterLazerReports">Lazer Epilyasiya</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Reports" asp-action="FilterCosmetologyReports"> Kosmetologiya </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Reports" asp-action="FilterPirsinqReports">Pirsinq </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Reports" asp-action="FilterLipuckaReports">Lipuçka  </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Reports" asp-action="FilterShopingReports"> Satış </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Reports" asp-action="FilterSpendingReports"> Xərc </a>
+                    </li>
+
+                </ul>
+
+            </li>
+            <li>
+                <a asp-area="" asp-controller="Account" asp-action="Logout">Hesabdan çıxış</a>
+            </li>
+        </ul>
+    </div>
+</aside>

@@ -14,11 +14,13 @@ namespace Entity.Concrete
         
         public bool  IsDeactive { get; set; }
 
-        public List<BodyShapingMaster> Masters { get; set; }    
+        public List<BodyshapingAppointment> BodyShapingAppointment { get; set; }    
 
         public Filial Filial { get; set; }
 
         public int FilialId { get; set; }
+
+        
 
 
     }

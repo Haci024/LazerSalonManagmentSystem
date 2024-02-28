@@ -1,0 +1,241 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterLazerReports";
+}
+
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>Lazer Epilyasiya Hesabat</h2>
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Başlanıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Lazer Ustası</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="lazeroloqId">
+                                    <option value="all" selected>Hamısı</option>
+                                    @foreach (var item in Model.LazerMasters)
+                                    {
+                                        foreach (var filial in item.LazerMasterFilial)
+                                        {
+                                            if (filial.FilialId == 3)
+                                            {
+                                                <option value="@filial.LazerMasterId">@item.FullName</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Kategoriyalar</h2>
+                            <div class="form-group">
+                                <div>
+                                    <select class="form-control show-tick" id="childCategoryId" multiple>
+                                        <option value="all" selected>Hamısı</option>
+                                        @foreach (var item in Model.LazerCategories)
+                                        {
+
+                                            <option value="@item.Id">@item.Name @item.MainCategory.Name</option>
+
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row container-fluid">
+                            <div class="col-lg-4 ">
+                                <label for="email_address_2">Ümumi gəlir</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="lazerEarning" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">İmpuls sayı</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="impulsCount" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">Seans sayı</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="sessionCount" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+
+                                <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" id="lazerEpilyasiyaTable"></div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var LazeroloqId = $("#lazeroloqId").val();
+            var CategoryId = $("#childCategoryId").val();
+
+            $.ajax({
+                url: "/ArzumEstetic/Reports/LazerEarningCalculator",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate, lazeroloqId: LazeroloqId, categoryId: CategoryId },
+                success: function (response) {
+
+                    if (CategoryId == 'all' && LazeroloqId == 'all') {
+
+                        $("#lazerEarning").val(response.totalLazerEarning + " " + "AZN");
+                        $("#impulsCount").val(response.totalImpulsCount);
+                        $("#sessionCount").val(response.totalSessions + " " + "Seans");
+
+                    }
+                    else if (CategoryId == 'all' && LazeroloqId != 'all') {
+
+                        $("#lazerEarning").val(response.lazerMasterAllCategoryEarning + " " + "AZN");
+                        $("#impulsCount").val(response.lazerMasterTotalImpulsAllCategory);
+                        $("#sessionCount").val(response.lazerMasterAllCategorySession + " " + "Seans");
+                    }
+                    else if (CategoryId != 'all' && LazeroloqId == 'all') {
+
+                        $("#lazerEarning").val(response.allMasterCategoryEarning + " " + "AZN");
+                        $("#impulsCount").val(response.allMasterCategorySessionCount);
+                        $("#sessionCount").val(response.allMasterCategoryImpulsCount + " " + "Seans");
+                    }
+                    else {
+                        $("#lazerEarning").val(response.lazerMasterEarning + " " + "AZN");
+                        $("#impulsCount").val(response.impulsCount);
+                        $("#sessionCount").val(response.sessionCount + " " + "Seans");
+                    }
+
+                },
+                error: function () {
+                    Swal.fire(
+                        'Xəbərdarlıq!',
+                        'Tarixləri düzgün qeyd edin!',
+                        'warning'
+                    )
+                }
+            });
+            if (CategoryId == 'all' && LazeroloqId == 'all') {
+                console.log(CategoryId);
+                console.log(LazeroloqId);
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectAllReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                        console.log("Salam");
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (CategoryId == 'all' && LazeroloqId != 'all') {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectLazerMasterAllReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, lazeroloqId: LazeroloqId },
+                    success: function (result) {
+
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (CategoryId != 'all' && LazeroloqId == 'all') {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectAllMasterCategoryReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, categoryId: CategoryId },
+                    success: function (result) {
+
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/ArzumEstetic/Reports/SelectReportsWithAllFilter",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, lazeroloqId: LazeroloqId, categoryId: CategoryId },
+                    success: function (result) {
+
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            };
+
+
+        });
+
+    });
+</script>
+
+
+
+

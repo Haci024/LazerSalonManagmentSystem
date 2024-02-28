@@ -111,9 +111,6 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BodyShapingMasterId")
-                        .HasColumnType("int");
-
                     b.Property<int>("FilialId")
                         .HasColumnType("int");
 
@@ -126,20 +123,9 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BodyShapingMasterId");
-
                     b.HasIndex("FilialId");
 
                     b.ToTable("BodyShapingMasters");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FilialId = 2,
-                            FullName = "Arifə",
-                            IsDeactive = false
-                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.BodyShapingPacketCategory", b =>
@@ -149,6 +135,9 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("MainCategoryId")
                         .HasColumnType("int");
@@ -170,7 +159,7 @@ namespace Data.Migrations
 
                     b.HasIndex("MainCategoryId");
 
-                    b.ToTable("BodyShapingPacketCategory");
+                    b.ToTable("BodyShapingPacketCategories");
                 });
 
             modelBuilder.Entity("Entity.Concrete.BodyShapingPacketsReports", b =>
@@ -204,20 +193,32 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BodyShapingAppointmentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime?>("SessionDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("SessionName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("BodyShapingAppointmentId");
 
@@ -232,6 +233,10 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BodyshapingMasterId")
                         .HasColumnType("int");
 
@@ -241,13 +246,31 @@ namespace Data.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("FilialId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime>("RemaingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ReturnMoney")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("BodyshapingMasterId");
 
@@ -255,7 +278,30 @@ namespace Data.Migrations
 
                     b.HasIndex("FilialId");
 
-                    b.ToTable("BodyshapingAppointment");
+                    b.ToTable("BodyShapingAppointments");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologFilial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CosmetologsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CosmetologsId");
+
+                    b.HasIndex("FilialId");
+
+                    b.ToTable("CosmetologFilials");
                 });
 
             modelBuilder.Entity("Entity.Concrete.Cosmetologs", b =>
@@ -266,16 +312,14 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FilialId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
 
-                    b.HasIndex("FilialId");
+                    b.HasKey("Id");
 
                     b.ToTable("Cosmetologs");
 
@@ -283,8 +327,8 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            FilialId = 2,
-                            FullName = "Nuray"
+                            FullName = "Nuray",
+                            IsDeactive = false
                         });
                 });
 
@@ -296,28 +340,40 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("CosmetologId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CosmetologyDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FilialId")
+                    b.Property<int>("FilialId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("OutTime")
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStart")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("OutTime")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("ReservationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime?>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CosmetologId");
 
@@ -325,7 +381,55 @@ namespace Data.Migrations
 
                     b.HasIndex("FilialId");
 
-                    b.ToTable("CosmetologyAppointment");
+                    b.ToTable("CosmetologyAppointments");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologyCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MainCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MainCategoryId");
+
+                    b.ToTable("CosmetologyCategories");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologyReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CosmetologyAppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CosmetologyCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CosmetologyAppointmentId");
+
+                    b.HasIndex("CosmetologyCategoryId");
+
+                    b.ToTable("CosmetologyReport");
                 });
 
             modelBuilder.Entity("Entity.Concrete.Customer", b =>
@@ -342,14 +446,22 @@ namespace Data.Migrations
                     b.Property<bool>("Female")
                         .HasColumnType("bit");
 
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
 
                     b.Property<double>("PhoneNumber")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FilialId");
 
                     b.ToTable("Customers");
                 });
@@ -374,7 +486,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            FilialName = "Arzum Mini Lazer Studio"
+                            FilialName = "Arzum Mini Laser Studio"
                         },
                         new
                         {
@@ -390,6 +502,11 @@ namespace Data.Migrations
                         {
                             Id = 4,
                             FilialName = "İdarə Paneli"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FilialName = "Texniki Dəstək"
                         });
                 });
 
@@ -404,6 +521,9 @@ namespace Data.Migrations
                     b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("BuyingPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -439,47 +559,6 @@ namespace Data.Migrations
                     b.ToTable("Incomes");
                 });
 
-            modelBuilder.Entity("Entity.Concrete.Kassa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Budget")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FilialId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FilialId");
-
-                    b.ToTable("Budget");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Budget = 0m,
-                            FilialId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Budget = 0m,
-                            FilialId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Budget = 0m,
-                            FilialId = 3
-                        });
-                });
-
             modelBuilder.Entity("Entity.Concrete.KassaActionList", b =>
                 {
                     b.Property<int>("Id")
@@ -492,7 +571,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("KassaId")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FilialId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("LastOutMoneyDate")
@@ -501,11 +584,14 @@ namespace Data.Migrations
                     b.Property<decimal>("OutMoneyQuantity")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("KassaId");
+                    b.HasIndex("FilialId");
 
                     b.ToTable("KassaActionLists");
                 });
@@ -623,6 +709,220 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MainCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilialId");
+
+                    b.HasIndex("MainCategoryId");
+
+                    b.ToTable("LazerCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FilialId = 1,
+                            IsDeactive = false,
+                            Name = "Qadın",
+                            Price = 0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FilialId = 1,
+                            IsDeactive = false,
+                            Name = " Kişi",
+                            Price = 0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FilialId = 2,
+                            IsDeactive = false,
+                            Name = "Qadın",
+                            Price = 0m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FilialId = 2,
+                            IsDeactive = false,
+                            Name = "Kişi",
+                            Price = 0m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FilialId = 3,
+                            IsDeactive = false,
+                            Name = "Qadın",
+                            Price = 0m
+                        });
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LazerMaster", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LazerMasters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FullName = "Ellada",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FullName = "Aidə",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FullName = "Nuridə",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FullName = "Gülnar",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FullName = "Nəzrin",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FullName = "Əminə",
+                            IsDeactive = false
+                        });
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LazerMasterFilial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LazerMasterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilialId");
+
+                    b.HasIndex("LazerMasterId");
+
+                    b.ToTable("LazerMasterFilial");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LipuckaAppointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStart")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LazerMasterId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("FilialId");
+
+                    b.HasIndex("LazerMasterId");
+
+                    b.ToTable("LipuckaAppointments");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LipuckaCategories", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("MainCategoryId")
                         .HasColumnType("int");
 
@@ -637,378 +937,10 @@ namespace Data.Migrations
 
                     b.HasIndex("MainCategoryId");
 
-                    b.ToTable("LazerCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Lazer Mini Qadınlar üçün",
-                            Price = 0m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Lazer Mini Kişilər üçün",
-                            Price = 0m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Lazer Beauty Qadınlar üçün",
-                            Price = 0m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Lazer Beauty Kişilər  üçün",
-                            Price = 0m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Lazer Qadınlar üçün Estetik Salon",
-                            Price = 0m
-                        },
-                        new
-                        {
-                            Id = 6,
-                            MainCategoryId = 1,
-                            Name = "Bütün bədən",
-                            Price = 40m
-                        },
-                        new
-                        {
-                            Id = 7,
-                            MainCategoryId = 1,
-                            Name = "Sadə bədən",
-                            Price = 35m
-                        },
-                        new
-                        {
-                            Id = 8,
-                            MainCategoryId = 1,
-                            Name = "Sinə & Qarın",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 9,
-                            MainCategoryId = 1,
-                            Name = "Kürək & Bel",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 10,
-                            MainCategoryId = 1,
-                            Name = "Bütün qol",
-                            Price = 15m
-                        },
-                        new
-                        {
-                            Id = 11,
-                            MainCategoryId = 1,
-                            Name = "Qolaltı",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 12,
-                            MainCategoryId = 1,
-                            Name = "Üz",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 13,
-                            MainCategoryId = 1,
-                            Name = "Dodaqüstü",
-                            Price = 2m
-                        },
-                        new
-                        {
-                            Id = 14,
-                            MainCategoryId = 1,
-                            Name = "Çənə",
-                            Price = 3m
-                        },
-                        new
-                        {
-                            Id = 15,
-                            MainCategoryId = 1,
-                            Name = "Arxayan",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 16,
-                            MainCategoryId = 1,
-                            Name = "Bikini",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 17,
-                            MainCategoryId = 1,
-                            Name = "Bütün ayaq",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 18,
-                            MainCategoryId = 2,
-                            Name = "Yarı bədən",
-                            Price = 50m
-                        },
-                        new
-                        {
-                            Id = 19,
-                            MainCategoryId = 2,
-                            Name = "Üz & Boyun & Boğaz",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 20,
-                            MainCategoryId = 2,
-                            Name = "Üz",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 21,
-                            MainCategoryId = 2,
-                            Name = "Boyun",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 22,
-                            MainCategoryId = 2,
-                            Name = "Boğaz",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 23,
-                            MainCategoryId = 2,
-                            Name = "Yanaq",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 24,
-                            MainCategoryId = 2,
-                            Name = "Qulaq",
-                            Price = 3m
-                        },
-                        new
-                        {
-                            Id = 25,
-                            MainCategoryId = 2,
-                            Name = "Bütün qol",
-                            Price = 25m
-                        },
-                        new
-                        {
-                            Id = 26,
-                            MainCategoryId = 2,
-                            Name = "Çiyin",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 27,
-                            MainCategoryId = 2,
-                            Name = "Qolaltı",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 28,
-                            MainCategoryId = 2,
-                            Name = "Kürək & Bel",
-                            Price = 30m
-                        },
-                        new
-                        {
-                            Id = 29,
-                            MainCategoryId = 2,
-                            Name = "Sinə & Qarın",
-                            Price = 30m
-                        },
-                        new
-                        {
-                            Id = 30,
-                            MainCategoryId = 3,
-                            Name = "Bütün bədən",
-                            Price = 40m
-                        },
-                        new
-                        {
-                            Id = 31,
-                            MainCategoryId = 3,
-                            Name = "Sadə bədən",
-                            Price = 35m
-                        },
-                        new
-                        {
-                            Id = 32,
-                            MainCategoryId = 3,
-                            Name = "Sinə & Qarın",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 33,
-                            MainCategoryId = 3,
-                            Name = "Kürək & Bel",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 34,
-                            MainCategoryId = 4,
-                            Name = "Bütün qol",
-                            Price = 15m
-                        },
-                        new
-                        {
-                            Id = 35,
-                            MainCategoryId = 4,
-                            Name = "Qolaltı",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 36,
-                            MainCategoryId = 4,
-                            Name = "Üz",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 37,
-                            MainCategoryId = 4,
-                            Name = "Dodaqüstü",
-                            Price = 2m
-                        },
-                        new
-                        {
-                            Id = 38,
-                            MainCategoryId = 4,
-                            Name = "Çənə",
-                            Price = 3m
-                        },
-                        new
-                        {
-                            Id = 39,
-                            MainCategoryId = 4,
-                            Name = "Arxayan",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 40,
-                            MainCategoryId = 4,
-                            Name = "Bikini",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 41,
-                            MainCategoryId = 4,
-                            Name = "Bütün ayaq",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 42,
-                            MainCategoryId = 4,
-                            Name = "Yarı bədən",
-                            Price = 50m
-                        },
-                        new
-                        {
-                            Id = 43,
-                            MainCategoryId = 5,
-                            Name = "Üz & Boyun & Boğaz",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 44,
-                            MainCategoryId = 5,
-                            Name = "Üz",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 45,
-                            MainCategoryId = 5,
-                            Name = "Boyun",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 46,
-                            MainCategoryId = 5,
-                            Name = "Boğaz",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 47,
-                            MainCategoryId = 5,
-                            Name = "Yanaq",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 48,
-                            MainCategoryId = 5,
-                            Name = "Qulaq",
-                            Price = 3m
-                        },
-                        new
-                        {
-                            Id = 49,
-                            MainCategoryId = 5,
-                            Name = "Bütün qol",
-                            Price = 25m
-                        },
-                        new
-                        {
-                            Id = 50,
-                            MainCategoryId = 5,
-                            Name = "Çiyin",
-                            Price = 10m
-                        },
-                        new
-                        {
-                            Id = 51,
-                            MainCategoryId = 5,
-                            Name = "Qolaltı",
-                            Price = 5m
-                        },
-                        new
-                        {
-                            Id = 52,
-                            MainCategoryId = 5,
-                            Name = "Kürək & Bel",
-                            Price = 30m
-                        },
-                        new
-                        {
-                            Id = 53,
-                            MainCategoryId = 5,
-                            Name = "Sinə & Qarın",
-                            Price = 30m
-                        });
+                    b.ToTable("LipuckaCategories");
                 });
 
-            modelBuilder.Entity("Entity.Concrete.LazerMaster", b =>
+            modelBuilder.Entity("Entity.Concrete.LipuckaReports", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1016,59 +948,56 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FilialId")
+                    b.Property<int>("LipuckaAppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LipuckaCategoriesId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FilialId");
+                    b.HasIndex("LipuckaAppointmentId");
 
-                    b.ToTable("LazerMasters");
+                    b.HasIndex("LipuckaCategoriesId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FilialId = 1,
-                            FullName = "Ellada"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FilialId = 1,
-                            FullName = "Aidə"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FilialId = 2,
-                            FullName = "Ellada"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FilialId = 2,
-                            FullName = "Nuridə"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FilialId = 3,
-                            FullName = "Gülnar"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            FilialId = 3,
-                            FullName = "Nəzrin"
-                        });
+                    b.ToTable("LipuckaReports");
                 });
 
             modelBuilder.Entity("Entity.Concrete.OutMoney", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AddingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SpendCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("SpendCategoryId");
+
+                    b.ToTable("OutMoney");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqAppointment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1080,31 +1009,98 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FilialId")
-                        .IsRequired()
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStart")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LazerMasterId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Product")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("FilialId");
 
-                    b.ToTable("OutMoney");
+                    b.HasIndex("LazerMasterId");
+
+                    b.ToTable("PirsinqAppointments");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MainCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MainCategoryId");
+
+                    b.ToTable("PirsinqCategories");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqReports", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PirsinqAppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PirsinqCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PirsinqAppointmentId");
+
+                    b.HasIndex("PirsinqCategoryId");
+
+                    b.ToTable("PirsinqReports");
                 });
 
             modelBuilder.Entity("Entity.Concrete.SolariumAppointment", b =>
@@ -1115,14 +1111,31 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("BuyingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("FilialId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTimeOut")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MinuteLimit")
                         .HasColumnType("int");
@@ -1133,6 +1146,12 @@ namespace Data.Migrations
                     b.Property<int>("RemainingMinute")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("RemainingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ReturnMoney")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("SolariumCategoriesId")
                         .HasColumnType("int");
 
@@ -1141,13 +1160,15 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("FilialId");
 
                     b.HasIndex("SolariumCategoriesId");
 
-                    b.ToTable("SolariumAppointment");
+                    b.ToTable("SolariumAppointments");
                 });
 
             modelBuilder.Entity("Entity.Concrete.SolariumCategories", b =>
@@ -1157,6 +1178,9 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeactive")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("MainCategoryId")
                         .HasColumnType("int");
@@ -1184,6 +1208,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
+                            IsDeactive = false,
                             Minute = 0,
                             Name = "Günlük",
                             Price = 0m
@@ -1191,6 +1216,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
+                            IsDeactive = false,
                             Minute = 0,
                             Name = "Aylıq",
                             Price = 0m
@@ -1198,6 +1224,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 3,
+                            IsDeactive = false,
                             MainCategoryId = 1,
                             Minute = 5,
                             Name = "MiniPacket",
@@ -1207,6 +1234,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 4,
+                            IsDeactive = false,
                             MainCategoryId = 1,
                             Minute = 10,
                             Name = "MediumPacket",
@@ -1216,26 +1244,29 @@ namespace Data.Migrations
                         new
                         {
                             Id = 5,
+                            IsDeactive = false,
                             MainCategoryId = 1,
                             Minute = 15,
                             Name = "LargePacket",
-                            Price = 12m,
+                            Price = 10m,
                             UsingPeriod = 1
                         },
                         new
                         {
                             Id = 6,
+                            IsDeactive = false,
                             MainCategoryId = 1,
                             Minute = 20,
                             Name = "ExtraLarge",
-                            Price = 16m,
+                            Price = 12m,
                             UsingPeriod = 30
                         },
                         new
                         {
                             Id = 7,
+                            IsDeactive = false,
                             MainCategoryId = 2,
-                            Minute = 30,
+                            Minute = 50,
                             Name = "MiniPacket",
                             Price = 19m,
                             UsingPeriod = 30
@@ -1243,8 +1274,9 @@ namespace Data.Migrations
                         new
                         {
                             Id = 8,
+                            IsDeactive = false,
                             MainCategoryId = 2,
-                            Minute = 40,
+                            Minute = 100,
                             Name = "MediumPacket",
                             Price = 29m,
                             UsingPeriod = 30
@@ -1252,8 +1284,9 @@ namespace Data.Migrations
                         new
                         {
                             Id = 9,
+                            IsDeactive = false,
                             MainCategoryId = 2,
-                            Minute = 50,
+                            Minute = 150,
                             Name = "LargePacket",
                             Price = 39m,
                             UsingPeriod = 60
@@ -1267,6 +1300,10 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("RemainingMinute")
                         .HasColumnType("int");
@@ -1282,9 +1319,36 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.HasIndex("SolariumAppointmentId");
 
-                    b.ToTable("SolariumUsingList");
+                    b.ToTable("SolariumUsingLists");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.SpendCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FilialId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilialId");
+
+                    b.ToTable("SpendCategories");
                 });
 
             modelBuilder.Entity("Entity.Concrete.Stock", b =>
@@ -1308,15 +1372,21 @@ namespace Data.Migrations
                     b.Property<int>("FilialId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RemainCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SellingCount")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("SellingPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("TotalCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1357,8 +1427,8 @@ namespace Data.Migrations
                         new
                         {
                             Id = "qwertyu1234",
-                            Name = "Qeydiyyatçı",
-                            NormalizedName = "QEYDİYYATÇI"
+                            Name = "Reservator",
+                            NormalizedName = "RESERVATOR"
                         },
                         new
                         {
@@ -1499,10 +1569,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.Concrete.BodyShapingMaster", b =>
                 {
-                    b.HasOne("Entity.Concrete.BodyShapingMaster", null)
-                        .WithMany("Masters")
-                        .HasForeignKey("BodyShapingMasterId");
-
                     b.HasOne("Entity.Concrete.Filial", "Filial")
                         .WithMany("BodyShapingMasters")
                         .HasForeignKey("FilialId")
@@ -1542,21 +1608,35 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.Concrete.BodyShapingSessionList", b =>
                 {
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany("BodyshapingSessionList")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity.Concrete.BodyshapingAppointment", "BodyShapingAppointment")
                         .WithMany("BodyShapingSessionLists")
                         .HasForeignKey("BodyShapingAppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AppUser");
+
                     b.Navigation("BodyShapingAppointment");
                 });
 
             modelBuilder.Entity("Entity.Concrete.BodyshapingAppointment", b =>
                 {
-                    b.HasOne("Entity.Concrete.BodyShapingMaster", "BodyShapingMaster")
-                        .WithMany()
-                        .HasForeignKey("BodyshapingMasterId")
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany("BodyshapingAppointments")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.BodyShapingMaster", "BodyShapingMaster")
+                        .WithMany("BodyShapingAppointment")
+                        .HasForeignKey("BodyshapingMasterId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Entity.Concrete.Customer", "Customer")
@@ -1571,6 +1651,8 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("AppUser");
+
                     b.Navigation("BodyShapingMaster");
 
                     b.Navigation("Customer");
@@ -1578,19 +1660,33 @@ namespace Data.Migrations
                     b.Navigation("Filial");
                 });
 
-            modelBuilder.Entity("Entity.Concrete.Cosmetologs", b =>
+            modelBuilder.Entity("Entity.Concrete.CosmetologFilial", b =>
                 {
-                    b.HasOne("Entity.Concrete.Filial", "Filial")
-                        .WithMany("CosmetologyAppointment")
+                    b.HasOne("Entity.Concrete.Cosmetologs", "Cosmetologs")
+                        .WithMany("CosmetologsFilial")
+                        .HasForeignKey("CosmetologsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.Filial", "Filials")
+                        .WithMany("CosmetologFilial")
                         .HasForeignKey("FilialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Filial");
+                    b.Navigation("Cosmetologs");
+
+                    b.Navigation("Filials");
                 });
 
             modelBuilder.Entity("Entity.Concrete.CosmetologyAppointment", b =>
                 {
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany("CosmetologyAppointments")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity.Concrete.Cosmetologs", "Cosmetolog")
                         .WithMany("CosmetologAppointments")
                         .HasForeignKey("CosmetologId")
@@ -1603,13 +1699,58 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Concrete.Filial", null)
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
                         .WithMany("CosmetologyAppointments")
-                        .HasForeignKey("FilialId");
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Cosmetolog");
 
                     b.Navigation("Customers");
+
+                    b.Navigation("Filial");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologyCategory", b =>
+                {
+                    b.HasOne("Entity.Concrete.CosmetologyCategory", "MainCategory")
+                        .WithMany("ChildCategory")
+                        .HasForeignKey("MainCategoryId");
+
+                    b.Navigation("MainCategory");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologyReport", b =>
+                {
+                    b.HasOne("Entity.Concrete.CosmetologyAppointment", "CosmetologyAppointment")
+                        .WithMany("CosmetologyReports")
+                        .HasForeignKey("CosmetologyAppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.CosmetologyCategory", "CosmetologyCategory")
+                        .WithMany("CosmetologyReports")
+                        .HasForeignKey("CosmetologyCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CosmetologyAppointment");
+
+                    b.Navigation("CosmetologyCategory");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.Customer", b =>
+                {
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("Customer")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Filial");
                 });
 
             modelBuilder.Entity("Entity.Concrete.Income", b =>
@@ -1639,17 +1780,6 @@ namespace Data.Migrations
                     b.Navigation("Stock");
                 });
 
-            modelBuilder.Entity("Entity.Concrete.Kassa", b =>
-                {
-                    b.HasOne("Entity.Concrete.Filial", "Filial")
-                        .WithMany("Kassa")
-                        .HasForeignKey("FilialId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Filial");
-                });
-
             modelBuilder.Entity("Entity.Concrete.KassaActionList", b =>
                 {
                     b.HasOne("Entity.Concrete.AppUser", "AppUser")
@@ -1658,21 +1788,21 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Concrete.Kassa", "Kassa")
-                        .WithMany("KassaActionLists")
-                        .HasForeignKey("KassaId")
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("KassaActionList")
+                        .HasForeignKey("FilialId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");
 
-                    b.Navigation("Kassa");
+                    b.Navigation("Filial");
                 });
 
             modelBuilder.Entity("Entity.Concrete.LazerAppointment", b =>
                 {
                     b.HasOne("Entity.Concrete.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("LazerAppointments")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1725,22 +1855,101 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.Concrete.LazerCategory", b =>
                 {
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("LazerCategories")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity.Concrete.LazerCategory", "MainCategory")
+                        .WithMany("ChildCategories")
+                        .HasForeignKey("MainCategoryId");
+
+                    b.Navigation("Filial");
+
+                    b.Navigation("MainCategory");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LazerMasterFilial", b =>
+                {
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("LazerMasterFilials")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.LazerMaster", "LazerMaster")
+                        .WithMany("LazerMasterFilial")
+                        .HasForeignKey("LazerMasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Filial");
+
+                    b.Navigation("LazerMaster");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LipuckaAppointment", b =>
+                {
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("LipuckaAppointments")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.LazerMaster", "LazerMaster")
+                        .WithMany()
+                        .HasForeignKey("LazerMasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Filial");
+
+                    b.Navigation("LazerMaster");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LipuckaCategories", b =>
+                {
+                    b.HasOne("Entity.Concrete.LipuckaCategories", "MainCategory")
                         .WithMany("ChildCategories")
                         .HasForeignKey("MainCategoryId");
 
                     b.Navigation("MainCategory");
                 });
 
-            modelBuilder.Entity("Entity.Concrete.LazerMaster", b =>
+            modelBuilder.Entity("Entity.Concrete.LipuckaReports", b =>
                 {
-                    b.HasOne("Entity.Concrete.Filial", "Filial")
-                        .WithMany("LazerMasters")
-                        .HasForeignKey("FilialId")
+                    b.HasOne("Entity.Concrete.LipuckaAppointment", "LipuckaAppointment")
+                        .WithMany("LipuckaReports")
+                        .HasForeignKey("LipuckaAppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Filial");
+                    b.HasOne("Entity.Concrete.LipuckaCategories", "LipuckaCategories")
+                        .WithMany()
+                        .HasForeignKey("LipuckaCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LipuckaAppointment");
+
+                    b.Navigation("LipuckaCategories");
                 });
 
             modelBuilder.Entity("Entity.Concrete.OutMoney", b =>
@@ -1751,19 +1960,88 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Concrete.Filial", "Filial")
-                        .WithMany("OutMoney")
-                        .HasForeignKey("FilialId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("Entity.Concrete.SpendCategory", "SpendCategory")
+                        .WithMany()
+                        .HasForeignKey("SpendCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
 
+                    b.Navigation("SpendCategory");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqAppointment", b =>
+                {
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("PirsinqAppointments")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.LazerMaster", "LazerMaster")
+                        .WithMany()
+                        .HasForeignKey("LazerMasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Customer");
+
                     b.Navigation("Filial");
+
+                    b.Navigation("LazerMaster");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqCategory", b =>
+                {
+                    b.HasOne("Entity.Concrete.PirsinqCategory", "MainCategory")
+                        .WithMany("ChildCategory")
+                        .HasForeignKey("MainCategoryId");
+
+                    b.Navigation("MainCategory");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqReports", b =>
+                {
+                    b.HasOne("Entity.Concrete.PirsinqAppointment", "PirsinqAppointment")
+                        .WithMany("PirsinqReports")
+                        .HasForeignKey("PirsinqAppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Concrete.PirsinqCategory", "PirsinqCategory")
+                        .WithMany("PirsinqReports")
+                        .HasForeignKey("PirsinqCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PirsinqAppointment");
+
+                    b.Navigation("PirsinqCategory");
                 });
 
             modelBuilder.Entity("Entity.Concrete.SolariumAppointment", b =>
                 {
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany("SolariumAppointments")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity.Concrete.Customer", "Customer")
                         .WithMany("SolariumAppointments")
                         .HasForeignKey("CustomerId")
@@ -1781,6 +2059,8 @@ namespace Data.Migrations
                         .HasForeignKey("SolariumCategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Customer");
 
@@ -1800,13 +2080,32 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.Concrete.SolariumUsingList", b =>
                 {
+                    b.HasOne("Entity.Concrete.AppUser", "AppUser")
+                        .WithMany("SolariumUsingList")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Entity.Concrete.SolariumAppointment", "SolariumAppointment")
                         .WithMany("SolariumUsingList")
                         .HasForeignKey("SolariumAppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AppUser");
+
                     b.Navigation("SolariumAppointment");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.SpendCategory", b =>
+                {
+                    b.HasOne("Entity.Concrete.Filial", "Filial")
+                        .WithMany("SpendCategory")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Filial");
                 });
 
             modelBuilder.Entity("Entity.Concrete.Stock", b =>
@@ -1879,9 +2178,24 @@ namespace Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Entity.Concrete.AppUser", b =>
+                {
+                    b.Navigation("BodyshapingAppointments");
+
+                    b.Navigation("BodyshapingSessionList");
+
+                    b.Navigation("CosmetologyAppointments");
+
+                    b.Navigation("LazerAppointments");
+
+                    b.Navigation("SolariumAppointments");
+
+                    b.Navigation("SolariumUsingList");
+                });
+
             modelBuilder.Entity("Entity.Concrete.BodyShapingMaster", b =>
                 {
-                    b.Navigation("Masters");
+                    b.Navigation("BodyShapingAppointment");
                 });
 
             modelBuilder.Entity("Entity.Concrete.BodyShapingPacketCategory", b =>
@@ -1901,6 +2215,20 @@ namespace Data.Migrations
             modelBuilder.Entity("Entity.Concrete.Cosmetologs", b =>
                 {
                     b.Navigation("CosmetologAppointments");
+
+                    b.Navigation("CosmetologsFilial");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologyAppointment", b =>
+                {
+                    b.Navigation("CosmetologyReports");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.CosmetologyCategory", b =>
+                {
+                    b.Navigation("ChildCategory");
+
+                    b.Navigation("CosmetologyReports");
                 });
 
             modelBuilder.Entity("Entity.Concrete.Customer", b =>
@@ -1920,28 +2248,31 @@ namespace Data.Migrations
 
                     b.Navigation("BodyShapingMasters");
 
-                    b.Navigation("CosmetologyAppointment");
+                    b.Navigation("CosmetologFilial");
 
                     b.Navigation("CosmetologyAppointments");
 
+                    b.Navigation("Customer");
+
                     b.Navigation("Income");
 
-                    b.Navigation("Kassa");
+                    b.Navigation("KassaActionList");
 
                     b.Navigation("LazerAppointments");
 
-                    b.Navigation("LazerMasters");
+                    b.Navigation("LazerCategories");
 
-                    b.Navigation("OutMoney");
+                    b.Navigation("LazerMasterFilials");
+
+                    b.Navigation("LipuckaAppointments");
+
+                    b.Navigation("PirsinqAppointments");
 
                     b.Navigation("SolariumAppointments");
 
-                    b.Navigation("Stock");
-                });
+                    b.Navigation("SpendCategory");
 
-            modelBuilder.Entity("Entity.Concrete.Kassa", b =>
-                {
-                    b.Navigation("KassaActionLists");
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("Entity.Concrete.LazerAppointment", b =>
@@ -1959,6 +2290,30 @@ namespace Data.Migrations
             modelBuilder.Entity("Entity.Concrete.LazerMaster", b =>
                 {
                     b.Navigation("LazerAppointment");
+
+                    b.Navigation("LazerMasterFilial");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LipuckaAppointment", b =>
+                {
+                    b.Navigation("LipuckaReports");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.LipuckaCategories", b =>
+                {
+                    b.Navigation("ChildCategories");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqAppointment", b =>
+                {
+                    b.Navigation("PirsinqReports");
+                });
+
+            modelBuilder.Entity("Entity.Concrete.PirsinqCategory", b =>
+                {
+                    b.Navigation("ChildCategory");
+
+                    b.Navigation("PirsinqReports");
                 });
 
             modelBuilder.Entity("Entity.Concrete.SolariumAppointment", b =>

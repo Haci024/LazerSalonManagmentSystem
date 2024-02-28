@@ -18,9 +18,9 @@
                 <div class="body">
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Rezervasiyalar</a></li>
-                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni rezervasiya</a></li>
-                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Imtina olunan rezervasiyalar</a></li>
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Qeydiyyatlar</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni qeydiyyat</a></li>
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">İmtina olunan seanslar</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -77,7 +77,7 @@
                                                             {
                                                                 <tr>
                                                                     <td>@item.FullName</td>
-                                                                    <td>@item.PhoneNumber</td>
+                                                                    <td>@item.PhoneNumber.ToString("0000000000")</td>
                                                                     <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
 
                                                                     <td style="display:flex;justify-content:end">
@@ -170,10 +170,7 @@
                                                            
                                                                 @foreach (var item in Model.LazerAppointments)
                                                                 {
-                                                                    if (item.LazerMasterId==Model.LazerMasterId)
-                                                                    {
-                                                                       if (item.IsCompleted==false && item.IsDeleted==false)
-                                                                        {
+                                                               
                                                                             <tr>
                                                                                 <td>@item.ReservationDate.ToString("dd.MM.yyyy")</td>
                                                                                 <td>@item.AppUser.UserName</td>
@@ -246,11 +243,6 @@
 
                                                                         }
 
-                                                                    }
-                                                                           
-                                                                    
-                                                              
-                                                                }
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -312,10 +304,9 @@
                                                                 </tr>
                                                             </tfoot>
                                                             <tbody>
-                                                                @foreach (var item in Model.LazerAppointments)
+                                                                @foreach (var item in Model.Injections)
                                                                 {
-                                                                    @if (item.IsDeleted==true && item.LazerMaster.FullName==ViewBag.LazerMaster)
-                                                                    {
+                                        
                                                                         <tr>
                                                                             <td>@item.ReservationDate.ToString("dd.MM.yyyy")</td>
                                                                             <td>@item.Customers.FullName</td>
@@ -356,7 +347,7 @@
                                                                             </td>
 
                                                                         </tr>
-                                                                    }
+                                                                    
                                                                       
                                                                    
                                                                     }

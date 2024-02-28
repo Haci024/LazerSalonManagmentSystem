@@ -44,7 +44,7 @@
                         <div class="form-group form-float">
                             <label class="form-label">Qiymət</label>
                             <div class="form-line">
-                                <input type="number" class="form-control" asp-for="Price" id="priceInput">
+                                <input type="number" class="form-control" asp-for="Price" id="priceInput" step="0.1">
                             
                             </div>
                         </div>
@@ -56,9 +56,9 @@
                              
                             </div>
                         </div>
-                     <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                      <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
                             <a asp-action="InComeMoneyList" class="btn btn-success">Geri</a>
                      </div>
                     
@@ -69,7 +69,7 @@
     </div>
    
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
         // Initialize the price based on the selected product
@@ -102,4 +102,18 @@
             $('#priceInput').val(totalPrice);
         }
     });
+</script>
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+        document.getElementById("submitButton").disabled = true;
+
+
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000);
+    });
+
 </script>

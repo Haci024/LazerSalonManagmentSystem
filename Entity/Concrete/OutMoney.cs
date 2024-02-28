@@ -8,22 +8,20 @@ namespace Entity.Concrete
 {
     public class OutMoney
     {
-        public int Id { get; set; }
+        public int Id { get; set;}
 
-        public DateTime CreateTime { get; set; }
-
-        public string Product { get; set; }
+        public DateTime AddingDate { get; set;}
 
         public Decimal Price { get; set; }
 
-        public string Description { get; set; }
+        public string Description {get; set;}
 
-        public AppUser AppUser { get; set; }
+        public AppUser AppUser { get; set;}
 
-        public string AppUserId { get; set; }
+        public string AppUserId { get; set;}
 
-        public Filial Filial { get; set; }
+        public  SpendCategory SpendCategory { get; set;}
 
-        public int? FilialId { get; set; }
+        public int SpendCategoryId { get; set;}
     }
 }

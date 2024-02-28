@@ -1,0 +1,315 @@
+﻿@model DTO.DTOS.ReportDTO.DailyReportDTO
+@{
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+<div class="row clearfix">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-pink hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">payments</i>
+            </div>
+            <div class="content">
+                <div class="text">Kassa</div>
+                <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">@Model.Budget.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-orange hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">bolt</i>
+            </div>
+            <div class="content">
+                <div class="text">Lazer epilyasiyası</div>
+                <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">@Model.DailyLazerEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-green hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">woman</i>
+            </div>
+            <div class="content">
+                <div class="text">Kosmetologiya</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.DailyCosmetologyEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-purple hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">water_drop</i>
+            </div>
+            <div class="content">
+                <div class="text">Lipuçka</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.LipuckaEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-red hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">money_off</i>
+            </div>
+            <div class="content">
+                <div class="text">Xərclər</div>
+                <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20">@Model.Spending.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-amber hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">my_location</i>
+            </div>
+            <div class="content">
+                <div class="text">İmpuls</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.ImplusCount</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-deep-orange hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">solar_power</i>
+            </div>
+            <div class="content">
+                <div class="text">Solarium</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.DailySolariumEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-cyan hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">hearing</i>
+            </div>
+            <div class="content">
+                <div class="text">Pirsinq</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.PirsinqEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-light-green hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">done_all</i>
+            </div>
+            <div class="content">
+                <div class="text">Mənfəət</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.TotalEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-blue-grey hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">shopping_bag</i>
+            </div>
+            <div class="content">
+                <div class="text">Satış</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.ShopingEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-teal hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">hotel</i>
+            </div>
+            <div class="content">
+                <div class="text">Bədən şəkilləndirmə</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.DailyBodyShapingEarning.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-indigo hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">payments</i>
+            </div>
+            <div class="content">
+                <div class="text">Kassadan çıxarılan pul</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.OutMoneyFromKassa.ToString("0.##") AZN</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+ <div class="container-fluid">
+   
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:center;align-items:center">
+                        <h2>Filter ilə hesabat</h2>
+                    </div>
+                </div>         
+                            <div class="body">
+                                <div class="row clearfix">
+                                    <div class="col-xs-6">
+                                        <h2 class="card-inside-title">Başlanğıc tarix</h2>
+                                        <div class="form-group">
+                                            <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h2 class="card-inside-title">Son tarix</h2>
+                                        <div class="input-group date" id="bs_datepicker_component_container">
+                                            <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                                <div class="row container-fluid">    
+                                    <div class="col-lg-4 ">
+                                        <label for="email_address_2">Lazer Epilyasiyasiyası</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="LazerEpilyasiya" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="email_address_2">Kosmetologiya</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="Cosmetology" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="email_address_2">Solarium</label>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                        <input type="text" class="form-control"  id="Solarium" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="col-lg-4 ">
+                                <label for="email_address_2">Bədən şəkilləndirmə</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="BodyShaping" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">Lipuçka</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="Lipucka" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">Pirsinq</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                    <input type="text" class="form-control" id="Pirsinq" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-lg-4 ">
+                            <label for="email_address_2">Xərclənən pul</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="OutMoney" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Satışdan gələn gəlir</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="İncome" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">İşlədilən  impuls sayı</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="Totalİmpuls" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row container-fluid">
+                            <div class="col-lg-4">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="email_address_2">Ümumi  gəlir</label>
+                                <div class="form-group">
+                                    <h1 class="form-line">
+                                        <input type="text" style="font-size:30px" class="form-control" id="totalEarning" readonly>
+                                    </h1>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <button id="calculateButton" style="margin-left:450px" class="btn btn-primary">Hesabla</button>
+                            </div>
+                                </div>
+                                  
+                             
+                            </div>
+            </div>
+        </div>           
+   </div>                   
+</div> 
+</div>
+<div id="resultForLazer"></div>
+ 
+<script src="~/js/pages/tables/jquery-datatable.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            
+            $.ajax({
+                url: "/ArzumEstetic/Kassa/CalculateTotalPrice",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate},
+                success: function (response) {
+                    $("#LazerEpilyasiya").val(response.lazerEarning + " " + "AZN");
+                    $("#Pirsinq").val(response.pirsinqEarning + " " + "AZN");
+                    $("#Lipucka").val(response.lipuckaEarning + " " + "AZN");
+                    $("#Solarium").val(response.solariumEarning + " " + "AZN");
+                    $("#OutMoney").val(response.outMoney + " " + "AZN");
+                    $("#BodyShaping").val(response.bodyShapingarning + " " + "AZN");
+                    $("#Cosmetology").val(response.cosmetology + " " + "AZN");
+                    $("#Totalİmpuls").val(response.impulsCount);
+                    $("#İncome").val(response.incomeMoney + " " + "AZN");
+                    $("#totalEarning").val(response.totalEarning + " " + "AZN");
+                   
+                },
+                error: function () {
+                    Swal.fire(
+                        'Xəbərdarlıq!',
+                        'Tarixləri düzgün qeyd edin!',
+                        'warning'
+                    )
+                }
+            });
+        });
+     
+
+    });
+</script>

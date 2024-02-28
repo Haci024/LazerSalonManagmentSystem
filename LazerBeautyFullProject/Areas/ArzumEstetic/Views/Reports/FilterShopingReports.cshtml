@@ -1,0 +1,181 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterLazerReports";
+}
+
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header text-center">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+
+                        <h2>Satış hesabatı</h2>
+
+
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Başlanğıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Məhsul</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" name="filialId" id="productId" multiple>
+                                    <option value="all" selected>Hamısı</option>
+                                    @foreach (var item in Model.Stock)
+                                    {
+
+                                        <option value="@item.Id">@item.ProductName</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Satışdan gələn gəlir</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="sellingPrice" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Ümumi maya dəyəri</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="buyingPrice" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Net gəlir</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="benefitMoney" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Ümumi satılan məhsul sayı</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="productCount" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+
+                            <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="shopingTable"></div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#calculateButton').on('click', function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var productId = $('#productId').val();
+          
+            
+            console.log(productId);
+            $.ajax({
+                type: 'POST',
+                url: '/ArzumEstetic/Reports/ShopingEarningCalculator',
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    productId: productId
+                },
+                success: function (response) {
+
+                    if (productId == 'all') {
+                        $('#sellingPrice').val(response.sellingAllPrice + " " + "AZN");
+                        $('#buyingPrice').val(response.buyingAllPrice + " " + "AZN");
+                        $('#benefitMoney').val(response.benefitAllMoney + " " + "AZN");
+                        $('#productCount').val(response.allproductCount);
+                   
+                    }
+                    else {
+                        $('#sellingPrice').val(response.sellingPrice + " " + "AZN");
+                        $('#buyingPrice').val(response.buyingPrice + " " + "AZN");
+                        $('#benefitMoney').val(response.benefitMoney + " " + "AZN");
+                        $('#productCount').val(response.productCount);
+                    }
+
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+
+            });
+            if (productId == 'all') {
+
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectAllShopingReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+
+                        $("#shopingTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectProductReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, productId: productId },
+                    success: function (result) {
+                        console.log("Salam");
+                        $("#shopingTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+      
+    });
+</script>
+
+
+

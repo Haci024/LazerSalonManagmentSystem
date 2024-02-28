@@ -28,18 +28,18 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         }
         
         [HttpGet]
-        public IActionResult FemaleList()
+        public async Task<IActionResult> FemaleList()
         {
             
-            List<Customer> Womans = _customerService.GetFemaleList();
+            List<Customer> Womans =await _customerService.GetFemaleList();
 
             return View(Womans);
         }
         [HttpGet]
-        public IActionResult MaleList()
+        public async Task<IActionResult> MaleList()
         {
 
-            List<Customer> Mans = _customerService.MaleList();
+            List<Customer> Mans = await _customerService.MaleList();
 
             return View(Mans);
         }
@@ -53,11 +53,13 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddCustomer(AddCustomerDTO addCustomerDTO)
+        public async Task<IActionResult> AddCustomer(AddCustomerDTO addCustomerDTO)
         {
+
             var validator = new CustomerValidator();
             var validationResult = validator.Validate(addCustomerDTO);
             bool IsExist = _db.Customers.Any(x => x.PhoneNumber == addCustomerDTO.PhoneNumber);
+            var appUser =await _userManager.FindByNameAsync(User.Identity.Name);
             if (IsExist)
             {
                 ModelState.AddModelError("","Bu nömrə daha öncə qeydiyyata alınıb");
@@ -75,9 +77,11 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             if (addCustomerDTO.IsFemale)
             {
                 Customer customer = new Customer();
+                customer.FilialId = appUser.FilialId;
                 customer.FullName = addCustomerDTO.FullName;
                 customer.PhoneNumber = addCustomerDTO.PhoneNumber;
                 customer.BirthDate = addCustomerDTO.BirthDate;
+                customer.FilialId = 1;
                 customer.Female = true;
                 _customerService.Create(customer);
                 return RedirectToAction("FemaleList", "Customer");
@@ -89,23 +93,13 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
                 customer.PhoneNumber = addCustomerDTO.PhoneNumber;
                 customer.BirthDate = addCustomerDTO.BirthDate;
                 customer.Female = false;
+                customer.FilialId = 1;
                 _customerService.Create(customer);
                 return RedirectToAction("MaleList", "Customer");
             }
           
         }
-        public IActionResult GetMatchingCustomers(string searchTerm)
-        {
-            var matchingCustomers = GetMatchingCustomersFromDatabase(searchTerm); 
-            return PartialView("Views/Shared/_CustomerInfoPartial.cshtml", matchingCustomers);
-        }
-
-        private List<Customer> GetMatchingCustomersFromDatabase(string searchTerm)
-        {     
-            var searchCustomer = _db.Customers.Where(c => c.FullName.Contains(searchTerm) || c.PhoneNumber.ToString().Contains(searchTerm)).ToList();
-
-            return searchCustomer;
-        }
+ 
 
         [HttpGet]
         public IActionResult UpdateCustomer(int CustomerId)
@@ -119,7 +113,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateCustomer(int CustomerId, CustomerUpdateDTO customerUpdateDTO)
+        public async Task<IActionResult> UpdateCustomer(int CustomerId, CustomerUpdateDTO customerUpdateDTO)
         {
             var validator = new UpdateCustomerValidator();
             var validationResult = validator.Validate(customerUpdateDTO);
@@ -131,10 +125,11 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
                 }
                 return View(customerUpdateDTO);
             }
-            Customer customer = _customerService.SelectedCustomer(CustomerId);
+            Customer customer =await _customerService.SelectedCustomer(CustomerId);
             customer.FullName = customerUpdateDTO.FullName;
             customer.BirthDate = customerUpdateDTO.BirthDate;
             customer.PhoneNumber = customerUpdateDTO.PhoneNumber;
+         
             _customerService.Update(customer);
             if (customer.Female)
             {
@@ -144,21 +139,26 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
 
         }
         [HttpGet]
-        public IActionResult DailyBirthDate()
+        public async Task<IActionResult> DailyBirthDate()
         {
-            DateTime date = DateTime.Today;
-            List<Customer> customer = _db.Customers.Where(x => x.BirthDate.Month == date.Month && x.BirthDate.Day == date.Day).ToList();
+            
+            List<Customer> customer =await _customerService.DailyBirthDate(1);
 
             return View(customer);
         }
         [HttpGet]
         public IActionResult CustomerHistory(int CustomerId) {
+            CustomerUsingHistoryDTO customerUsingHistoryDTO = new CustomerUsingHistoryDTO();
+            customerUsingHistoryDTO.LazerAppointmentsHistory = _db.LazerAppointments.Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Include(x => x.Filial).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.CosmetologyAppointments = _db.CosmetologyAppointments.Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).Include(x => x.Filial).Include(x => x.AppUser).Include(x => x.Customers).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.SolariumAppointments = _db.SolariumAppointments.Include(x => x.SolariumCategories).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.Customer).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.BodyshapingAppointments = _db.BodyShapingAppointments.Include(x => x.BodyShapingMaster).Include(x => x.BodyShapingPacketReports).Include(x => x.AppUser).Include(x => x.Customer).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.LipuckaAppointments = _db.LipuckaAppointments.Include(x => x.Customer).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.LipuckaReports).ThenInclude(x => x.LipuckaCategories).Where(x=>x.CustomerId==CustomerId).ToList();
+            customerUsingHistoryDTO.PirsinqAppointments = _db.PirsinqAppointments.Include(x => x.Customer).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.FullName = _db.Customers.Where(x => x.Id == CustomerId).Select(x => x.FullName).FirstOrDefault();
+            customerUsingHistoryDTO.BirthDate = _db.Customers.Where(x => x.Id == CustomerId).Select(x => x.BirthDate).FirstOrDefault();
 
-            List<LazerAppointment> lazerAppointment = _db.LazerAppointments.Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x=>x.Customers).Include(x=>x.LazerAppointmentReports).ThenInclude(x=>x.LazerCategory).
-                Where(x=>x.CustomerId==CustomerId).ToList();
-            ViewBag.Customer = _db.Customers.Where(x => x.Id == CustomerId).Select(x=>x.FullName).FirstOrDefault();
-            ViewBag.Female=_db.Customers.Where(x=>x.Id==CustomerId).Select(x => x.Female).FirstOrDefault();
-        return View(lazerAppointment);
+            return View(customerUsingHistoryDTO);
         }
 
     }

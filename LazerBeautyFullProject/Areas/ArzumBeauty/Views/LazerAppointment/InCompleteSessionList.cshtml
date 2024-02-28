@@ -57,7 +57,7 @@
 
                                 @foreach (var item in Model)
                                 {
-                                    if ((item.EndTime.Value.Date.AddHours(168)>DateTime.Now))
+                                    if ((item.EndTime.Value.Date.AddHours(168)>DateTime.Today.Date))
                                     {
                                         <tr>
                                             <td>

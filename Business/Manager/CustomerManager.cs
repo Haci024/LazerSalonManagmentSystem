@@ -31,9 +31,9 @@ namespace Business.Manager
            return _customerAccountDAL.GetById(id);
         }
 
-        public List<Customer> GetFemaleList()
+        public async Task<List<Customer>> GetFemaleList()
         {
-            return _customerAccountDAL.GetFemaleList();
+            return await _customerAccountDAL.GetFemaleList();
         }
 
         public List<Customer> GetList()
@@ -47,14 +47,19 @@ namespace Business.Manager
            
             _customerAccountDAL.Update(t);
         }
-        public Customer SelectedCustomer(int id)
+        public async Task<Customer> SelectedCustomer(int id)
         {
-            return _customerAccountDAL.SelectedCustomer(id);
+            return await _customerAccountDAL.SelectedCustomer(id);
         }
 
-        public List<Customer> MaleList()
+        public async Task<List<Customer>> MaleList()
         {
-            return _customerAccountDAL.GetMaleList();
+            return await _customerAccountDAL.GetMaleList();
+        }
+
+        public async Task<List<Customer>> DailyBirthDate(int FilialId)
+        {
+            return await _customerAccountDAL.DailyBirthDate(FilialId);
         }
     }
 }

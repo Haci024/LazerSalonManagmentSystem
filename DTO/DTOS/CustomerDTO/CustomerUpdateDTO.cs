@@ -13,5 +13,7 @@ namespace DTO.DTOS.CustomerDTO
         public string FullName { get; set; }
 
         public DateTime BirthDate { get; set; }
+
+        public bool Female { get; set; }
     }
 }

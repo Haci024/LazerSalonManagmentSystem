@@ -11,8 +11,12 @@ namespace DTO.DTOS.LazerAppointmentDTO
     {
         public List<LazerAppointment> LazerAppointments { get; set; }
 
+        public List<LazerAppointment> Injections { get; set; }
+
         public List<Customer> CustomerList { get; set; }
 
         public int  LazerMasterId { get; set; }
+
+        
     }
 }

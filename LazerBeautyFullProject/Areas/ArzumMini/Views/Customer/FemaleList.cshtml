@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Entity.Concrete.Customer>
 @{
+    Layout = "~/Areas/ArzumMini/Views/Shared/_LazerMiniLayout.cshtml";
     ViewData["Title"] = " Qadın Müştərilər";
     int num = 0;
 }
@@ -58,7 +59,7 @@
                                     <tr>
                                         <td>@(num = num + 1)</td>
                                         <td>@item.FullName</td>
-                                        <td>@item.PhoneNumber</td>
+                                        <td>@item.PhoneNumber.ToString("0000000000")</td>
                                         <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
                                         <td style="display:flex;justify-content:end">
                                          
@@ -72,9 +73,6 @@
                                                     <i class="material-icons">edit</i>
                                                 </a>
                                             </div>
-                                     
-
-
                                         </td>
                                     </tr>
                                 }

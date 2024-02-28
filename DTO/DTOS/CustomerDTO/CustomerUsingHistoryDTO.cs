@@ -17,5 +17,15 @@ namespace DTO.DTOS.CustomerDTO
 
         public DateTime BirthDate { get; set; }
 
+        public List<CosmetologyAppointment> CosmetologyAppointments { get; set; }
+
+        public List<SolariumAppointment> SolariumAppointments { get; set; }
+
+        public List<BodyshapingAppointment> BodyshapingAppointments { get; set; }
+
+        public List<PirsinqAppointment> PirsinqAppointments { get; set; }
+
+        public List<LipuckaAppointment> LipuckaAppointments { get; set; }
+
     }
 }

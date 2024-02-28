@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Entity.Concrete.Stock>
+@{
+    ViewData["Title"] = "ArchiveProducts";
+}
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                            Tükənmiş məhsullar
+                        </h2>
+                        <div style="padding-right:30px;">
+                            <a asp-action="ArchiveProducts" class="btn btn-outline-warning waves-effect ">
+                                <i class="material-icons">list</i>
+                            </a>
+                            <a asp-action="ProductList" class="btn btn-success waves-effect ">
+                                <i class="material-icons">keyboard_return</i>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Qeydiyyat tarixi</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Məhsul</th>
+                                    <th>Ümumi alınma sayı</th>
+                                    <th>Mövcud say</th>
+                                    <th>Satılma sayı</th>
+                                    <th>Maya qiyməti</th>
+                                    <th>Satış qiyməti</th>
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Qeydiyyat tarixi</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Məhsul</th>
+                                    <th>Ümumi alınma sayı</th>
+                                    <th>Mövcud say</th>
+                                    <th>Satılma sayı</th>
+                                    <th>Maya qiyməti</th>
+                                    <th>Satış qiyməti</th>
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                
+                                        <tr>
+                                            <th>@item.AddingDate.ToString("dd.MM.yyyy")</th>
+                                            <td>@item.AppUser.UserName</td>
+                                            <td>@item.ProductName</td>
+                                            <td>@item.TotalCount</td>
+                                            <td>@item.RemainCount</td>
+                                            <td>@item.SellingCount</td>
+                                            <td>@item.BuyingPrice.ToString("#0.##") AZN</td>
+                                            <td>@item.SellingPrice.ToString("#0.##") AZN</td>
+                                            <td>
+                                                <a asp-controller="Income" asp-action="IncreaseToCountProduct" asp-route-ProductId="@item.Id" class="btn btn-deep-pruple">
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    
+                                 
+                                }
+
+
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

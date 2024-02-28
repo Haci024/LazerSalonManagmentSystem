@@ -1,0 +1,68 @@
+﻿@model DTO.DTOS.KassaActionsDTO.KassaActionsDTO
+@{
+    ViewData["Title"] = "OutMoneyForOwner";
+}
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Kassaya Mədaxil</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="form-group form-float">
+                            <label class="form-label">Kassadakı məbləğ</label>
+                            <div class="form-line">
+                                <input type="number" asp-for="Budget" class="form-control" readonly>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Əlavə ediləcək məbləğ</label>
+                            <div class="form-line">
+                                <input type="number" asp-for="OutMoney" class="form-control" step="0.1" min="0">
+
+                            </div>
+
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Açıqlama</label>
+                            <div class="form-line">
+                                <textarea  asp-for="Description" class="form-control"></textarea>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yenilə</button>
+                            <a asp-action="KassaActionList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
+
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
+
+</script>
+

@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
+@{
+    ViewData["Title"] = "LazeroloqSessionList";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        @ViewBag.LazeroloqName Seanslar
+                    </h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Nahiyələr</th>          
+                                    <th>Ödəniş</th>
+                                    <th>Status</th>
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>                
+                                    <th>Nahiyələr</th>                
+                                    <th>Ödəniş</th>
+                                    <th>Status</th>
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                        <tr>
+                                            <th>@item.ReservationDate.ToString("dd.MM.yyyy")</th>
+                                            <th>@item.AppUser.UserName</th>
+                                            <td>@item.Customers.FullName</td>
+                                            <td>@item.Customers.PhoneNumber.ToString("0000000000")</td>
+                                            <td style="display:flex">
+                                                @foreach (var categories in item.LazerAppointmentReports)
+                                                {
+                                                    if (categories.LazerCategory.MainCategoryId != null)
+                                                    {
+                                                        <div style="padding:2px">@categories.LazerCategory.Name,</div>
+                                                    }
+                                                }
+                                            </td>
+                                          
+                                         
+                                            <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                            <td>
+                                                @if (item.IsStart==true && item.IsCompleted==false)
+                                                {
+                                                <b style="color:#2196F3">Seans başladı</b>
+                                                }
+                                                else if (item.IsCompleted==true && item.IsContiued==true && item.IsCompleted==true)
+                                                {
+                                                <b style="color:#FF9800">Bədən ardı</b>
+                                                }
+                                                else if (item.IsCompleted==true && item.IsContiued==false && item.IsStart==true && item.IsContiued==false)   
+                                                 {
+                                                <b style="color:#8BC34A">Uğurlu</b>
+                                                 }
+                                                 else if (item.IsDeleted==true && item.IsCompleted==false)
+                                                 {
+                                                <b style="color:#F44336">İmtina edilmiş</b>
+                                                  }
+                                                  else
+                                                 {
+                                                <b style="color:#4CAF50">Rezervasiya</b>
+                                                 }
+                                                                         
+                                            </td>
+
+                                            <td style="padding-top:17px" class="text-center">
+                                                <a asp-controller="Personal" asp-action="DeleteSession" asp-route-AppointmentId="@item.Id" class="btn bg-red">
+                                                    <i class="material-icons">delete</i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    
+
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

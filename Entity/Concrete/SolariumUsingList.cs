@@ -20,5 +20,11 @@ namespace Entity.Concrete
 
         public DateTime  UsingDate { get; set; }
 
+
+        public AppUser AppUser { get; set; }
+
+        public string? AppUserId { get; set; }
+
+
     }
 }

@@ -1,0 +1,81 @@
+﻿@model DTO.DTOS.PersonalDTO.NewPersonalDTO
+@{
+    ViewData["Title"] = "AddBodyShapingMaster";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Yeni Bədən Şəkilləndirmə ustası</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <p>
+                            <label> Bədən Şəkilləndirmə ustası adı</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">person</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="FullName" class="form-control" placeholder="Ad və Soyad">
+                            </div>
+                        </div>
+
+                        <p>
+                            <label>Filial</label>
+                        </p>
+                        <div class="form-group form-float">
+
+                            <div>
+
+                                <select class="form-control show-tick" asp-for="FilialId">
+                                    <option selected>Filial seçin...</option>
+                                    @foreach (var item in Model.Filials)
+                                    {
+
+                                        <option value="@item.Id">@item.FilialName</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yarat</button>
+                            <a asp-action="BodyShapingMasterList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+        document.getElementById("submitButton").disabled = true;
+
+
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000);
+    });
+
+</script>
+
+

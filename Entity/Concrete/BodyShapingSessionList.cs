@@ -14,11 +14,19 @@ namespace Entity.Concrete
 
         public int BodyShapingAppointmentId { get; set; }
 
-        public DateTime? SessionDate { get; set; }
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        public int Duration { get; set; }
 
         public string SessionName { get; set; }
 
         public bool IsCompleted { get; set; } = false;
+
+        public AppUser AppUser { get; set; }   
+       
+        public string? AppUserId {  get; set; }
 
 
 

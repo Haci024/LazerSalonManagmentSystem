@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,18 +11,38 @@ namespace DTO.DTOS.ReportDTO
     {
         public decimal Budget { get; set; }
 
-        public decimal DailyTotalInComeMoney { get; set; }
+        public List<LazerMaster> Lazeroloqs{get;set;}
 
-        public decimal DailyTotalOutMoney { get; set; }
+        public List<BodyShapingMaster> BodyShapingMasters { get;set;}
 
-        public decimal DailyBenefitMoney { get; set; }
+        public List<Cosmetologs> Cosmetologs { get; set; }
 
-        public decimal Master1DailyEarnings { get; set; }
+        public List<AppUser> AppUsers { get; set; }
 
-        public decimal Master2DailyEarnings { get; set; }
+        public List<LazerAppointment> LazerAppointments { get; set; }
+        
+        public decimal ShopingEarning { get; set; }
 
-        public decimal ProceedsFromSales { get; set; }
+        public decimal OutMoneyFromKassa { get; set; }
+
+        public decimal DailyLazerEarning { get; set; }
+
+        public decimal DailySolariumEarning { get; set; }
+
+        public decimal DailyBodyShapingEarning { get; set; }
+
+        public decimal DailyCosmetologyEarning { get; set; }
 
         public int ImplusCount { get; set; }
+
+        public decimal TotalEarning { get; set; }
+
+        public decimal Spending { get; set; }
+
+        public decimal LipuckaEarning { get; set; }
+
+        public decimal PirsinqEarning { get; set; }
+
+
     }
 }

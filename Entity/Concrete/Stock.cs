@@ -12,7 +12,12 @@ namespace Entity.Concrete
 
         public string ProductName { get; set; }
 
-        public int ProductCount { get; set; }   
+        public int TotalCount { get; set; }   
+
+        public int SellingCount { get;set; }
+        
+        public int RemainCount { get; set; }
+
 
         public DateTime AddingDate { get; set; }
 

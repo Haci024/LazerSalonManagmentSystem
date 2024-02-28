@@ -13,54 +13,55 @@ namespace Data.Repositories
     public class LazerAppointmentRepository : GenericRepository<LazerAppointment>, ILazerAppointmentDAL
     {
 
-        public List<LazerAppointment> GetAllInjectList()
+        public async Task<List<LazerAppointment>> GetAllInjectList()
         {
             using AppDbContext db = new AppDbContext(); 
             
-           return db.LazerAppointments.Include(x=>x.LazerMaster).Include(x=>x.AppUser).Include(x=>x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x=>x.LazerCategory).ToList();
+           return await db.LazerAppointments.Include(x=>x.LazerMaster).Include(x=>x.AppUser).Include(x=>x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x=>x.LazerCategory).ToListAsync();
         }
 
-        public List<LazerAppointment> LazerAppointmentsReports()
+        public async Task<List<LazerAppointment>> LazerAppointmentsReports()
         {
            AppDbContext db=new AppDbContext();
           
         
-            return db.LazerAppointments.Include(x => x.LazerMaster).Include(x=>x.AppUser).Include(x => x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).ToList();
+            return await db.LazerAppointments.Include(x => x.LazerMaster).Include(x=>x.AppUser).Include(x => x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).ToListAsync();
        
         }
 
-        public List<LazerAppointment> SuccesfullyAppointments()
+        public async Task<List<LazerAppointment>> SuccesfullyAppointments(int filialId)
         {
             using AppDbContext db = new AppDbContext();
             
           
-            return db.LazerAppointments.Include(x=>x.LazerMaster).Include(x=>x.AppUser).Include(x=>x.Customers).Include(x=>x.LazerAppointmentReports).ThenInclude(x=> x.LazerCategory).OrderBy(x=>x.ReservationDate).ToList();
+            return await db.LazerAppointments.Include(x=>x.LazerMaster).Include(x=>x.AppUser).Include(x=>x.Customers).Include(x=>x.LazerAppointmentReports).ThenInclude(x=> x.LazerCategory).OrderBy(x=>x.ReservationDate).Where(x=>x.IsCompleted == false && x.IsDeleted == false && x.FilialId==filialId).ToListAsync();
         }
-        public async  Task<LazerAppointment>  SelectedCustomer(int AppointmentId)
+        public  async Task<LazerAppointment>  SelectedCustomer(int AppointmentId)
         {
+       
             using AppDbContext db = new AppDbContext();
 
-            return await db.LazerAppointments.Include(x => x.Customers).Include(x=>x.AppUser).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.AppUser).Include(x => x.LazerMaster).FirstOrDefaultAsync(x => x.Id == AppointmentId);
         }
-        public List<LazerAppointment> NextSessionList(AppUser appUser)
+        public async Task<List<LazerAppointment>> NextSessionList(int filialId)
         {
-            DateTime today = DateTime.Today.Date;
+            DateTime date = new DateTime();
             using AppDbContext db = new AppDbContext();
-            return db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.NextSessionDate.Value.Date == today && x.FilialId==appUser.FilialId).ToList();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x =>x.NextSessionDate.Value.Date==DateTime.Today && x.FilialId==filialId).ToListAsync();
 
         }
 
-        public List<LazerAppointment> AllReservations(AppUser appUser)
+        public async Task<List<LazerAppointment>> AllReservations(int filialId)
         {
             using AppDbContext db = new AppDbContext();
-            return db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsCompleted == false && x.FilialId == appUser.FilialId).ToList();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsCompleted == false && x.FilialId == filialId).ToListAsync();
         }
-        public List<LazerAppointment> InCompletedList(AppUser appUser)
+        public async Task<List<LazerAppointment>> InCompletedList(int filialId)
         {
 
             using AppDbContext db = new AppDbContext();
 
-            return db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsContiued == true && x.FilialId==appUser.FilialId).ToList();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x=>x.FilialId == filialId && x.IsContiued == true ).ToListAsync();
         }
 
         public async Task<LazerAppointment> CompletelySecondSessionEnd(int AppointmentId)
@@ -75,6 +76,18 @@ namespace Data.Repositories
             using AppDbContext db = new AppDbContext();
 
             return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<LazerAppointment>> ReservationsForMaster(int filialId, int LazerMasterId)
+        {
+            using AppDbContext db = new AppDbContext();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsCompleted == false && x.FilialId == filialId && x.LazerMasterId==LazerMasterId && x.IsDeleted==false).ToListAsync();
+        }
+
+        public async Task<List<LazerAppointment>> InjectionsForMaster(int filialId ,int lazermasterId)
+        {
+            using AppDbContext db = new AppDbContext();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsCompleted == false && x.FilialId == filialId && x.LazerMasterId == lazermasterId && x.IsDeleted == true).ToListAsync();
         }
     }
 }

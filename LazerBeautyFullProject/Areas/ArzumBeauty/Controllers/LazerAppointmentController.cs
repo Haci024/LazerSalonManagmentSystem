@@ -16,31 +16,39 @@ using Microsoft.Identity.Client;
 
 namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
 {
-   
+
     [Area("ArzumBeauty")]
+    [Authorize]
     public class LazerAppointmentController : Controller
     {
         private readonly ILazerAppointmentService _appointmentService;
         private readonly AppDbContext _db;
         private readonly ICustomerService _customerService;
         private readonly ILazerAppointmentsReportService _lazerReports;
+
         private readonly UserManager<AppUser> _userManager;
-        public LazerAppointmentController(ILazerAppointmentService appointmentService, ILazerAppointmentsReportService lazerReports, AppDbContext db, ICustomerService customerService, UserManager<AppUser> userManager)
+        private readonly ILazerMasterService _lazerMasterService;
+        public LazerAppointmentController(ILazerAppointmentService appointmentService, ILazerMasterService lazerMasterService, ILazerAppointmentsReportService lazerReports, AppDbContext db, ICustomerService customerService, UserManager<AppUser> userManager)
         {
             _db = db;
             _appointmentService = appointmentService;
             _customerService = customerService;
             _lazerReports = lazerReports;
             _userManager = userManager;
+            _lazerMasterService = lazerMasterService;
         }
 
         [HttpGet]
-        public IActionResult LazerMasterPage(int LazerMasterId)
+        public async Task<IActionResult> LazerMasterPage(int LazerMasterId)
         {
-            ViewBag.LazerMaster = _db.LazerMasters.Where(x => x.Id == LazerMasterId).Select(x => x.FullName).FirstOrDefault();
+            LazerMaster lazerMaster = _lazerMasterService.GetById(LazerMasterId);
+            var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewBag.LazerMaster = lazerMaster.FullName;
             LazerMasterPageDTO lazerMasterPageDTO = new LazerMasterPageDTO();
-            lazerMasterPageDTO.CustomerList = _customerService.GetList();
-            lazerMasterPageDTO.LazerAppointments = _appointmentService.GetAllSuccecfullyAppointments();
+            lazerMasterPageDTO.CustomerList = await _customerService.GetFemaleList();
+            lazerMasterPageDTO.LazerAppointments = await _appointmentService.ReservationsForMaster(2, LazerMasterId);
+            lazerMasterPageDTO.Injections = await _appointmentService.InjectionsForMaster(2, LazerMasterId);
+
             lazerMasterPageDTO.LazerMasterId = LazerMasterId;
             return View(lazerMasterPageDTO);
         }
@@ -48,22 +56,24 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         public async Task<IActionResult> AddLazerAppointment(int LazerMasterId, bool Female, int CustomerId)
         {
             ViewBag.LazerMasterId = LazerMasterId;
-            ViewBag.LazerMaster = _db.LazerMasters.Where(x => x.Id == LazerMasterId).Select(x => x.FullName).FirstOrDefault();
+            LazerMaster lazerMaster = _lazerMasterService.GetById(LazerMasterId);
+            ViewBag.LazerMaster = lazerMaster.FullName;
+            Customer customer = _customerService.GetById(CustomerId);
             LazerAppointmentDTO lazerAppointmentDTO = new LazerAppointmentDTO();
-            AppUser AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (Female==true)
+            var AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (Female == true)
             {
-                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId==1).ToListAsync();
+                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 5).ToListAsync();
             }
             else
             {
-                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId ==15).ToListAsync();
+                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 5).ToListAsync();
             }
-           
-            lazerAppointmentDTO.CustomerName = await _db.Customers.Where(c => c.Id == CustomerId).Select(x => x.FullName).FirstOrDefaultAsync();
-            lazerAppointmentDTO.LazerMasterName = _db.LazerMasters.Where(x => x.Id == LazerMasterId).Select(x => x.FullName).FirstOrDefault();
+
+            lazerAppointmentDTO.CustomerName = customer.FullName;
+            lazerAppointmentDTO.LazerMasterName = lazerMaster.FullName;
             lazerAppointmentDTO.LazerMasterId = LazerMasterId;
-            List<Customer> customers = _customerService.GetList();
+
             return View(lazerAppointmentDTO);
         }
         [HttpPost]
@@ -71,15 +81,15 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         {
             ViewBag.LazerMasterId = LazerMasterId;
             ViewBag.LazerMaster = _db.LazerMasters.Where(x => x.Id == LazerMasterId).Select(x => x.FullName).FirstOrDefault();
-            if (Female==true)
+            if (Female == true)
             {
-                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 1).ToListAsync();
+                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 5).ToListAsync();
             }
             else
             {
-                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 15).ToListAsync();
+                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 5).ToListAsync();
             }
-            AppUser AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            var AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
 
             var validator = new LazerValidator();
             var validationResult = validator.Validate(lazerAppointmentDTO);
@@ -92,13 +102,14 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                 return View(lazerAppointmentDTO);
             }
             LazerAppointment lazerAppointment = new LazerAppointment();
-            lazerAppointment.FilialId = AppUser.FilialId;
+            lazerAppointment.FilialId = 2;
             lazerAppointment.CustomerId = CustomerId;
             lazerAppointment.AppUserId = AppUser.Id;
             lazerAppointment.Price = lazerAppointmentDTO.Price;
             lazerAppointment.LazerMasterId = LazerMasterId;
             lazerAppointment.ReservationDate = lazerAppointmentDTO.ReservationDate;
             lazerAppointment.ImplusCount = 0;
+
             List<LazerAppointmentReports> reports = new List<LazerAppointmentReports>();
             foreach (int childcategories in lazerAppointmentDTO.lazerCategoriesId)
             {
@@ -117,14 +128,16 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         public async Task<IActionResult> UpdateReservationStatus(int AppointmentId)
         {
             LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
+            Customer customer = _customerService.GetById(lazerAppointment.CustomerId);
+            LazerMaster lazerMaster = _lazerMasterService.GetById(lazerAppointment.LazerMasterId);
             UpdateReservationDTO updateReservationDTO = new UpdateReservationDTO();
-            AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             updateReservationDTO.IsStart = lazerAppointment.IsStart;
-            updateReservationDTO.CustomerName = _db.Customers.Where(x => x.FullName == lazerAppointment.Customers.FullName).Select(x => x.FullName).FirstOrDefault();
-            updateReservationDTO.LazerMasterName = _db.LazerMasters.Where(x => x.FullName == lazerAppointment.LazerMaster.FullName).Select(x => x.FullName).FirstOrDefault();
+            updateReservationDTO.CustomerName = customer.FullName;
+            updateReservationDTO.LazerMasterName = lazerMaster.FullName;
             updateReservationDTO.LazerMasterId = lazerAppointment.LazerMasterId;
-            
-            
+
+
             return View(updateReservationDTO);
         }
 
@@ -132,7 +145,9 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateReservationStatus(int AppointmentId, UpdateReservationDTO updateReservationDTO)
         {
-            AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
+            updateReservationDTO.LazerMasterId = lazerAppointment.LazerMasterId;
+            var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             var validator = new UpdateReservationValidator();
             var validationResult = validator.Validate(updateReservationDTO);
             if (!validationResult.IsValid)
@@ -144,10 +159,10 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                 return View(updateReservationDTO);
             }
 
-            LazerAppointment lazerAppointment =await _appointmentService.SelectLazerAppointment(AppointmentId);
-            lazerAppointment.AppUserId = appUser.Id;
+
+
             updateReservationDTO.LazerMasterId = lazerAppointment.LazerMasterId;
-            
+
             lazerAppointment.StartTime = updateReservationDTO.StartTime;
 
             if (updateReservationDTO.IsStart == false)
@@ -163,6 +178,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                     lazerAppointment.Decription = updateReservationDTO.Description;
                     lazerAppointment.StartTime = updateReservationDTO.StartTime;
                     lazerAppointment.IsStart = false;
+                    lazerAppointment.IsCompleted = false;
                     lazerAppointment.IsDeleted = true;
                     _appointmentService.Update(lazerAppointment);
                     return RedirectToAction("LazerMasterPage", "LazerAppointment", new { LazerMasterId = lazerAppointment.LazerMasterId });
@@ -171,12 +187,12 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             lazerAppointment.IsStart = true;
 
             _appointmentService.Update(lazerAppointment);
-            return RedirectToAction("LazerMasterPage", "LazerAppointment",new { LazerMasterId = lazerAppointment.LazerMasterId });
+            return RedirectToAction("LazerMasterPage", "LazerAppointment", new { LazerMasterId = lazerAppointment.LazerMasterId });
         }
         [HttpGet]
         public async Task<IActionResult> CompletedReservationStatus(int AppointmentId)
         {
-            LazerAppointment lazerAppointment = await _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
             CompletedReservationStatusDTO completedReservationStatusDTO = new CompletedReservationStatusDTO();
             completedReservationStatusDTO.EndTime = lazerAppointment.EndTime;
 
@@ -189,6 +205,8 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CompletedReservationStatus(int AppointmentId, CompletedReservationStatusDTO completedReservationStatusDTO)
         {
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
+            completedReservationStatusDTO.LazerMasterId = lazerAppointment.LazerMasterId;
             var validator = new CompletedReservationStatusValidator();
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             var validationResult = validator.Validate(completedReservationStatusDTO);
@@ -200,28 +218,23 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                 }
                 return View(completedReservationStatusDTO);
             }
-            LazerAppointment lazerAppointment = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).FirstOrDefault(x => x.Id == AppointmentId);
+
             lazerAppointment.AppUserId = appUser.Id;
             lazerAppointment.EndTime = completedReservationStatusDTO.EndTime;
-            lazerAppointment.NextSessionDate = lazerAppointment.EndTime.Value.AddDays(30);
+            lazerAppointment.NextSessionDate = lazerAppointment.EndTime.Value.AddDays(29);
             lazerAppointment.ImplusCount = completedReservationStatusDTO.ImpulsCount;
-
-            Kassa budget = _db.Budget.FirstOrDefault();
-            budget.Budget = budget.Budget + lazerAppointment.Price;
             if (completedReservationStatusDTO.IsCompleted)
             {
                 lazerAppointment.IsCompleted = true;
                 lazerAppointment.IsContiued = false;
                 _appointmentService.Update(lazerAppointment);
-                _db.Update(budget);
-                _db.SaveChanges();
+
                 return RedirectToAction("LazerMasterPage", "LazerAppointment", new { LazerMasterId = lazerAppointment.LazerMasterId });
             }
             lazerAppointment.IsCompleted = true;
             lazerAppointment.IsContiued = true;
             _appointmentService.Update(lazerAppointment);
-            _db.Update(budget);
-            _db.SaveChanges();
+
             return RedirectToAction("LazerMasterPage", "LazerAppointment", new { LazerMasterId = lazerAppointment.LazerMasterId });
         }
         [HttpGet]
@@ -240,6 +253,8 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePrice(int LazerId, LazerPriceUpdateDTO lazerPriceUpdateDTO)
         {
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(LazerId);
+            lazerPriceUpdateDTO.LazerMasterId = lazerAppointment.LazerMasterId;
             var validator = new UpdatePriceValidator();
             var validationResult = validator.Validate(lazerPriceUpdateDTO);
             if (!validationResult.IsValid)
@@ -252,41 +267,27 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                 return View(lazerPriceUpdateDTO);
             }
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            LazerAppointment lazerAppointment = _appointmentService.GetById(LazerId);
+
             lazerAppointment.AppUserId = appUser.Id;
 
-            lazerAppointment.PriceUpdateDescription = lazerPriceUpdateDTO.Desciption;
+            lazerAppointment.PriceUpdateDescription = lazerPriceUpdateDTO.Description;
             lazerAppointment.Price = lazerPriceUpdateDTO.Price;
 
             _appointmentService.Update(lazerAppointment);
             return RedirectToAction("LazerMasterPage", "LazerAppointment", new { LazerMasterId = lazerAppointment.LazerMasterId });
         }
         [HttpGet]
-        public IActionResult KorreksionDateList() {
-
-            List<LazerAppointment> lazerAppointments = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.EndTime.Value.Day == DateTime.Today.Day && x.EndTime.Value.Year == DateTime.Today.Year).ToList();
-
+        public async Task<IActionResult> RememberedMonthlySession()
+        {
+            var AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            List<LazerAppointment> lazerAppointments = await _appointmentService.NextSessionList(2);
             return View(lazerAppointments);
         }
         [HttpGet]
-        public IActionResult SuccessfullyAppointments()
+        public async Task<IActionResult> InCompleteSessionList()
         {
-            List<LazerAppointment> lazerAppointments = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).ToList();
-            return View(lazerAppointments);
-        }
-   
-
-        [HttpGet]
-        public IActionResult RememberedMonthlySession()
-        {
-            DateTime today = DateTime.Today.Date;
-            List<LazerAppointment> lazerAppointments = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.NextSessionDate.Value.Date == today).ToList();
-            return View(lazerAppointments);
-        }
-        [HttpGet]
-        public IActionResult InCompleteSessionList()
-        {
-            List<LazerAppointment> lazerAppointments = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsContiued == true).ToList();
+            var AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            List<LazerAppointment> lazerAppointments = await _appointmentService.InComepletedList(2);
 
             return View(lazerAppointments);
         }
@@ -294,27 +295,28 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         [HttpGet]
         public async Task<IActionResult> AllReservations()
         {
-            AppUser appUser =await _userManager.FindByNameAsync(User.Identity.Name);
-            List<LazerAppointment> lazerAppointments= _appointmentService.AllReservations(appUser);
-           
+            var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            List<LazerAppointment> lazerAppointments = await _appointmentService.AllReservations(2);
+
             return View(lazerAppointments);
         }
         [HttpGet]
-        public IActionResult UpdateReservationTime(int AppointmentId)
+        public async Task<IActionResult> UpdateReservationTime(int AppointmentId)
         {
 
-            LazerAppointment lazerAppointment = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefault();
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
 
             UpdateReservationTimeDTO updateReservationTimeDTO = new UpdateReservationTimeDTO();
             updateReservationTimeDTO.NewStartTime = lazerAppointment.ReservationDate;
-            
-
 
             return View(updateReservationTimeDTO);
         }
         [HttpPost]
-        public IActionResult UpdateReservationTime(int AppointmentId,UpdateReservationTimeDTO updateReservationTimeDTO)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateReservationTime(int AppointmentId, UpdateReservationTimeDTO updateReservationTimeDTO)
         {
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
+
             var validator = new UpdateReservationTimeValidator();
             var validationResult = validator.Validate(updateReservationTimeDTO);
             if (!validationResult.IsValid)
@@ -325,30 +327,30 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                     return View(updateReservationTimeDTO);
                 }
             }
-            LazerAppointment lazerAppointment = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefault();
+
             UpdateReservationTimeDTO updateReservationDTO = new UpdateReservationTimeDTO();
-            lazerAppointment.ReservationDate = updateReservationTimeDTO.NewStartTime;
-            
-          
+            lazerAppointment.ReservationDate = (DateTime)updateReservationTimeDTO.NewStartTime;
+
+
             _appointmentService.Update(lazerAppointment);
 
             return RedirectToAction("LazerMasterPage", "LazerAppointment", new { LazerMasterId = lazerAppointment.LazerMasterId });
         }
         [HttpGet]
-        public IActionResult SesstionTime(int AppointmentId)
+        public async Task<IActionResult> SesstionTime(int AppointmentId)
         {
 
-            LazerAppointment lazerAppointment = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefault();
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
 
-           
-            UpdateReservationTimeDTO updateReservationTimeDTO=new UpdateReservationTimeDTO();
+
+            UpdateReservationTimeDTO updateReservationTimeDTO = new UpdateReservationTimeDTO();
 
 
 
             return View(updateReservationTimeDTO);
         }
         [HttpPost]
-        public IActionResult SesstionTime(int AppointmentId, UpdateReservationTimeDTO updateReservationTimeDTO)
+        public async Task<IActionResult> SesstionTime(int AppointmentId, UpdateReservationTimeDTO updateReservationTimeDTO)
         {
             var validator = new UpdateReservationTimeValidator();
             var validationResult = validator.Validate(updateReservationTimeDTO);
@@ -360,9 +362,9 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                     return View(updateReservationTimeDTO);
                 }
             }
-            LazerAppointment lazerAppointment = _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefault();
+            LazerAppointment lazerAppointment = await _appointmentService.SelectLazerAppointment(AppointmentId);
             UpdateReservationTimeDTO updateReservationDTO = new UpdateReservationTimeDTO();
-            lazerAppointment.InCompleteStartTime =updateReservationTimeDTO.NewStartTime;
+            lazerAppointment.InCompleteStartTime = updateReservationTimeDTO.NewStartTime;
 
 
             _appointmentService.Update(lazerAppointment);
@@ -373,16 +375,16 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         [HttpGet]
         public async Task<IActionResult> CompletelySecondSessionStart(int AppointmentId)
         {
-            LazerAppointment lazerAppointment = await _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
-        CompletelySecondSessionStartDTO korreksionDateDTO = new CompletelySecondSessionStartDTO();
+            LazerAppointment lazerAppointment = await _appointmentService.CompletetedSecondSessionStart(AppointmentId);
+            CompletelySecondSessionStartDTO korreksionDateDTO = new CompletelySecondSessionStartDTO();
             korreksionDateDTO.Customer = lazerAppointment.Customers.FullName;
             korreksionDateDTO.Lazeroloq = lazerAppointment.LazerMaster.FullName;
 
-            
+
             return View(korreksionDateDTO);
         }
         [HttpPost]
-        public async Task<IActionResult> CompletelySecondSessionStart(int AppointmentId,CompletelySecondSessionStartDTO korreksionDateDTO)
+        public async Task<IActionResult> CompletelySecondSessionStart(int AppointmentId, CompletelySecondSessionStartDTO korreksionDateDTO)
         {
             var validate = new CompletelySecondSessionStartValidator();
             var validationResult = validate.Validate(korreksionDateDTO);
@@ -394,22 +396,23 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                 }
                 return View(validationResult);
             }
-            LazerAppointment lazerAppointment = await _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
-            lazerAppointment.IsContiued=lazerAppointment.IsContiued;
+            LazerAppointment lazerAppointment = await _appointmentService.CompletetedSecondSessionStart(AppointmentId);
+            lazerAppointment.IsContiued = lazerAppointment.IsContiued;
             lazerAppointment.InCompleteStartTime = korreksionDateDTO.StartDate2;
-            
+
             lazerAppointment.StartForSecond = true;
             _appointmentService.Update(lazerAppointment);
             return RedirectToAction("InCompleteSessionList");
         }
-      
+
         [HttpGet]
         public async Task<IActionResult> CompletelySecondSessionEnd(int AppointmentId)
         {
-            LazerAppointment lazerAppointment = await _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
+
+            LazerAppointment lazerAppointment = await _appointmentService.CompletelySecondSessionEnd(AppointmentId);
             CompletelySecondSessionEndDTO korreksionDateDTO = new CompletelySecondSessionEndDTO();
             korreksionDateDTO.CustomerFullName = lazerAppointment.Customers.FullName;
-            korreksionDateDTO.CustomerFullName=lazerAppointment.Customers.FullName;
+            korreksionDateDTO.CustomerFullName = lazerAppointment.Customers.FullName;
             korreksionDateDTO.ImpulsCount = lazerAppointment.ImplusCount;
             korreksionDateDTO.Lazeroloq = lazerAppointment.LazerMaster.FullName;
             return View(korreksionDateDTO);
@@ -417,14 +420,14 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         [HttpPost]
         public async Task<IActionResult> CompletelySecondSessionEnd(int AppointmentId, CompletelySecondSessionEndDTO korreksionDateDTO)
         {
-            LazerAppointment lazerAppointment = await _db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
-            if (lazerAppointment.ImplusCount>korreksionDateDTO.ImpulsCount)
+            LazerAppointment lazerAppointment = await _appointmentService.CompletelySecondSessionEnd(AppointmentId);
+            if (lazerAppointment.ImplusCount > korreksionDateDTO.ImpulsCount)
             {
-                ModelState.AddModelError("","Impuls sayı azaldıla bilməz!");
-               
+                ModelState.AddModelError("", "Impuls sayı azaldıla bilməz!");
+
                 return View(korreksionDateDTO);
             }
-            if (korreksionDateDTO.InCompleteEnd==null)
+            if (korreksionDateDTO.InCompleteEnd == null)
             {
                 ModelState.AddModelError("", "Çıxış saatı boş ola bilməz!");
                 return View(korreksionDateDTO);

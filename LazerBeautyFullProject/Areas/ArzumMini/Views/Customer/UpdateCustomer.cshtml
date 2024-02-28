@@ -27,7 +27,7 @@
                             <label class="form-label">Mobil nömrə <span class="font-bold col-pink"> - Nümunə:(0553454532) *</span></label>
 
                             <div class="form-line">
-                                <input asp-for="PhoneNumber" class="form-control">
+                                <input asp-for="PhoneNumber"  class="form-control">
                             </div>
                             <span class="font-bold col-pink" asp-validation-for="PhoneNumber"></span>
                         </div>
@@ -53,7 +53,7 @@
 
                         <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yenilə</button>
                             <a asp-action="FemaleList" class="btn btn-success" >Geri</a>
                         </div>
                       

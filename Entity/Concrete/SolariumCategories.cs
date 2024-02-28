@@ -25,6 +25,8 @@ namespace Entity.Concrete
 
         public int? UsingPeriod { get; set; }
 
+        public bool IsDeactive { get; set; }
+
         public List<SolariumAppointment> SolariumAppointment { get; set;}
 
         

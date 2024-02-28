@@ -15,9 +15,9 @@ namespace Entity.Concrete
 
         public List<LazerAppointment> LazerAppointment { get; set; }  
         
-        public Filial Filial { get; set; }
+        public List<LazerMasterFilial> LazerMasterFilial { get; set; }
 
-        public int FilialId { get; set; }
+        public bool IsDeactive { get; set; }
 
     }
 }

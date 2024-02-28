@@ -16,8 +16,6 @@ namespace Entity.Concrete
 
         public List<BodyshapingAppointment> BodyshapingAppointments { get; set; }
 
-        
-
         public DateTime BirthDate { get; set; }
 
         public string FullName { get; set; }
@@ -25,5 +23,12 @@ namespace Entity.Concrete
         public double PhoneNumber { get; set; }
 
         public bool Female { get; set; }
+
+        public Filial Filial { get; set; }
+
+        public int FilialId { get; set; }
+
+        public bool IsDeactive { get;set; }
+
     }
 }

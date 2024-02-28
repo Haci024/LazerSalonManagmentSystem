@@ -62,9 +62,9 @@
                             </div>
                             <span class="font-bold col-pink"></span>
                         </div>
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
                             <a asp-action="LazerMasterPage" asp-route-LazerMasterId="@ViewBag.LazerMasterId" class="btn btn-success">Geri</a>
                         </div>
                     </form>
@@ -116,24 +116,18 @@
     });
 </script>
 <script>
-    $(document).on('change', '#maincCategoryId', function () {
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
 
-        $.ajax({
-            url: "/LazerAppointment/ChildCategoriesList",
-            type: "GET",
-            data: {
-                "mainId": $("#maincCategoryId").val()
-            },
-            success: function (response) {
-                $("#childCategoryId").empty()
-                $("#childCategoryId").append(response)
-            }
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
 
-        });
-
-
-    })
 </script>
+
 
 
 

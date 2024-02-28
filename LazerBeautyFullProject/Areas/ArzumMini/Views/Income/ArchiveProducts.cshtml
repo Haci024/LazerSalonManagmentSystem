@@ -35,13 +35,15 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable dataTable">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                             <thead>
                                 <tr>
                                     <th>Qeydiyyat tarixi</th>
                                     <th>Qeydiyyatçı</th>
                                     <th>Məhsul</th>
-                                    <th>Say</th>
+                                     <th>Ümumi alınma sayı</th>
+                                    <th>Mövcud say</th>
+                                    <th>Satılma sayı</th>
                                     <th>Maya qiyməti</th>
                                     <th>Satış qiyməti</th>
                                     <th>Əməliyyatlar</th>
@@ -52,7 +54,9 @@
                                     <th>Qeydiyyat tarixi</th>
                                     <th>Qeydiyyatçı</th>
                                     <th>Məhsul</th>
-                                    <th>Say</th>
+                                    <th>Ümumi alınma sayı</th>
+                                    <th>Mövcud say</th>
+                                    <th>Satılma sayı</th>
                                     <th>Maya qiyməti</th>
                                     <th>Satış qiyməti</th>
                                     <th>Əməliyyatlar</th>
@@ -62,22 +66,23 @@
 
                                 @foreach (var item in Model)
                                 {
-                                    if (item.ProductCount==0)
-                                    {
+                                 
                                         <tr>
                                             <th>@item.AddingDate.ToString("dd.MM.yyyy")</th>
                                             <td>@item.AppUser.UserName</td>
                                             <td>@item.ProductName</td>
-                                            <td>@item.ProductCount</td>
-                                            <td>@item.BuyingPrice.ToString("#0.##") AZN</td>
-                                            <td>@item.SellingPrice.ToString("#0.##") AZN</td>
+                                            <td>@item.TotalCount</td>
+                                            <td>@item.RemainCount</td>
+                                            <td>@item.SellingCount</td>
+                                            <td>@item.BuyingPrice AZN</td>
+                                            <td>@item.SellingPrice AZN</td>
                                             <td>
                                                 <a asp-controller="Income" asp-action="IncreaseToCountProduct" asp-route-ProductId="@item.Id" class="btn btn-deep-pruple">
                                                     <i class="material-icons">add</i>
                                                 </a>
                                             </td>
                                         </tr>
-                                    }
+                                    
                                  
                                 }
 

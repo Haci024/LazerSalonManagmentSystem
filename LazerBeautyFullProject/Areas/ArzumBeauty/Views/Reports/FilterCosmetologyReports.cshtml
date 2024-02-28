@@ -1,0 +1,233 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterLazerReports";
+}
+
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>Kosmetologiya Hesabat</h2>
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Başlanıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Kosmetoloq</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="cosmetologId">
+                                    <option value="all" selected>Hamısı</option>
+                                    @foreach (var item in Model.Cosmetologs)
+                                    {
+                                        foreach (var filial in item.CosmetologsFilial)
+                                        {
+                                            if (filial.FilialId == 2)
+                                            {
+                                                <option value="@filial.CosmetologsId">@item.FullName</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Kategoriyalar</h2>
+                            <div class="form-group">
+                                <div>
+                                    <select class="form-control show-tick" id="childCategoryId" multiple>
+                                        <option value="all" selected>Hamısı</option>
+                                        @foreach (var item in Model.CosmetologyCategories)
+                                        {
+
+                                            <option value="@item.Id">@item.CategoryName @item.MainCategory.CategoryName</option>
+
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row container-fluid">
+                            <div class="col-lg-6">
+                                <label for="email_address_2">Ümumi gəlir</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="cosmetologEarning" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                          
+                            <div class="col-lg-6">
+                                <label for="email_address_2">Seans sayı</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="sessionCount" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+
+                                <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" id="comsetologyReports"></div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var cosmetologId = $("#cosmetologId").val();
+            var categoryId = $("#childCategoryId").val();
+
+            $.ajax({
+                url: "/ArzumBeauty/Reports/CalculateCosmetologyReports",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate, cosmetologId: cosmetologId, categoryId: categoryId },
+                success: function (response) {
+
+                    if (categoryId == 'all' && cosmetologId == 'all') {
+
+                        $("#cosmetologEarning").val(response.totalEarning + " " + "AZN");
+                       
+                        $("#sessionCount").val(response.totalSession + " " + "Seans");
+
+                    }
+                    else if (categoryId == 'all' && cosmetologId != 'all') {
+
+                        $("#cosmetologEarning").val(response.masterCosmetologyEarning + " " + "AZN");
+                      
+                        $("#sessionCount").val(response.masterCosmetologySession + " " + "Seans");
+                    }
+                    else if (categoryId != 'all' && cosmetologId == 'all') {
+
+                        $("#cosmetologEarning").val(response.categoryEarning + " " + "AZN");
+                       
+                        $("#sessionCount").val(response.categorySession + " " + "Seans");
+                    }
+                    else {
+                        $("#cosmetologEarning").val(response.allFilterEarning + " " + "AZN");
+                     
+                        $("#sessionCount").val(response.allFilterSession + " " + "Seans");
+                    }
+
+                },
+                error: function () {
+                    Swal.fire(
+                        'Xəbərdarlıq!',
+                        'Tarixləri düzgün qeyd edin!',
+                        'warning'
+                    )
+                }
+            });
+            if (categoryId == 'all' && cosmetologId == 'all') {
+             
+                $.ajax({
+
+                    url: "/ArzumBeauty/Reports/SelectAllCosmetologyReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                        console.log("Salam");
+                        $("#comsetologyReports").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (categoryId == 'all' && cosmetologId != 'all') {
+                $.ajax({
+
+                    url: "/ArzumBeauty/Reports/SelectCosmetologyMasterReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, cosmetologId: cosmetologId },
+                    success: function (result) {
+
+                        $("#comsetologyReports").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (categoryId != 'all' && cosmetologId == 'all') {
+                $.ajax({
+
+                    url: "/ArzumBeauty/Reports/SelectCosmetologyCategoryReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, categoryId: categoryId },
+                    success: function (result) {
+
+                        $("#comsetologyReports").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/ArzumBeauty/Reports/SelectCosmetologyReportsWithAllFilter",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, cosmetologId: cosmetologId, categoryId: categoryId },
+                    success: function (result) {
+
+                        $("#comsetologyReports").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            };
+
+
+        });
+
+    });
+</script>
+
+
+
+

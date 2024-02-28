@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Entity.Concrete.OutMoney>
+@{
+    ViewData["Title"] = "Xərclər";
+    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumBeautyLayout.cshtml";
+   
+    
+}
+<div class="container-fluid">
+
+    <!-- Exportable Table -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                            Xərclər
+                        </h2>
+                        <div style="padding-right:30px">
+                            <button id="calculatePriceButtonMaster1" class="btn btn-primary">Hesabla</button>
+                            <a asp-action="AddOutMoney" class="btn bg-deep-purple waves-effect ">
+                                <i class="material-icons">money_off</i>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                     <th>Qeydiyyatçı</th>
+                                    <th>Səbəb</th>
+                                    <th id="priceValueMaster1">Ödəniş</th>
+                                    <th>Açıqlama</th>   
+                                    <th class="text-right">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                     <th>Qeydiyyatçı</th>
+                                    <th>Səbəb</th>
+                                    <th>Ödəniş</th>
+                                    <th>Açıqlama</th>
+                                    <th class="text-right ">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (Entity.Concrete.OutMoney item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.AddingDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AppUser.UserName</td>
+                                        <td>@item.SpendCategory.Category</td>
+                                        <td>@item.Price.ToString("00") AZN</td>
+                                        <td>@item.Description</td>
+                                        <td style="display:flex;justify-content:end">
+                                            <div style="margin-right:5px">
+                                            </div>
+                                            <div style="margin-right:10px">
+                                                <a asp-action="UpdateOutMoney" asp-route-Id="@item.Id" class="btn bg-green waves-effect">
+                                                    <i class="material-icons">edit</i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Exportable Table -->
+</div>
+<script>
+    $(document).ready(function () {
+        // Function to calculate and display the sum of prices
+        function calculateTotalPrice() {
+            var total = 0;
+            // Loop through all the table rows and sum the prices
+            $("tbody tr").each(function () {
+                var price = parseFloat($(this).find("td:eq(3)").text().replace(" AZN", ""));
+                total += price;
+            });
+
+            // Display the total price in the th with id "priceValueMaster1"
+            $("#priceValueMaster1").text("Ümumi:" + total.toFixed(2).replace(/\.00$/, '') + " AZN");
+        }
+
+        // Add a click event handler to the "Hesabla" button
+        $("#calculatePriceButtonMaster1").click(function () {
+            calculateTotalPrice();
+        });
+
+        //
+
+    });
+</script>

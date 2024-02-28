@@ -1,0 +1,169 @@
+﻿@model IEnumerable<Entity.Concrete.LipuckaAppointment>
+
+
+<div class="container-fluid">
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                            Lipuçka hesabatı
+
+                        </h2>
+
+                        <div style="padding-right:30px">
+
+
+                            <button id="calculatePriceButtonMaster1" class="btn btn-primary">Hesabla</button>
+
+                        </div>
+                    </div>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Lazeroloq</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Kategoriya</th>
+                                    <th>Giriş</th>
+                                    <th>Çıxış</th>
+                                    <th id="priceValueMaster1">Ödəniş</th>
+                                    <th>Qeyd</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Lazeroloq</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Kategoriya</th>
+                                    <th>Giriş</th>
+                                    <th>Çıxış</th>
+                                    <th>Ödəniş</th>   
+                                    <th>Qeyd</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.EndTime.Value.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AppUser.UserName</td>
+                                        <td>@item.LazerMaster.FullName</td>
+                                        <td>@item.Customer.FullName</td>
+                                        <td style="display:flex">
+                                            @foreach (var categories in item.LipuckaReports)
+                                            {
+                                                if (categories.LipuckaCategories.MainCategoryId != null)
+                                                {
+                                                    <div style="padding:2px">@categories.LipuckaCategories.Name,</div>
+                                                }
+
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.StartTime == null)
+                                            {
+                                                <h5 class="btn btn-primary">Seans başlamayıb!</h5>
+                                            }
+                                            else
+                                            {
+                                                @item.StartTime.ToString("HH:mm")
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.EndTime == null)
+                                            {
+                                                <div>Bitməyib</div>
+                                            }
+                                            else
+                                            {
+                                                @item.EndTime.Value.ToString("HH:mm")
+                                            }
+                                        </td>
+                                        <td>@item.Price.ToString("#0.##") AZN</td>
+                                        <td>
+                                            @if (item.Description == null)
+                                            {
+                                                <div>Qeyd yoxdur!</div>
+                                            }
+                                            else
+                                            {
+                                                <div>@item.Description</div>
+                                            }
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Jquery DataTable Plugin Js -->
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+<script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="~/plugins/jquery-countto/jquery.countTo.js"></script>
+<script src="~/js/pages/tables/jquery-datatable.js"></script>
+<script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to calculate and display the sum of prices
+        function calculateTotalPrice() {
+            var total = 0;
+            // Loop through all the table rows and sum the prices
+            $("tbody tr").each(function () {
+                var price = parseFloat($(this).find("td:eq(7)").text().replace(" AZN", ""));
+                total += price;
+            });
+
+            // Display the total price in the th with id "priceValueMaster1"
+            $("#priceValueMaster1").text("Ümumi:" + total.toFixed(2).replace(/\.00$/, '') + " AZN");
+        }
+
+        // Add a click event handler to the "Hesabla" button
+        $("#calculatePriceButtonMaster1").click(function () {
+            calculateTotalPrice();
+        });
+
+        // Calculate the total price when the page loads
+
+    });
+</script>

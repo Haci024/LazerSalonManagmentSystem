@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
 @{
     ViewData["Title"] = "FilterLazerReports";
 }
@@ -9,13 +9,13 @@
             <div class="card">
                 <div class="header">
                     <div style="display:flex;justify-content:space-between;align-items:center">
-                        <h2>Filter ilə Hesabat</h2>
+                        <h2>Lazer Epilyasiya Hesabat</h2>
                     </div>
                 </div>
-                        <div class="card">    
+                       
                             <div class="body">
                                 <div class="row clearfix">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-3">
                                         <h2 class="card-inside-title">Başlanıc tarix</h2>
                                         <div class="form-group">
                                             <div class="form-line" id="bs_datepicker_container">
@@ -23,38 +23,74 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-3">
                                         <h2 class="card-inside-title">Son tarix</h2>
                                         <div class="input-group date" id="bs_datepicker_component_container">
                                             <div class="form-line">
                                                 <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
                                             </div>
                                         </div>
-                                    </div>
-                                  
+                                    </div>                         
+                                    <div class="col-xs-3">
+                                <h2 class="card-inside-title">Lazer Ustası</h2>
+                                <div class="form-group">
+                                    <select class="form-control show-tick"  id="lazeroloqId">
+                                    <option value="all" selected>Hamısı</option>
+                                        @foreach (var item in Model.LazerMasters)
+                                        {
+                                            foreach (var filial in item.LazerMasterFilial)
+                                         {
+                                             if (filial.FilialId==1)
+                                            {
+                                                <option value="@filial.LazerMasterId">@item.FullName</option>
+                                            }
+                                         
+                                         }
+                                        }
+                                    </select>
                                 </div>
+                            </div>
+                                    <div class="col-xs-3">
+                                <h2 class="card-inside-title">Kategoriyalar</h2>
+                                <div class="form-group">
+                                    <div>
+                                    <select class="form-control show-tick" id="childCategoryId" multiple>
+                                         <option  value="all" selected>Hamısı</option> 
+                                            @foreach (var item in Model.LazerCategories)
+                                            {
+                                              
+                                                    <option value="@item.Id">@item.Name @item.MainCategory.Name</option>
+                                                
+                                                
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                 </div>
+                                 <div>
                                 <div class="row container-fluid">    
                                     <div class="col-lg-4 ">
-                                        <label for="email_address_2">Mənfəət</label>
+                                        <label for="email_address_2">Ümumi gəlir</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                        <input type="text" class="form-control"  id="totalPriceInput" readonly>
+                                        <input type="text" class="form-control"  id="lazerEarning" readonly>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
-                                        <label for="email_address_2">Satışdan gələn gəlir</label>
+                                        <label for="email_address_2">İmpuls sayı</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                        <input type="text" class="form-control"   id="IncomeMoney" readonly>
+                                        <input type="text" class="form-control"   id="impulsCount" readonly>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
-                                        <label for="email_address_2">Xərclənən pul</label>
+                                        <label for="email_address_2">Seans sayı</label>
                                         <div class="form-group">
                                             <div class="form-line">
-                                        <input type="text" class="form-control" id="OutMoney" readonly>
+                                        <input type="text" class="form-control" id="sessionCount" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +98,7 @@
                               
                                 <button id="calculateButton" class="btn btn-primary">Hesabla</button>
                             </div>
-                                </div>
+                                </div> 
                                                 
                             </div>
                         </div>
@@ -72,26 +108,49 @@
 </div>
 
 
-<div class="container-fluid" id="resultIncomeList"></div>
-<div class="container-fluid" id="resultOutMoneyList"></div>
+<div class="container-fluid" id="lazerEpilyasiyaTable"></div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     $(document).ready(function () {
         $("#calculateButton").on("click", function () {
             var startDate = $("#startDate").val();
             var endDate = $("#endDate").val();
+            var LazeroloqId = $("#lazeroloqId").val();
+            var CategoryId = $("#childCategoryId").val();
+         
             $.ajax({
-                url: "/Reports/CalculateTotalPrice",
+                url: "/ArzumMini/Reports/LazerEarningCalculator",
                 type: "POST",
-                data: { startDate: startDate, endDate: endDate},
-                success: function (result) {
-                    $("#totalPriceInput").val((result.totalIncomeMoney-result.totalOutMoney) + " AZN");
-                    $("#OutMoney").val(result.totalOutMoney + " AZN");
-                    $("#IncomeMoney").val(result.totalIncomeMoney + " AZN");
+                data: { startDate: startDate, endDate: endDate, lazeroloqId:LazeroloqId,categoryId: CategoryId },
+                success: function (response) {
+                    
+                    if (CategoryId == 'all' && LazeroloqId=='all') {
+
+                        $("#lazerEarning").val(response.totalLazerEarning + " " + "AZN");
+                        $("#impulsCount").val(response.totalImpulsCount);
+                        $("#sessionCount").val(response.totalSessions + " " + "Seans");
+                    
+                    }
+                    else if (CategoryId=='all' && LazeroloqId!='all') {
+                       
+                        $("#lazerEarning").val(response.lazerMasterAllCategoryEarning + " " + "AZN");
+                        $("#impulsCount").val(response.lazerMasterTotalImpulsAllCategory);
+                        $("#sessionCount").val(response.lazerMasterAllCategorySession + " " + "Seans");
+                    }
+                    else if (CategoryId != 'all' && LazeroloqId == 'all') {
+
+                        $("#lazerEarning").val(response.allMasterCategoryEarning + " " + "AZN");
+                        $("#impulsCount").val(response.allMasterCategorySessionCount);
+                        $("#sessionCount").val(response.allMasterCategoryImpulsCount + " " + "Seans");
+                    }
+                    else {
+                        $("#lazerEarning").val(response.lazerMasterEarning + " " + "AZN");
+                        $("#impulsCount").val(response.impulsCount);
+                        $("#sessionCount").val(response.sessionCount + " " + "Seans");
+                    }
+                   
                 },
                 error: function () {
                     Swal.fire(
@@ -101,47 +160,81 @@
                     )
                 }
             });
+            if (CategoryId == 'all' && LazeroloqId == 'all') {
+                console.log(CategoryId);
+                console.log(LazeroloqId);
+                $.ajax({
+
+                    url: "/ArzumMini/Reports/SelectAllReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                        console.log("Salam");
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (CategoryId=='all' && LazeroloqId!='all') {
+                $.ajax({
+
+                    url: "/ArzumMini/Reports/SelectLazerMasterAllReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, lazeroloqId: LazeroloqId },
+                    success: function (result) {
+                       
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (CategoryId != 'all' && LazeroloqId == 'all') {
+                $.ajax({
+
+                    url: "/ArzumMini/Reports/SelectAllMasterCategoryReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, categoryId: CategoryId },
+                    success: function (result) {
+
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else{
+                $.ajax({
+                    url: "/ArzumMini/Reports/SelectReportsWithAllFilter",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, lazeroloqId: LazeroloqId, categoryId: CategoryId },
+                    success: function (result) {
+                       
+                        $("#lazerEpilyasiyaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            };
+         
+          
         });
-       
-        $("#calculateButton").on("click", function () {
-            var startDate = $("#startDate").val();
-            var endDate = $("#endDate").val();
-            $.ajax({
-                url: "/Reports/SelectInComeMoney",
-                type: "POST",
-                data: { startDate: startDate, endDate: endDate },
-                success: function (result) {
-
-                    $("#resultIncomeList").html(result);
-
-
-                },
-                error: function () {
-
-                }
-            });
-        });
-        $("#calculateButton").on("click", function () {
-            var startDate = $("#startDate").val();
-            var endDate = $("#endDate").val();
-            $.ajax({
-                url: "/Reports/SelectOutMoney",
-                type: "POST",
-                data: { startDate: startDate, endDate: endDate },
-                success: function (result) {
-
-                    $("#resultOutMoneyList").html(result);
-
-
-                },
-                error: function () {
-
-                }
-            });
-        });
+     
     });
 </script>
-
 
 
 

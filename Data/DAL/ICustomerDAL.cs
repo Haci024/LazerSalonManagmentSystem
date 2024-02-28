@@ -9,10 +9,12 @@ namespace Data.DAL
 {
     public interface ICustomerDAL : IGenericDAL<Customer>
     {
-        public List<Customer> GetFemaleList();
+        public Task<List<Customer>> GetFemaleList();
 
-        public List<Customer> GetMaleList();
+        public Task<List<Customer>> GetMaleList();
 
-        public Customer SelectedCustomer(int CustomerId);
+        public Task<Customer> SelectedCustomer(int CustomerId);
+
+        public Task<List<Customer>> DailyBirthDate(int FilialId);
     }
 }

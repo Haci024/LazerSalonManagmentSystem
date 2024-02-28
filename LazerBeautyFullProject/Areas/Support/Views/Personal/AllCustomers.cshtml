@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Entity.Concrete.Customer>
+@{
+    ViewData["Title"] = "AllCustomers";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+    int num = 0;
+}
+
+<div class="container-fluid">
+
+    <!-- Exportable Table -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                              Müştərilər
+                        </h2>
+                      
+                    </div>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="javascript:void(0);">Action</a></li>
+                                <li><a href="javascript:void(0);">Another action</a></li>
+                                <li><a href="javascript:void(0);">Something else here</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Mobil</th>
+                                    <th>Doğum günü</th>
+                                    <th>Filial</th>
+                                    <th>Status</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Mobil</th>
+                                    <th>Doğum günü</th>
+                                    <th>Filial</th>
+                                    <th>Status</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@(num = num + 1)</td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.PhoneNumber.ToString("0000000000")</td>
+                                        <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+                                        <th>@item.Filial.FilialName</th>
+                                        <td>
+                                            @if (item.IsDeactive==true)
+                                            {
+                                            <b style="color:red">Blok edilib</b>
+                                            }
+                                            else
+                                            {
+                                                <b style="color:green">Aktivdir</b>
+                                            }
+                                        </td>
+                                        <td style="display:flex;justify-content:center">
+                                            @if (item.IsDeactive == true)
+                                            {
+                                                <div style="margin-right:10px" class="text-center">
+                                                    <a asp-action="CustomerOFF" asp-route-CustomerId="@item.Id" class="btn bg-green waves-effect">
+                                                        <i class="material-icons">build</i>
+                                                    </a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="margin-right:10px" class="text-center">
+                                                    <a asp-action="CustomerOFF" asp-route-CustomerId="@item.Id" class="btn bg-red waves-effect">
+                                                        <i class="material-icons">delete</i>
+                                                    </a>
+                                                </div>
+                                            }
+                                          
+                                        
+
+
+
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Exportable Table -->
+</div>
+
+

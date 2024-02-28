@@ -1,0 +1,156 @@
+﻿@model DTO.DTOS.BodyShapingDTO.SessionListDTO
+@{
+    ViewData["Title"] = "SessionList";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+    int num = 0;
+}
+<div class="container-fluid">
+
+    <!-- Exportable Table -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h3>
+                            Seans tarixçəsi  
+                        </h3>
+                        <div style="padding-right:30px">
+                          
+                                <a asp-action="AddG8TurboSessions" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-primary waves-effect ">
+                                    <i class="material-icons">add </i>
+                                </a>
+                                <a asp-action="AddMioStimulyasiyaSession" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-danger waves-effect ">
+                                    <i class="material-icons">add</i>
+                                </a>
+                                <a asp-action="AddTermoYorganSession" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-warning waves-effect ">
+                                    <i class="material-icons">add </i>
+                                </a>
+
+                           
+                        
+
+                        <a asp-action="BodyShapingMasterPage" asp-route-BodyShapingMasterId="@ViewBag.BodyShapingMasterId" class="btn btn-success waves-effect ">
+                            <i class="material-icons">keyboard_return</i>
+                        </a>
+                        </div>
+                    </div>
+                 
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Giriş saatı</th>
+                                    <th>Çıxış saatı</th>
+                                    <th>Seans başlıq</th>   
+                                    <td>Seans müddəti</td>
+                                    <td>Status</td>
+                                    <th>Əməliyyatlar</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Giriş saatı</th>
+                                    <th>Çıxış saatı</th>
+                                    <th>Seans başlıq</th>
+                                    <td>Seans müddəti</td>
+                                    <td>Status</td>
+                                    <th class="align-items-center">Əməliyyatlar</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model.SessionLists)
+                                {
+
+                                    <tr>
+                                        <td>@(num=num+1)</td>
+                                        
+                                        @if (item.IsCompleted)
+                                        {
+                                            <td>
+                                                <div> @item.StartDate.Value.ToString("dd.MM.yyyy")</div>
+                                            </td>
+                                            <td>
+                                                <div> @item.AppUser.UserName</div>
+                                            </td>
+                                         
+                                            <td>
+                                                <div> @item.StartDate.Value.ToString(" HH:mm")</div>
+                                          </td>
+                                            <td>
+                                                <div>  @item.EndDate.Value.ToString(" HH:mm")</div>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                <p class="font-bold col-pink">Seans baş tutmayıb</p>
+                                            </td>
+                                            <td>
+                                                <p class="font-bold col-pink">Seans tarixi təyin edilməyib!</p>
+                                            </td>
+                                              <td>
+                                                <p class="font-bold col-pink">Seans baş tutmayıb</p>
+                                            </td>
+                                            <td>
+                                                <p class="font-bold col-pink">Seans baş tutmayıb</p>
+                                            </td>
+                                          
+                                        }
+                                        <td>
+                                             @item.SessionName 
+                                        </td>
+
+
+                                        <td>
+                                                @item.Duration dəqiqə
+                                            </td>
+                                        <td>
+                                            @if (item.IsCompleted)
+                                            {
+                                                <p class="btn btn-success">Seans tamamlanıb!</p>
+
+                                            }
+                                            else
+                                            {
+                                                <p class="btn btn-warning">Seans baş tutmayıb!</p>
+
+                                            }
+                                        </td>
+                                            <td>
+                                              @if (!item.IsCompleted)
+                                            {
+                                                <div style="padding-right:30px">
+                                                    <a asp-action="EditSession" asp-route-SessionId="@item.Id" class="btn btn-success waves-effect ">
+                                                        <i class="material-icons">edit</i>
+                                                    </a>
+                                                </div>
+                                            }
+                                          
+                                         
+                                         
+                                         </td>
+                                      
+                                    </tr>
+
+
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

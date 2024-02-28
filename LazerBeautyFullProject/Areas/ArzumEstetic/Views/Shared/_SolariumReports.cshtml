@@ -1,0 +1,127 @@
+﻿@model IEnumerable<Entity.Concrete.SolariumAppointment>
+
+<div class="container-fluid">
+
+    <!-- Exportable Table -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                            Tamamlanmış paketlər
+                        </h2>
+                     
+                    </div>
+                    
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example">
+                            <thead>
+                                <tr>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Nömrə</th>
+                                    <th>Ödəniş</th>
+                                    <th>İstifadə olunan müddət</th>
+                                    <th>Qalan müddət</th>
+                                    <th>Paket limiti</th>
+                                    <th>Status</th>
+                                    <th>Qaytarılan pul</th> 
+                                    <th>Qeyd</th>
+                                    <th class="text-right">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Nömrə</th>
+                                    <th>Ödəniş</th>
+                                    <th>İstifadə olunan müddət</th>
+                                    <th>Qalan müddət</th>
+                                    <th>Paket limiti</th>
+                                    <th>Status</th>
+                                    <th>Qaytarılan pul</th>
+                                    <th>Qeyd</th>
+                                    <th class="text-right">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.AppUser.UserName</td>
+                                        <td>@item.Customer.FullName</td>
+                                        <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+                                        <td>@item.Price.ToString("#0.0#") AZN</td>
+                                        <td>@item.UsingMinute dəqiqə</td>
+                                        <td>@item.RemainingMinute dəqiqə</td>
+                                        <td>@item.MinuteLimit dəqiqə</td>
+                                     
+                                         <td>@if (item.IsCompleted)
+                                            {
+                                                <div><span style="color:green"><b>Uğurlu!</b></span></div>
+                                            }
+                                            else if(item.IsDeleted)
+                                            {
+                                                <div><span style="color:red"><b>İmtina!</b></span></div>
+                                            }
+                                            else if(item.IsTimeOut)
+                                            {
+                                                <div><span style="color:orange"><b>Vaxtı bitib!</b></span></div>
+                                            }
+                                            else
+                                            {
+                                                <div><span style="color:blue"><b>Davam edir!</b></span></div>
+                                            }
+                                        </td>
+                                        <td>@item.ReturnMoney.ToString("#0.#") AZN</td>
+                                        <td>
+                                            @item.Description
+                                        </td>
+                                      
+                                        
+                                        <td style="display:flex;justify-content:end">
+                                            <div style="margin-right:10px">
+                                                <a asp-area="ArzumEstetic" asp-controller="SolariumAppointment" asp-action="MonthlySessionList" asp-route-CustomerId="@item.Customer.Id" asp-route-SolariumId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                    <i class="material-icons">list</i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Jquery DataTable Plugin Js -->
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+<script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="~/plugins/jquery-countto/jquery.countTo.js"></script>
+<script src="~/js/pages/tables/jquery-datatable.js"></script>
+<script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>

@@ -63,7 +63,7 @@
                             <div>
                              
                                 <select class="form-control show-tick" asp-for="Role">
-                                    <option>Rol seçin...</option>
+                                    <option se>Rol seçin...</option>
                                     @foreach (var item in Model.IdentityRoles)
                                     {
 
@@ -99,10 +99,10 @@
                                 <input type="text" asp-for="ConfirmPassword" class="form-control" placeholder="Şifrə təkrarı">
                             </div>
                         </div>
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
-                            <a asp-action="LazerMasterPage" asp-route-LazerMasterId="@ViewBag.LazerMasterId" class="btn btn-success">Geri</a>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yarat</button>
+                            <a asp-action="AllUsers"  class="btn btn-success">Geri</a>
                         </div>
                     </form>
                 </div>

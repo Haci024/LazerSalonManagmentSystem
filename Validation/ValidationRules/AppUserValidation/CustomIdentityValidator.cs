@@ -44,8 +44,8 @@ namespace Validation.ValidationRules
 				Description = "Minimum 1 simvol olmalıdır!"
 			};
 		}
-    
-    }
+
+	}
 
 	/*Qeydiyyat zamanı gələn xətalar Azərbaycan dilinə çevirmək üçün model yaratdıq.Model İdentityErrorDescriber-dan
 	miras alır və metodlarından istifadə edir*/

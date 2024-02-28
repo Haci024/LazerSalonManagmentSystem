@@ -43,39 +43,39 @@ namespace Business.Manager
         }
     
 
-        public List<LazerAppointment> GetAllInjectList()
+        public async  Task<List<LazerAppointment>> GetAllInjectList()
         {
-            return _appointmentDAL.GetAllInjectList();
+            return await _appointmentDAL.GetAllInjectList();
         }
 
-        public List<LazerAppointment> GetAllSuccecfullyAppointments()
+        public async Task<List<LazerAppointment>> GetAllSuccecfullyAppointments(int filialId)
         {
-            return _appointmentDAL.SuccesfullyAppointments();
+            return await _appointmentDAL.SuccesfullyAppointments(filialId);
+        }
+        
+        public async Task<List<LazerAppointment>> DailyLazerAppointmentReports()
+        {
+            return await _appointmentDAL.LazerAppointmentsReports();
         }
 
-        public List<LazerAppointment> DailyLazerAppointmentReports()
+        public async Task<LazerAppointment> SelectLazerAppointment(int AppointmentId)
         {
-            return _appointmentDAL.LazerAppointmentsReports();
+            return await _appointmentDAL.SelectedCustomer(AppointmentId);
         }
 
-        public Task<LazerAppointment> SelectLazerAppointment(int AppointmentId)
+        public async Task<List<LazerAppointment>> ReservationsForMaster(int filialId, int LazerMasterId)
         {
-            return _appointmentDAL.SelectedCustomer(AppointmentId);
+           return await _appointmentDAL.ReservationsForMaster(filialId,LazerMasterId);
         }
 
-        public List<LazerAppointment> AllReservations(AppUser appUser)
+        public async Task<List<LazerAppointment>> NextSessionList(int filialId)
         {
-           return _appointmentDAL.AllReservations(appUser);
+            return await _appointmentDAL.NextSessionList(filialId);
         }
 
-        public List<LazerAppointment> NextSessionList(AppUser appUser)
+        public async Task<List<LazerAppointment>> InComepletedList(int filialId)
         {
-            return _appointmentDAL.NextSessionList(appUser);
-        }
-
-        public List<LazerAppointment> InComepletedList(AppUser appUser)
-        {
-            return _appointmentDAL.InCompletedList(appUser);
+            return await _appointmentDAL.InCompletedList(filialId);
         }
         public async Task<LazerAppointment> CompletetedSecondSessionStart(int AppointmentId)
         {
@@ -86,6 +86,14 @@ namespace Business.Manager
             return await _appointmentDAL.CompletelySecondSessionEnd(AppointmentId);
         }
 
-      
+        public async Task<List<LazerAppointment>> AllReservations(int filialId)
+        {
+            return await _appointmentDAL.AllReservations(filialId);
+        }
+
+        public async Task<List<LazerAppointment>> InjectionsForMaster(int filialId, int lazermasterId)
+        {
+            return await _appointmentDAL.InjectionsForMaster(filialId, lazermasterId);
+        }
     }
 }

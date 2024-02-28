@@ -1,0 +1,57 @@
+﻿@model DTO.DTOS.OutMoneyDTO.AddSpendCategoryDTO
+@{
+    ViewData["Title"] = "AddSpendCategory";
+    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumBeautyLayout.cshtml";
+}
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Xərc əlavə et</h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="POST">
+ 
+                        <div class="form-group form-float">
+                            <label class="form-label">Kategoriya adı...</label>
+                            <div class="form-line">
+                                <input type="text" class="form-control" asp-for="Category">
+
+                            </div>
+                        </div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
+                            <a asp-action="OutMoneyList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+        document.getElementById("submitButton").disabled = true;
+
+
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000);
+    });
+
+</script>

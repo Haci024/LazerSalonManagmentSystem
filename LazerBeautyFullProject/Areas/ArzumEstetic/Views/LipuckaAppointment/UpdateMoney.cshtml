@@ -1,0 +1,59 @@
+﻿@model DTO.DTOS.LipuckaDTO.LipuckaPriceUpdateDTO
+@{
+
+    ViewData["Title"] = "UpdateReservationStatus";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Qiymət artımı</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="form-group form-float">
+                            <label class="form-label">Ödəniş məbləği</label>
+                            <div class="form-line">
+                                <input type="number" asp-for="Price" class="form-control" step="0.1" min="0">
+
+                            </div>
+
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Açıqlama</label>
+                            <div class="form-line">
+                                <textarea  asp-for="Description" class="form-control"></textarea>
+
+                            </div>
+
+                        </div>
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yenilə</button>
+                            <a asp-action="LipuckaMasterPage" asp-route-LipuckaMasterId="@Model.LipuckaMasterId" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+        document.getElementById("submitButton").disabled = true;
+
+
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000);
+    });
+
+</script>

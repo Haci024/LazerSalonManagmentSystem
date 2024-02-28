@@ -11,5 +11,7 @@ namespace DTO.DTOS.KassaActionsDTO
         public decimal OutMoney { get; set; }
 
         public decimal Budget { get; set; }
+
+        public string Description { get; set; }
     }
 }

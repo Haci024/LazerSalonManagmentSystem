@@ -7557,14 +7557,15 @@ fieldset[disabled] .form-control {
       overflow: hidden;
       margin-top: 5px;
       font-size: 13px; }
+    
   .sidebar .user-info {
-    padding: 13px 15px 12px 15px;
+  
     white-space: nowrap;
     position: relative;
     border-bottom: 1px solid #e9e9e9;
-    background: url("../logo jpg (1).jpg");
     width:300px;
     height:150px;
+
   }
     .sidebar .user-info .image {
        

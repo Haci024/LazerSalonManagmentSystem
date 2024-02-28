@@ -29,5 +29,19 @@ namespace Entity.Concrete
         public BodyShapingMaster BodyShapingMaster { get; set; }
 
         public int BodyshapingMasterId { get; set;}
+
+        public AppUser AppUser { get; set; }
+
+        public DateTime RemaingDate { get; set; }
+
+        public bool IsCompleted { get; set; }
+
+        public bool IsDeactive { get; set; }
+
+        public string AppUserId { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        public decimal ReturnMoney { get; set; } = 0;
     }
 }

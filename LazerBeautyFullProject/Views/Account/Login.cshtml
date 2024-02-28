@@ -5,93 +5,108 @@
 
 
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Arzum laser studio- Texniki dəstək</title>
-    <!-- Favicon-->
-    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+	<title>SAKİNA</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="~/login_v1/images/icons/favicon.ico" />
+	
+	<link rel="stylesheet" type="text/css" href="~/login_v1/vendor/bootstrap/css/bootstrap.min.css">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-
-    <!-- Bootstrap Core Css -->
-    <link href="~/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
-
-    <!-- Waves Effect Css -->
-    <link href="~/plugins/node-waves/waves.css" rel="stylesheet" />
-
-    <!-- Animation Css -->
-    <link href="~/plugins/animate-css/animate.css" rel="stylesheet" />
-
-    <!-- Custom Css -->
-    <link href="~/css/style.css" rel="stylesheet">
-  
+	<link rel="stylesheet" type="text/css" href="~/login_v1/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" type="text/css" href="~/login_v1/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="~/login_v1/vendor/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="~/login_v1/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	
+    <link href="~/login_v1/css/util.css" rel="stylesheet" />
+    <link href="~/login_v1/css/main.css" rel="stylesheet" />
+	<style>
+		#back{
+			background-color:darkblue;
+		}
+	</style>
+	<!--===============================================================================================-->
 </head>
+<body>
+	<div class="limiter" id="back">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="~/login_v1/images/sunflower (1).png" alt="IMG" />
+				</div>
+				
+				<form class="login100-form validate-form" method="post">
+					<span class="login100-form-title">
+				Daxil ol!
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate="İstifadəçi adı boş ola bilməz!">
+						<input class="input100" type="text" asp-for="UserName" name="userName" placeholder="İstifadəçi adı...">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-user" aria-hidden="true"></i>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Şifrə boş ola bilməz!">
+						<input class="input100"  type="password" name="password" asp-for="Password" placeholder="Şifrəniz...">
+						<span class="focus-input100" asp-validation-for="Password"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" type="submit">
+						Daxil ol!
+						</button>
+					</div>
+
+					<div class="text-center p-t-12" asp-validation-summary="ModelOnly" style="color:red">
+						<span class="txt1">
+						
+						</span>
+						<a class="txt2" href="#">
+					
+						</a>
+					</div>
+
+					<div class="text-center p-t-136">
+						<a class="txt2" href="#">
+							
+						
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
 
-<body class="login-page">
-    <div class="login-box">
-        <div class="logo">
-            <img src="~/logo png.png" width="350px" height="140px" />
-           
-        </div>
-        <div class="card">
-            <div class="body">
-                <form method="POST">
-                    <div class="text-center">
-                        <h3 class="msg">Daxil ol!</h3>
-                    </div>
-                  
-                    <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">person</i>
-                        </span>
-                        <div class="form-line">
-                            <input asp-for="UserName" class="form-control" placeholder="İstifadəçi adı" autofocus>
-                        </div>
-                        <span class="font-bold col-pink" asp-validation-for="UserName"></span>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input asp-for="Password" class="form-control" placeholder="Şifrə" type="password" >
-                        </div>
-                        <span class="font-bold col-pink" asp-validation-for="Password"></span>
-                       
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4 text-center">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit">Daxil ol</button>
-                        </div>
-                    </div>
-                  
-                </form>
-            </div>
-        </div>
-    </div>
 
-    
-    <script src="~/plugins/jquery/jquery.min.js"></script>
 
-   
-    <script src="~/plugins/bootstrap/js/bootstrap.js"></script>
+	<!--===============================================================================================-->
+	<script src="~/Login_v1/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="~/Login_v1/vendor/bootstrap/js/popper.js"></script>
+	<script src="~/Login_v1/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="~/Login_v1/vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="~/Login_v1/vendor/tilt/tilt.jquery.min.js"></script>
+	<script>
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+	<!--===============================================================================================-->
+	<script src="~/Login_v1/js/main.js"></script>
 
-    
-    <script src="~/plugins/node-waves/waves.js"></script>
-
-   
-    <script src="~/plugins/jquery-validation/jquery.validate.js"></script>
-
-    
-    <script src="~/js/admin.js"></script>
-    <script src="~/js/pages/examples/sign-in.js"></script>
 </body>
-
 </html>

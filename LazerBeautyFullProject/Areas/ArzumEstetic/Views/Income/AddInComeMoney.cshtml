@@ -1,0 +1,120 @@
+﻿@model DTO.DTOS.InComeDTO.InComeAddDTO
+@{
+    ViewData["Title"] = "Gəlir əlavə et";
+}
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+            <div class="card">
+                <div class="header">
+                    <h2>Məhsul satışı</h2>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                          
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="POST">
+                        <div class="form-group form-float">
+                            <div>
+                                <select class="form-control show-tick" asp-for="StockId" id="productSelect">
+                                    <option>Seçim edin...</option>
+                                    @foreach (var item in Model.Stocks)
+                                    {
+
+                                        <option value="@item.Id" data-price="@item.SellingPrice">@item.ProductName</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Sayı qeyd edin...</label>
+                            <div class="form-line">
+                                <input type="number" class="form-control" asp-for="Count" id="countInput" min="0"  >
+
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <label class="form-label">Qiymət</label>
+                            <div class="form-line">
+                                <input type="number" class="form-control" asp-for="Price" id="priceInput" step="0.1" min="0">
+                            
+                            </div>
+                        </div>
+                        
+                        <div class="form-group form-float">
+                            <label class="form-label">Açıqlama</label>
+                            <div class="form-line">
+                                <input type="text" class="form-control" asp-for="Description">
+                             
+                            </div>
+                        </div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                     <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
+                            <a asp-action="InComeMoneyList" class="btn btn-success">Geri</a>
+                     </div>
+                    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Initialize the price based on the selected product
+        var selectedProduct = $('#productSelect option:selected');
+        var initialPrice = selectedProduct.data('price');
+        $('#priceInput').val(initialPrice);
+
+        // Update the price when the product selection changes
+        $('#productSelect').change(function () {
+            var selectedProduct = $(this).find(':selected');
+            var newPrice = selectedProduct.data('price');
+            $('#priceInput').val(newPrice);
+
+           
+            $('#countInput').val(1);
+
+            updatePrice(); // Update price when the product changes
+        });
+
+        // Update the price when the count changes
+        $('#countInput').change(function () {
+            updatePrice();
+        });
+
+        // Function to update the price based on the count
+        function updatePrice() {
+            var count = $('#countInput').val();
+            var pricePerItem = $('#productSelect option:selected').data('price');
+            var totalPrice = count * pricePerItem;
+            $('#priceInput').val(totalPrice);
+        }
+    });
+</script>
+
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
+
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
+
+</script>

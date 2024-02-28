@@ -58,9 +58,9 @@
                         </div>
                       
 
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yenilə</button>
                             <a asp-action="LazerMasterPage" asp-route-LazerMasterId="@Model.LazerMasterId" class="btn btn-success">Geri</a>
                         </div>
                     </form>
@@ -106,13 +106,24 @@
                 descriptionInput.show();
                 changeLabelforTime.text("Qeydiyyat saatı");
                 startTimeInput.show();
-                
-               
-            
             }
         }
         descriptionInput.show();
         startTimeInput.show();
         newReservationInput.hide();
     });
+</script>
+<script>
+
+
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
+        
+        document.getElementById("submitButton").disabled = true;
+
+       
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); 
+    });
+
 </script>

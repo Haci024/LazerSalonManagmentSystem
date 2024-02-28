@@ -14,7 +14,7 @@ namespace Entity.Concrete
 
         public List<LazerAppointment> LazerAppointments { get; set; } 
 
-        public List<Cosmetologs> CosmetologyAppointment { get; set; }
+        public List<CosmetologFilial> CosmetologFilial { get; set; }
 
          public List<BodyShapingMaster> BodyShapingMasters { get; set; }
 
@@ -26,19 +26,23 @@ namespace Entity.Concrete
 
         public List<BodyshapingAppointment> BodyShapingAppointments { get; set; }
 
-        public List<LazerMaster>  LazerMasters { get; set;}
+        public List<LazerMasterFilial>  LazerMasterFilials { get; set;}
 
-        public List<Kassa> Kassa { get; set;}
+        public List<KassaActionList> KassaActionList { get; set;}
 
         public List<Income> Income { get; set; }
 
         public List<Stock> Stock { get; set; }
 
-        public List<OutMoney> OutMoney { get; set; }
+        public List<SpendCategory> SpendCategory { get; set; }
 
+        public List<Customer> Customer { get; set; }
 
+        public List<LazerCategory> LazerCategories  { get; set; }
 
+        public List<LipuckaAppointment> LipuckaAppointments { get; set; }
 
+        public List<PirsinqAppointment> PirsinqAppointments { get; set; }
 
     }
 }

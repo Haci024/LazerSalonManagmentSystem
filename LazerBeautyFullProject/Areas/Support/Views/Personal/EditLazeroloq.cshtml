@@ -1,0 +1,51 @@
+﻿@model DTO.DTOS.PersonalDTO.EditPersonalDTO
+@{
+    ViewData["Title"] = "EditLazeroloq";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Yeni Lazeroloq</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <p>
+                            <label>Lazeroloqun adı</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">person</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="FullName" class="form-control" placeholder="Ad və Soyad">
+                            </div>
+                        </div>
+
+                      
+
+
+
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yarat</button>
+                            <a asp-action="LazeroloqList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

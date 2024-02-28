@@ -29,32 +29,25 @@
                             </div>
                         </div>
 
-                        <div class="form-group form-float">
-                            <label class="form-label">Qiymət</label>
-                            <div class="form-line">
-                                <input type="number" class="form-control" asp-for="Price">
-                             
-                            </div>
-                        </div>
-
+                  
                      
                         <div class="form-group form-float">
                             <label class="form-label">Sayı qeyd edin...</label>
                             <div class="form-line">
-                                <input type="number" class="form-control" asp-for="Count">
+                                <input type="number" class="form-control" asp-for="Count" min="0">
                              
                             </div>
                         </div>
                         <div class="form-group form-float">
                             <label class="form-label">Açıqlama</label>
                             <div class="form-line">
-                                <input type="text" class="form-control" asp-for="Description">
+                                <textarea  class="form-control" asp-for="Description"></textarea>
                                
                             </div>
                         </div>
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
                             <a asp-action="InComeMoneyList" class="btn btn-success">Geri</a>
                         </div>
 
@@ -65,4 +58,16 @@
     </div>
 
 </div>
+<script>
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
+
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
+
+</script>
 

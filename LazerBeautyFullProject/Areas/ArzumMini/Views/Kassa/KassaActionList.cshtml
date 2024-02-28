@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Entity.Concrete.KassaActionList>
 @{
     ViewData["Title"] = "KassaActionList";
+    Layout = "~/Areas/ArzumMini/Views/Shared/_LazerMiniLayout.cshtml";
 }
 
 <div class="container-fluid">
@@ -12,14 +13,18 @@
                 <div class="header">
                     <div style="display:flex;justify-content:space-between;align-items:center">
                         <h2>
-                         Kassa Əməliyyatları
+                            Kassa Əməliyyatları
                         </h2>
 
                         <div style="padding-right:30px">
 
 
                             <button id="calculatePriceButtonMaster1" class="btn btn-primary">Hesabla</button>
-                            <a asp-action="OutMoneyForOwner" class="btn bg-deep-purple waves-effect ">
+                            <a asp-action="OutMoneyForOwner" class="btn btn-danger waves-effect ">
+                                <i class="material-icons">payments</i>
+
+                            </a>
+                            <a asp-action="AddMoneyToKassa" class="btn btn-success waves-effect ">
                                 <i class="material-icons">payments</i>
 
                             </a>
@@ -36,22 +41,27 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
                             <thead>
                                 <tr>
                                     <th>Tarix</th>
                                     <th>İcracı</th>
-                                    <th id="priceValueMaster1">Məbləğ</th>
+                                    <th>Tip</th>
                                    
-                                  
+                                    <th id="priceValueMaster1">Məbləğ</th>
+                                    <th>Açıqlama</th>
+
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>Tarix</th>
                                     <th>İcracı</th>
+                                    <th>Tip</th>
+                                  
                                     <th>Məbləğ</th>
-                                   
+                                    <th>Açıqlama</th>
+
 
                                 </tr>
                             </tfoot>
@@ -59,9 +69,21 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.LastOutMoneyDate.ToString("dd.MM.yyyy  HH:dd")</td>
+                                        <td>@item.LastOutMoneyDate.ToString("dd.MM.yyyy hh:mm")</td>
                                         <td>@item.AppUser.UserName</td>
-                                        <td>@item.OutMoneyQuantity.ToString("00") AZN</td>
+                                        <td>
+                                            @if (item.Status)
+                                            {
+                                                <b style="color:#8BC34A">Əlavə edildi!</b>
+                                            }
+                                            else
+                                            {
+                                                <b style="color:#F44336">Çıxarş</b>
+                                            }
+                                        </td>
+                                     
+                                        <td>@item.OutMoneyQuantity.ToString("#0.0#") AZN</td>
+                                        <td>@item.Description</td>
                                     </tr>
                                 }
 
@@ -78,17 +100,17 @@
 
 <script>
     $(document).ready(function () {
-      
+
         function calculateTotalPrice() {
             var total = 0;
-           
+
             $("tbody tr").each(function () {
-                var price = parseFloat($(this).find("td:eq(2)").text().replace(" AZN", ""));
+                var price = parseFloat($(this).find("td:eq(3)").text().replace(" AZN", ""));
                 total += price;
             });
 
-           
-            $("#priceValueMaster1").text("Ümumi:" + total.toFixed(2).replace(/\.00$/, '') + " AZN");
+
+            $("#priceValueMaster1").text("Ümumi:            "+" " + total.toFixed(2).replace(/\.00$/, '') + " AZN");
         }
 
         // Add a click event handler to the "Hesabla" button
@@ -100,4 +122,3 @@
 
     });
 </script>
-

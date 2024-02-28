@@ -12,8 +12,8 @@ namespace Business.ValidationRules.LazerValidator
     {
         public UpdatePriceValidator()
         {
-            RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət 0 ola bilməz!");
-            RuleFor(x => x.Desciption).NotEmpty().WithMessage("Açıqlama olmadan qiymət artırıla bilməz");
+           
+            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama olmadan qiymət dəyişə bilməz");
         }
     }
 }

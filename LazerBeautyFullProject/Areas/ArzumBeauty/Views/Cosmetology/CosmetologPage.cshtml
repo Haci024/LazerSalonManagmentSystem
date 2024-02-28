@@ -1,0 +1,345 @@
+﻿@model DTO.DTOS.CosmetologyDTO.CosmetologPageDTO
+@{
+    ViewData["Title"] = "CosmetologPage";
+    Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumBeautyLayout.cshtml";
+}
+
+<style>
+    .size {
+        width: 30px;
+        height: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row clearfix">
+
+        <div class="col-xs-12 col-sm-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Aktiv seanslar</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni müraciət</a></li>
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">İmtina edilmiş seanslar</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div role="tabpanel" class="tab-pane fade in" id="profile_settings">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <h2>
+                                                    @ViewBag.Cosmetolog
+                                                </h2>
+                                                <ul class="header-dropdown m-r--5">
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Telefon nömrəsi</th>
+                                                                <th>Doğum günü</th>
+                                                                <th class="text-right ">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Telefon nömrəsi</th>
+                                                                <th>Doğum günü</th>
+                                                                <th class="text-right ">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            @foreach (var item in Model.Customers)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.FullName</td>
+                                                                    <td>@item.PhoneNumber.ToString("0000000000")</td>
+                                                                    <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+
+                                                                    <td style="display:flex;justify-content:end">
+
+
+
+                                                                        <div style="padding-right:30px">
+                                                                            <a asp-action="AddNewAppointment" asp-route-CosmetologId="@Model.CosmetologId" asp-route-CustomerId="@item.Id" class="btn bg-deep-purple waves-effect ">
+                                                                                <i class="material-icons">assignment_add</i>
+
+                                                                            </a>
+                                                                        </div>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <h2>
+                                                        @ViewBag.Cosmetolog
+                                                    </h2>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.CosmetologyAppointments)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@item.StartTime.Value.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.Customers.FullName</td>
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.CosmetologyReports)
+                                                                            {
+                                                                                if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.CosmetologyCategory.CategoryName,</div>
+                                                                                }
+
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                @item.StartTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.OutTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.OutTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                                                        <td>
+                                                                            @if (item.IsStart == false)
+                                                                            {
+                                                                                <h5 class="btn btn-success">Rezervasiya</h5>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <h5 class="btn btn-primary">Seans başladı</h5>
+                                                                            }
+                                                                        </td>
+
+                                                                        <td style="padding-top:17px" class="text-center">
+                                                                            <a asp-action="UpdateAppointment" asp-route-AppointmentId="@item.Id" class="btn bg-blue waves-effect ">
+                                                                                <i class="material-icons">edit</i>
+
+                                                                            </a>
+                                                                            <a asp-action="CompleteAppointment" asp-route-AppointmentId="@item.Id" class="btn btn-success waves-effect ">
+                                                                                <i class="material-icons">done</i>
+
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                <div class="container-fluid">
+
+                                    <!-- Exportable Table -->
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            @ViewBag.LazerMaster
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Nahiyə</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>qeyd olunma  saatı</th>
+                                                                    <th>İmtina səbəbi</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Nahiyə</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>qeyd olunma  saatı</th>
+                                                                    <th>İmtina səbəbi</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.InJectionAppointments)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.StartTime.Value.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.Customers.FullName</td>
+                                                                        <td>
+                                                                            <div style="display:flex">
+                                                                                @foreach (var categories in item.CosmetologyReports)
+                                                                                {
+                                                                                    @if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                                                    {
+                                                                                        <div> @categories.CosmetologyCategory.CategoryName,</div>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+
+                                                                        </td>
+                                                                        <td>@item.AppUser.UserName</td>
+
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                <div>Qeyd olunma zamanı daxil edilməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.Value.ToString("HH:mm")
+                                                                            }
+
+
+
+
+                                                                    </tr>
+
+
+
+                                                                }
+
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

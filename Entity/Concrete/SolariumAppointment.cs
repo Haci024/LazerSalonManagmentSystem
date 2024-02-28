@@ -28,13 +28,27 @@ namespace Entity.Concrete
       
         public int SolariumCategoriesId { get; set; }
 
-
         public List<SolariumUsingList> SolariumUsingList { get; set; }
-
 
         public Filial Filial { get; set; }
 
         public int FilialId { get; set; }
+
+        public AppUser AppUser { get; set; } 
+
+        public string AppUserId { get; set;}
+
+        public DateTime RemainingTime { get; set; }
+
+        public string Description { get; set; } = string.Empty;
+
+        public bool IsCompleted { get; set; } = false;
+
+        public bool IsTimeOut { get; set; } = false;
+
+        public bool IsDeleted { get; set; }=false;
+
+        public decimal ReturnMoney {  get; set; }=decimal.Zero;
 
     }
 }

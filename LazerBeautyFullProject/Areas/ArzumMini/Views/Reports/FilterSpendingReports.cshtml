@@ -1,0 +1,161 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterOutReports";
+    Layout = "~/Areas/ArzumMini/Views/Shared/_LazerMiniLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header text-center">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+
+                        <h2>Xərc  hesabatı</h2>
+
+
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Başlanğıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h2 class="card-inside-title">Xərc</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" data-live-search="true" id="categoryId">
+
+                                    <option style="margin-left:30px" value="all" selected>Hamısı</option>
+                                    @foreach (var item in Model.SpendCategory)
+                                    {
+
+                                        <option style="margin-left:30px" value="@item.Id">@item.Category</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                        <div class="col-lg-4">
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Xərc</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="spendingPrice" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-lg-12 text-center">
+
+                            <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="shopingTable"></div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#calculateButton').on('click', function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var categoryId = $('#categoryId').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/ArzumMini/Reports/CalculateSpendingReports',
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    categoryId: categoryId
+                },
+                success: function (response) {
+
+                    if (categoryId == 'all') {
+                        $('#spendingPrice').val(response.spendingPriceForAll + " " + "AZN");
+                    }
+                    else {
+                        $('#spendingPrice').val(response.spendingPriceForCategory + " " + "AZN");
+                    }
+
+
+
+
+
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+
+
+            });
+            if (categoryId == 'all') {
+                $.ajax({
+
+                    url: "/ArzumMini/Reports/SelectOutMoneyReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate },
+                    success: function (result) {
+
+                        $("#shopingTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+
+                    url: "/ArzumMini/Reports/SelectOutMoneyReportsForCategory",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, categoryId: categoryId },
+                    success: function (result) {
+
+                        $("#shopingTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+
+
+
+
+        });
+    });
+</script>

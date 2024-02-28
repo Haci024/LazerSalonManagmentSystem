@@ -1,0 +1,78 @@
+﻿@model DTO.DTOS.PersonalDTO.NewPersonalDTO
+@{
+    ViewData["Title"] = "AddCosmetoloq";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+<div class="container">
+
+   
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Yeni Kosmetoloq</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <p>
+                            <label>Kosmetoloqun adı</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">person</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="FullName" class="form-control" placeholder="Ad və Soyad">
+                            </div>
+                        </div>
+
+                        <p>
+                            <label>Filial</label>
+                        </p>
+                        <div class="form-group form-float">
+
+                            <div>
+
+                                <select class="form-control show-tick" asp-for="filialId" multiple>
+                                    <option selected>Filial seçin...</option>
+                                    @foreach (var item in Model.Filials)
+                                    {
+
+                                        <option value="@item.Id">@item.FilialName</option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yarat</button>
+                            <a asp-action="CosmetoloqList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
+
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
+
+</script>
+

@@ -13,7 +13,8 @@ namespace Business.ValidationRules.KassaValidator
         public KassaActionListValidator()
         {
             RuleFor(x => x.OutMoney).NotEmpty().WithMessage("Çıxarılacaq pul 0 ola bilməz!");
-            
+            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama olmadan əməliyyat yerinə yetirilə bilməz!");
+
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Business.ValidationRules.OutMoneyValidator
     {
         public UpdateOutMoneyValidator()
         {
-            RuleFor(x => x.Product).NotEmpty().WithMessage("Başlıq boş ola bilməz");
-            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama boş ola bilməz");
-            RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət 0 ola bilməz");
+            RuleFor(x => x.SpendCategoryId).NotEmpty().WithMessage("Kategoriya seçimi edin!");
+            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama boş ola bilməz!");
+            RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət 0 ola bilməz!");
         }
     }
 }

@@ -1,0 +1,360 @@
+﻿@model  DTO.DTOS.LipuckaDTO.LipuckaMasterPageDTO
+@{
+    ViewData["Title"] = "LipuckaMasterPage";
+    Layout = "~/Areas/ArzumMini/Views/Shared/_LazerMiniLayout.cshtml";
+}
+
+<style>
+    .size {
+        width: 30px;
+        height: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row clearfix">
+
+        <div class="col-xs-12 col-sm-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Qeydiyyatlar</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni qeydiyyat</a></li>
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">İmtina olunan seanslar</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div role="tabpanel" class="tab-pane fade in" id="profile_settings">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <h2>
+                                                    @ViewBag.LipuckaMaster
+                                                </h2>
+                                                <ul class="header-dropdown m-r--5">
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Telefon nömrəsi</th>
+                                                                <th>Doğum günü</th>
+                                                                <th class="text-right ">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Telefon nömrəsi</th>
+                                                                <th>Doğum günü</th>
+                                                                <th class="text-right ">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            @foreach (var item in Model.Customers)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.FullName</td>
+                                                                    <td>@item.PhoneNumber.ToString("0000000000")</td>
+                                                                    <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+
+                                                                    <td style="display:flex;justify-content:end">
+
+                                                   
+                                                                        <div style="padding-right:30px">
+                                                                            <a asp-action="AddLipuckaAppointment" asp-route-CustomerId="@item.Id"  asp-route-LipuckaMasterId="@Model.LipuckaMasterId"  class="btn bg-deep-purple waves-effect ">
+                                                                                <i class="material-icons">assignment_add</i>
+
+                                                                            </a>
+                                                                        </div>
+
+
+
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <h2>
+                                                        @ViewBag.LipuckaMaster
+                                                    </h2>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Açıqlama</th>
+                                                                    <th>Status</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Açıqlama</th>
+                                                                    <th>Status</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.ReservationList)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.StartTime.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.Customer.FullName</td>
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.LipuckaReports)
+                                                                            {
+                                                                                if (categories.LipuckaCategories.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.LipuckaCategories.Name,</div>
+                                                                                }
+
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                <h5 class="btn btn-primary">Seans başlamayıb!</h5>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.EndTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.EndTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+                                                                        <td>@item.Description</td>
+                                                                        <td>
+                                                                            @if (item.IsStart)
+                                                                            {
+                                                                                <h5 class="btn btn-primary">Seans başladı</h5>
+                                                                            }
+                                  
+                                                                        </td>
+
+                                                                        <td style="padding-top:17px" class="text-center">
+
+                                                                            <a asp-action="CompleteLipuckaSession" asp-route-AppointmentId="@item.Id" class="btn btn-success waves-effect">
+                                                                                    <i class="material-icons">hourglass_empty</i>
+                                                                                </a>
+                                                                            <a asp-action="UpdateMoney" asp-route-AppointmentId="@item.Id" class="btn btn-primary waves-effect">
+                                                                                <i class="material-icons">credit_card</i>
+                                                                            </a>
+                                                                              
+                                                                       
+
+                                                                        </td>
+                                                                    </tr>
+
+
+
+
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                <div class="container-fluid">
+
+                                    <!-- Exportable Table -->
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            @ViewBag.LazerMaster
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Nahiyə</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>qeyd olunma  saatı</th>
+                                                                   @*  <th>İmtina səbəbi</th> *@
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Ad və Soyad</th>
+                                                                    <th>Nahiyə</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>qeyd olunma  saatı</th>
+                                                                  @*   <th>İmtina səbəbi</th> *@
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.InjectionList)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.StartTime.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.Customer.FullName</td>
+                                                                        <td>
+                                                                            <div style="display:flex">
+                                                                                @foreach (var categories in item.LipuckaReports)
+                                                                                {
+                                                                                    @if (categories.LipuckaCategories.MainCategoryId != null)
+                                                                                    {
+                                                                                        <div> @categories.LipuckaCategories.Name,</div>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+
+                                                                        </td>
+                                                                        <td>@item.AppUser.UserName</td>
+
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                <div>Qeyd olunma zamanı daxil edilməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.ToString("HH:mm")
+                                                                            }
+                                                               @*          <td>
+                                                                                @if (item.Decription != null)
+                                                                                {
+                                                                                <p>@item.Decription</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                <div>Səbəb yoxdur</div>
+                                                                                }
+                                                                        </td> *@
+
+                                                                    </tr>
+                                                                }
+
+
+
+
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

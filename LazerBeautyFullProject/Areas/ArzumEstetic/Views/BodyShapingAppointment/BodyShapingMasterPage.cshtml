@@ -1,0 +1,496 @@
+﻿@model DTO.DTOS.BodyShapingDTO.BodyShapingPageDTO
+@{
+    ViewData["Title"] = "Müştərilər";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+
+}
+<style>
+    .size {
+        width: 30px;
+        height: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Aktiv Seans Paketləri</a></li>
+                            <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Yeni Paket</a></li>        
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Tamamlanmış  Paketlər</a></li>
+                            <li role="presentation"><a href="#change_password_settings_injection" aria-controls="settings_inject" role="tab" data-toggle="tab">İmtina edilmiş  Paketlər</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade in active" id="profile_settings">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <h2>
+                                                    @ViewBag.BodyShapingMaster - Aktiv Seans Paketləri
+                                                </h2>
+                                                <ul class="header-dropdown m-r--5">
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Ad  Soyad</th>
+                                                                <th>Paket</th>
+                                                                <th>Seans sayı</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Bitməsinə qalan müddət</th>
+                                                                <th>Qeyd</th>
+                                                                <th class="text-center">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Ad  Soyad</th>
+                                                                <th>Paket</th>
+                                                                <th>Seans sayı</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Bitməsinə qalan müddət</th>
+                                                                <th>Qeyd</th>
+                                                                <th class="text-center">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            @foreach (var item in Model.ActivePackets)
+                                                            {
+                                                              <tr>
+                                                                  <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                                                  <td>@item.Customer.FullName</td>
+                                                               
+                                                                    <td>
+                                                                        @foreach (var packetName in item.BodyShapingPacketReports){
+                                                                        
+                                                                     
+                                                                                <div   style="padding:2px">
+                                                                                    @packetName.BodyShapingPackets.Packet 
+                                                                                </div>
+                                                                      
+     
+                                                                    }
+                                                                    </td>
+                                                                    <td >
+                                                                        @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                        {
+
+                                                                      
+                                                                                <div style="padding:2px">
+                                                                                    @packetName.BodyShapingPackets.SessionCount Seans
+                                                                                </div>
+                                                                            
+
+
+                                                                        }
+                                                                    </td>
+                                                                    <td>@item.Price.ToString("#.##") AZN</td>
+                                                                    <td>
+                                                                        @{
+                                                                            TimeSpan kalanSure = item.RemaingDate - DateTime.Now;
+                                                                            string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
+                                                                        }
+                                                                        @if (kalanSure.TotalMinutes >= 0)
+                                                                        {
+                                                                            <span class="geriSayim">@kalanSureMetni</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="geriSayimBitmis" style="color:red"><b>Vaxt bitib!</b></span>
+                                                                        }
+                                                                    </td>
+                                                                   
+                                                                   
+                                                                    <td>@item.Description</td>
+                                                                    <td style="display:flex;justify-content:center">
+                                                                        @if (!User.IsInRole("Reservator"))
+                                                                        {
+                                                                            <div style="margin-right:10px">
+                                                                                <a asp-action="InjectionPacket" asp-route-AppointmentId="@item.Id" class="btn bg-orange waves-effect">
+                                                                                    <i class="material-icons">currency_exchange</i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+                                                                        
+                                                                            <a asp-action="SessionList" asp-route-BodyShapingMasterId="@item.BodyshapingMasterId" asp-route-BodyShapingAppointmentId="@item.Id"class="btn bg-blue-grey waves-effect" style=" margin-right:5px">
+                                                                                <i class="material-icons">list</i>
+                                                                            </a>
+                                                                            <a asp-action="UpdatePrice" asp-route-AppointmentId="@item.Id" class="btn btn-primary waves-effect">
+                                                                                <i class="material-icons">credit_card</i>
+                                                                            </a>
+                                                                      
+                                                                       
+                                                                           
+                                                                       
+                                                                        @if (kalanSure.TotalMinutes <= 0)
+                                                                        {
+                                                                            <div style="margin-right:10px">
+                                                                                <a asp-action="SessionList" asp-route-BodyShapingAppointmentId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                    <i class="material-icons">list</i>
+                                                                                </a>
+                                                                            </div>
+                                                                        }
+                                                                    </td>
+                                                                  
+                                                              </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in " id="home">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                                <h3>
+                                                    @ViewBag.BodyShapingMaster  Yeni Paket
+                                                </h3>                
+                                            </div>
+                                            
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Ad  Soyad</th>
+                                                                    <th>Telefon nömrəsi</th>
+                                                                    <th>Doğum günü</th>
+                                                                    <th class="text-right">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Ad  Soyad</th>
+                                                                    <th>Telefon nömrəsi</th>
+                                                                    <th>Doğum günü</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.Customers)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@item.FullName</td>
+                                                                        <td>@item.PhoneNumber.ToString("0000000000")</td>
+                                                                        <td>@item.BirthDate.ToString("dd.MM.yyyy")</td>
+
+                                                                        <td style="display:flex;justify-content:end">
+                                                                            <div style="padding-right:30px">
+
+                                                                            <a asp-action="AddBodyShapingAppointment" asp-route-CustomerId="@item.Id" asp-route-BodyShapingMasterId="@ViewBag.BodyShapingMasterId" class="btn bg-deep-purple waves-effect ">
+                                                                                    <i class="material-icons">assignment_add</i>
+
+                                                                                </a>
+
+                                                                            <a asp-action="ComboPacket" asp-route-BodyShapingMasterId="@ViewBag.BodyShapingMasterId" asp-route-CustomerId="@item.Id" class="btn btn-success waves-effect ">
+                                                                                <i class="material-icons">assignment_add </i>
+                                                                            </a>
+
+                                                                        </div>
+                                                                        
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>         
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                <div class="container-fluid">
+
+                                    
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                           
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                        @ViewBag.BodyShapingMaster - Tamamlanmış paketlər
+                                                        </h2>
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Ad  Soyad</th>
+                                                                <th>Paket</th>
+                                                                <th>Seans sayı</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Status</th>
+                                                                <th>Qeyd</th>
+                                                                <th class="text-right">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Ad  Soyad</th>
+                                                                <th>Paket</th>
+                                                                <th>Seans sayı</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Status</th>
+                                                                <th>Qeyd</th>
+                                                                <th class="text-right">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                            @foreach (var item in Model.SuccessfullyPackets)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                                                    <td>@item.Customer.FullName</td>
+                                                                    <td>
+                                                                        @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                        {
+                                                                            <div style="padding:2px">
+                                                                                @packetName.BodyShapingPackets.Packet
+                                                                            </div>
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                        {
+                                                                            <div style="padding:2px">
+                                                                                @packetName.BodyShapingPackets.SessionCount Seans
+                                                                            </div>
+                                                                        }
+                                                                    </td>
+
+                                                                  
+
+                                                                    <td>@item.Price.ToString("#.##") AZN</td>
+                                                                    <td>
+
+                                                                        @if (item.IsCompleted == true)
+                                                                        {
+
+                                                                            <span class="geriSayimBitmis" style="color:green"><b>Tamamlanıb!</b></span>
+                                                                        }
+
+                                                                    </td>
+                                                                    <td>@item.Description</td>
+                                                                    <td style="display:flex;justify-content:center">
+
+                                                                        <div style="margin-right:10px">
+                                                                            <a asp-action="SessionList" asp-route-BodyShapingMasterId="@item.BodyshapingMasterId" asp-route-BodyShapingAppointmentId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                <i class="material-icons">list</i>
+                                                                            </a>
+                                                                       
+                                                                        </div>
+
+
+
+                                                                       
+                                                                    </td>
+
+                                                                </tr>
+
+                                                            }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                          
+                                        </div>
+                                    </div>
+                                    <!-- #END# Exportable Table -->
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings_injection">
+                                <div class="container-fluid">
+
+                                    <!-- Exportable Table -->
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <div style="display:flex;justify-content:space-between;align-items:center">
+                                                    <h2>
+                                                        @ViewBag.BodyShapingMaster -  İmtina edilmiş Seans paketləri
+                                                    </h2>
+
+                                                </div>
+                                                <ul class="header-dropdown m-r--5">
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Ad  Soyad</th>
+                                                                <th>Paket</th>
+                                                                <th>Seans sayı</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Qaytarılan pul</th>
+                                                                <th>Status</th>
+                                                                <th>Açıqlama</th>
+                                                                <th class="text-right">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Ad  Soyad</th>
+                                                                <th>Paket</th>
+                                                                <th>Seans sayı</th>     
+                                                                <th>Ödəniş</th>
+                                                                <th>Qaytarılan pul</th>
+                                                                <th>Status</th>
+                                                                <th>Açıqlama</th>
+                                                                <th class="text-right">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            @foreach (var item in Model.InjectionPackets)
+                                                            {
+                                                                <tr>
+                                                                    <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                                                    <td>@item.Customer.FullName</td>
+
+                                                                    <td>
+                                                                        @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                        {
+
+
+                                                                            <div style="padding:2px">
+                                                                                @packetName.BodyShapingPackets.Packet
+                                                                            </div>
+
+
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                        {
+
+
+                                                                            <div style="padding:2px">
+                                                                                @packetName.BodyShapingPackets.SessionCount Seans
+                                                                            </div>
+
+
+
+                                                                        }
+                                                                    </td>
+
+                                       
+
+                                                                    <td>@item.Price.ToString("0.##") AZN</td>
+                                                                    <td>@item.ReturnMoney.ToString("0.##") AZN</td>
+                                                                    <td>
+                                                                        @if (item.IsDeactive == true)
+                                                                        {
+
+                                                                            <span style="color:red"><b>İmtina edilib!</b></span>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@item.Description</td>
+                                                                
+                                                                    <td style="display:flex;justify-content:center">
+
+                                                                        <div style="margin-right:10px">
+                                                                            <a asp-action="SessionList" asp-route-BodyShapingMasterId="@item.BodyshapingMasterId" asp-route-BodyShapingAppointmentId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                <i class="material-icons">list</i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- #END# Exportable Table -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

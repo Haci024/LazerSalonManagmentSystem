@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Arzum Laser Salonu</title>
+    <title>Sakina</title>
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -56,7 +57,7 @@
 
     <style>
         #nav {
-            background-color: #8C52FF;
+            background-color: #ff0000;
         }
     </style>
 
@@ -74,7 +75,7 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand">Arzum Mini Lazer Studio</a>
+                <a class="navbar-brand">Texniki dəstək</a>
             </div>
 
         </div>
@@ -83,53 +84,78 @@
     <section>
         <aside id="leftsidebar" class="sidebar">
             <div class="user-info">
-                <div class="image" style="margin-bottom:52px">
+                <img style="width:300px;height:150px" src="~/images/user-img-background.jpg"/>
                 </div>
-                <div class="info-container">
-                    <h3 class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orxan Aslan</h3>
-                    <div class="btn-group user-helper-dropdown">
-                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
-                        <ul class="dropdown-menu pull-right">
-                            <li role="separator" class="divider"></li>
-                            <li><a asp-controller="Account" asp-action="Logout"><i class="material-icons">input</i>Hesabdan çıxış</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+             
+            
             <div class="menu">
                 <ul class="list">
-                    <li class="header">Idarə Paneli</li>
+                    <li class="header" style="color:red">@User.Identity.Name</li>
+                  
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">store</i>
+                            <span>Filial keçid</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-area="ArzumMini" asp-controller="Kassa" asp-action="BudgetPage">Arzum Mini Lazer Studio</a>
+                            </li>
+                            <li>
+                                <a asp-area="ArzumEstetic" asp-controller="Kassa" asp-action="BudgetPage">Arzum Estetik  Studio</a>
+                            </li>
+                            <li>
+                                <a asp-area="ArzumBeauty" asp-controller="Kassa" asp-action="BudgetPage">Arzum Beauty  Studio</a>
+                            </li>
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperSupporter") || User.IsInRole("Supporter"))
+                            {
+                                <li>
+                                    <a asp-area="Admin" asp-controller="TotalKassa" asp-action="BudgetPage">İdarə paneli</a>
+                                </li>
+                            }
+                      
 
+
+                        </ul>
+                    </li>
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">
                                 person
                             </i>
-                            <span>Lazeroloqlar</span>
+                            <span>Lazer Epilyasiyası</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a asp-controller="LazerMaster" asp-action="BudgetPage">Lazeroloqlar</a>
+                                <a asp-controller="Personal" asp-action="LazeroloqList">Lazeroloqlar</a>
                             </li>
 
                             <li>
-                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni usta</a>
+                                <a asp-controller="Personal" asp-action="AddLazeroloq">Yeni Lazeroloq</a>
                             </li>
-
+                            <li>
+                                <a asp-controller="Categories" asp-action="LazerCategoryList">Lazer Kategoriyaları</a>
+                            </li>
                         </ul>
                     </li>
 
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">person</i>
-                            <span>Kosmetoloqlar</span>
+                            <span>Kosmetologiya</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a asp-controller="Kassa" asp-action="BudgetPage">Kosmetoloqlar</a>
+                                <a asp-controller="Personal" asp-action="CosmetoloqList">Kosmetoloqlar</a>
                             </li>
                             <li>
-                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni usta</a>
+                                <a asp-controller="Personal" asp-action="AddCosmetoloq">Yeni Kosmetoloq</a>
+                            </li>
+                               <li>
+                                <a asp-controller="Categories" asp-action="CosmetologyMainCategoryList">Əsas kateqoriyalar</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Categories" asp-action="CosmetologyCategoryList">Alt Kateqoriyalar</a>
                             </li>
                         </ul>
 
@@ -144,13 +170,11 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a asp-controller="LazerMaster" asp-action="BudgetPage">Solarium ustaları</a>
+                                <a asp-controller="Personal" asp-action="SolariumSessions">Solarium seansları</a>
                             </li>
-
                             <li>
-                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni  usta</a>
+                                <a asp-controller="Categories" asp-action="SolariumPacketList">Solarium kategoriyaları</a>
                             </li>
-
                         </ul>
                     </li>
                     <li>
@@ -162,13 +186,17 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a asp-controller="LazerMaster" asp-action="BudgetPage">Bədən şəkilləndirmə  ustaları</a>
+                                <a asp-controller="Personal" asp-action="BodyShapingMasterList">Bədən şəkilləndirmə  ustaları</a>
                             </li>
-
                             <li>
-                                <a asp-controller="Kassa" asp-action="KassaActionList">Yeni usta</a>
+                                <a asp-controller="Personal" asp-action="AddBodyShapingMaster">Yeni Bədən şəkilləndirmə ustası</a>
                             </li>
-
+                            <li>
+                                <a asp-controller="Categories" asp-action="BodyShapingPacketList">Paketlər</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Categories" asp-action="BodyShapingComboPacketList">Kombo Paketlər</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -178,9 +206,8 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a asp-controller="Customer" asp-action="CustomerList">Müştərilər</a>
+                                <a asp-controller="Personal" asp-action="AllCustomers">Müştərilər</a>
                             </li>
-
                         </ul>
                     </li>
                     <li>
@@ -197,11 +224,10 @@
                             <li>
                                 <a  asp-controller="Users" asp-action="AddNewUser">Yeni istifadəçi</a>
                             </li>
-                            <li>
-                                <a asp-controller="Users" asp-action="MyProfile">Hesabım</a>
-                            </li>
-
                         </ul>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Account" asp-action="Logout">Hesabdan çıxış </a>
                     </li>
 
                 </ul>
@@ -256,6 +282,21 @@
 
     <!-- Waves Effect Plugin Js -->
     <script src="~/plugins/node-waves/waves.js"></script>
+
+    <script>
+
+
+        document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+            document.getElementById("submitButton").disabled = true;
+
+
+            setTimeout(function () {
+                document.getElementById("submitButton").disabled = false;
+            }, 5000);
+        });
+
+    </script>
 
 
 

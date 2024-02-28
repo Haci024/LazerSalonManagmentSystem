@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Arzum Mini Lazer Salon</title>
+    <title>Sakina</title>
     
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -14,6 +14,8 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <link href="~/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="~/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -56,8 +58,10 @@
     
   <style>
         #nav{
-            background-color: #8C52FF;
+            background-color: #000000;
       }
+
+      
   </style>  
    
   
@@ -74,141 +78,14 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand">Arzum Mini Lazer Studio</a>
+                <a class="navbar-brand">Arzum Mini Laser Studio</a>
             </div>
        
         </div>
     </nav>
   
     <section>
-        <aside id="leftsidebar" class="sidebar">
-            <div class="user-info">
-                <div class="image" style="margin-bottom:52px">
-                </div>
-                <div class="info-container">
-                    <h3 class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orxan Aslan</h3>
-                    <div class="btn-group user-helper-dropdown">
-                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
-                        <ul class="dropdown-menu pull-right">
-                            <li role="separator" class="divider"></li>
-                            <li><a asp-controller="Account" asp-action="Logout"><i class="material-icons">input</i>Hesabdan çıxış</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="menu">
-                <ul class="list">
-                    <li class="header">Idarə Paneli</li>
-
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">edit_calendar</i>
-                            <span>Gündəlik işlər</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a asp-controller="Customer" asp-action="DailyBirthDate">Ad günləri</a>
-                            </li>
-                            <li>
-                                <a asp-controller="LazerAppointment" asp-action="RememberedMonthlySession">Növbəti seans</a>
-                            </li>
-                            <li>
-                                <a asp-controller="LazerAppointment" asp-action="InCompleteSessionList">Bədən ardı</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">
-                                point_of_sale
-                            </i>
-                            <span>Kassa</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a asp-controller="Kassa" asp-action="BudgetPage">Kassa</a>
-                            </li>
-                            <li>
-                                <a asp-controller="Kassa" asp-action="KassaActionList">Kassadan çıxarış</a>
-                            </li>
-
-                        </ul>
-                    </li>
-                   
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">light</i>
-                            <span>Lazer Epilyasiya</span>
-                        </a>
-                        <ul class="ml-menu">
-
-                            @foreach (var item in ViewBag.LazerMasters as List<Entity.Concrete.LazerMaster>)
-                            {
-                                <li>
-                                    <a asp-controller="LazerAppointment" asp-action="LazerMasterPage" asp-route-LazerMasterId="@item.Id">@item.FullName</a>
-                                </li>
-                            }
-                            <li>
-                                <a asp-area="ArzumMini" asp-controller="LazerAppointment" asp-action="AllReservations">Qeydiyyatlar</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">groups</i>
-                            <span>Müştərilər</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a asp-controller="Customer" asp-action="FemaleList"> Qadın Müştərilər</a>
-                            </li>
-                            <li>
-                                <a asp-controller="Customer" asp-action="MaleList"> Kişi Müştərilər</a>
-                            </li>
-                            <li>
-                                <a asp-controller="Customer" asp-action="AddCustomer">Müştəri əlavə et</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">
-                                receipt_long
-                            </i>
-                            <span>Hesabatlar</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a asp-controller="Reports" asp-action="FilterLazerReports">Satış hesabatı</a>
-                            </li>
-                            <li>
-                                <a asp-controller="Reports" asp-action="UpgradePriceList">Qiymətdə dəyişiklik edilmiş seanslar</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">payments</i>
-                            <span>Satış və Xərclər</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a asp-controller="Income" asp-action="IncomeMoneyList">Satışlar</a>
-                            </li>
-                            <li>
-                                <a asp-controller="OutMoney" asp-action="OutMoneyList">Xərclər</a>
-                            </li>
-
-                            <li>
-                                <a asp-controller="Income" asp-action="ProductList">Stok</a>
-                            </li>
-                        </ul>
-                    </li>
-                   
-
-                </ul>
-            </div>
-        </aside>
+        @await Component.InvokeAsync("ArzumMini")
        
      
       
@@ -261,7 +138,20 @@
     <script src="~/plugins/node-waves/waves.js"></script>
 
 
-   
+    <script>
+
+
+        document.getElementById("form_validation").addEventListener("submit", function (event) {
+
+            document.getElementById("submitButton").disabled = true;
+
+
+            setTimeout(function () {
+                document.getElementById("submitButton").disabled = false;
+            }, 5000);
+        });
+
+    </script>
     <!-- Jquery DataTable Plugin Js -->
     <script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
     <script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>

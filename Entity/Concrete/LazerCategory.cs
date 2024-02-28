@@ -24,5 +24,13 @@ namespace Entity.Concrete
         public List<LazerCategory> ChildCategories { get; set; }
         
         public decimal Price { get; set; }
+
+        public Filial Filial { get; set; }
+
+        public int FilialId { get; set; }
+
+        public bool IsDeactive { get; set; }
+
+
     }
 }

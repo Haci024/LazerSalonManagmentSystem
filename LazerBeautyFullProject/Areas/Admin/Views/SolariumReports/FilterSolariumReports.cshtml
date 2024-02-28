@@ -1,0 +1,158 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterSolariumReports";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header text-center">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+
+                        <h2>Solarium Hesabat</h2>
+
+
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Başlanıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Paket</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" name="filialId" id="SolariumCategoriesId" multiple>
+                                    <option value="all" selected>Hamısı</option>
+                                    @foreach (var item in Model.SolariumCategories)
+                                    {
+
+                                        <option value="@item.Id">@item.Minute dəqiqə -- @item.MainCategory.Name </option>
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                        <div class="col-lg-6">
+                            <label for="email_address_2">Seçilmiş Paket üzrə gəlir</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="TotalMonthlyPacketPrice" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="email_address_2">Alınan paket  sayı</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="SessionCount" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+
+                            <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="resultSolariumReports"></div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#calculateButton').on('click', function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var solariumCategoryId = $('#SolariumCategoriesId').val();
+            console.log(solariumCategoryId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/SolariumReports/GetSolariumPrice',
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    solariumCategoryId: solariumCategoryId
+                },
+                success: function (response) {
+
+                    if (solariumCategoryId == 'all') {
+                        $('#TotalMonthlyPacketPrice').val(response.totalEarningsForAll + " " + "AZN"),
+                        $('#SessionCount').val(response.totalSessionCount + " " + "Paket");
+                    }
+                    else{
+                        $('#TotalMonthlyPacketPrice').val(response.totalEarningsByPacket + " " + "AZN");
+                        $('#SessionCount').val(response.totalSessionCountByPacket + " " + "Paket");
+                    }
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+
+            });
+            if (solariumCategoryId == 'all') {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Admin/SolariumReports/SelectSolariumReportsForAll",
+
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                        console.log(endDate, startDate);
+                       
+                            $("#resultSolariumReports").html(result);
+                    },
+                });
+            }
+            else {
+                $.ajax({
+                    type: 'POST',
+                    url: "/Admin/SolariumReports/SelectSolariumReportsForCategory",
+
+                    data: { startDate: startDate, endDate: endDate, solariumCategoryId: solariumCategoryId },
+                    success: function (result) {
+                        console.log(endDate, startDate, solariumCategoryId);
+                      
+                    
+                            $("#resultSolariumReports").html(result);
+                        
+
+                    },
+
+                });
+            }
+           
+        });
+   
+    });
+       
+           
+</script>
+
+
+

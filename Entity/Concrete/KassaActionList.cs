@@ -14,12 +14,17 @@ namespace Entity.Concrete
 
         public AppUser AppUser {get; set;}
 
-        public Kassa Kassa { get; set;}
-
-        public int KassaId { get; set;}
-
         public string AppUserId { get; set;}
 
         public decimal OutMoneyQuantity { get; set;}
+
+        public Filial Filial { get; set;}
+
+        public int FilialId {  get; set;}   
+
+        public bool Status { get; set;} 
+
+        public string Description { get; set;}
+
     }
 }

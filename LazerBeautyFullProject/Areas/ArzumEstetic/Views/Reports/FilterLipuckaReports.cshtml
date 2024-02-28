@@ -1,0 +1,226 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "FilterLipuckaReports";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>Lipuçka Hesabat</h2>
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Başlanğıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Lazer Ustası</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="lazeroloqId">
+                                    <option value="all" selected>Hamısı</option>
+                                    @foreach (var item in Model.LazerMasters)
+                                    {
+                                        foreach (var filial in item.LazerMasterFilial)
+                                        {
+                                            if (filial.FilialId == 3)
+                                            {
+                                                <option value="@filial.LazerMasterId">@item.FullName</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <h2 class="card-inside-title">Kategoriyalar</h2>
+                            <div class="form-group">
+                                <div>
+                                    <select class="form-control show-tick" id="childCategoryId" multiple>
+                                        <option value="all" selected>Hamısı</option>
+                                        @foreach (var item in Model.LipuckaCategories)
+                                        {
+
+                                            <option value="@item.Id">@item.Name @item.MainCategory.Name</option>
+
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row container-fluid">
+                            <div class="col-lg-6">
+                                <label for="email_address_2">Ümumi gəlir</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="lazerEarning" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                      
+                            <div class="col-lg-6">
+                                <label for="email_address_2">Seans sayı</label>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="sessionCount" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+
+                                <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" id="lipuckaTable"></div>
+
+<script>
+    $(document).ready(function () {
+        $("#calculateButton").on("click", function () {
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var lipuckaMasterId = $("#lazeroloqId").val();
+            var categoryId = $("#childCategoryId").val();
+
+            $.ajax({
+                url: "/ArzumEstetic/Reports/CalculateLipuckaReports",
+                type: "POST",
+                data: { startDate: startDate, endDate: endDate, lipuckaMasterId: lipuckaMasterId, categoryId: categoryId },
+                success: function (response) {
+
+                    if (categoryId == 'all' && lipuckaMasterId == 'all') {
+
+                        $("#lazerEarning").val(response.totalEarning + " " + "AZN");
+                      
+                        $("#sessionCount").val(response.totalSession + " " + "Seans");
+
+                    }
+                    else if (categoryId == 'all' && lipuckaMasterId != 'all') {
+
+                        $("#lazerEarning").val(response.masterLipuckaEarning + " " + "AZN");
+                        $("#sessionCount").val(response.masterLipuckaSession + " " + "Seans");
+                    }
+                    else if (categoryId != 'all' && lipuckaMasterId == 'all') {
+
+                        $("#lazerEarning").val(response.categoryEarning + " " + "AZN");
+                        $("#sessionCount").val(response.categorySession + " " + "Seans");
+                    }
+                    else {
+                        $("#lazerEarning").val(response.allFilterEarning + " " + "AZN");
+                        $("#sessionCount").val(response.allFilterSession + " " + "Seans");
+                    }
+
+                },
+                error: function () {
+                    Swal.fire(
+                        'Xəbərdarlıq!',
+                        'Tarixləri düzgün qeyd edin!',
+                        'warning'
+                    )
+                }
+            });
+            if (categoryId == 'all' && lipuckaMasterId == 'all') {
+                
+              
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectAllLipuckaReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                      
+                        $("#lipuckaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (categoryId == 'all' && lipuckaMasterId != 'all') {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectLipuckaMasterReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, lipuckaMasterId: lipuckaMasterId },
+                    success: function (result) {
+
+                        $("#lipuckaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (categoryId != 'all' && lipuckaMasterId == 'all') {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectLipuckaCategoryReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, categoryId: categoryId },
+                    success: function (result) {
+
+                        $("#lipuckaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/ArzumEstetic/Reports/SelectLipuckaReportsWithAllFilter",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, lipuckaMasterId: lipuckaMasterId, categoryId: categoryId },
+                    success: function (result) {
+
+                        $("#lipuckaTable").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            };
+
+
+        });
+
+    });
+</script>

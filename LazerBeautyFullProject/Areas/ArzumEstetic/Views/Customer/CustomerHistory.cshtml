@@ -1,0 +1,843 @@
+﻿@model DTO.DTOS.CustomerDTO.CustomerUsingHistoryDTO
+
+@{
+    ViewData["Title"] = "Yeni müştəri";
+    Layout = "~/Areas/ArzumEstetic/Views/Shared/_ArzumEsteticLayout.cshtml";
+}
+<style>
+    .size {
+        width: 30px;
+        height: 10px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row clearfix">
+
+        <div class="col-xs-12 col-sm-12">
+            <div class="card">
+                <div class="body">
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Lazer Epilyasiya</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Kosmetologiya</a></li>
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Solarium</a></li>
+                            <li role="presentation"><a href="#change_password" aria-controls="settings" role="tab" data-toggle="tab">Bədən Şəkilləndirmə</a></li>
+                            <li role="presentation"><a href="#change_password_settings_lipucka" aria-controls="settings" role="tab" data-toggle="tab">Lipuçka</a></li>
+                            <li role="presentation"><a href="#change_password_pirsinq" aria-controls="settings" role="tab" data-toggle="tab">Pirsinq</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                            <div class="header">
+                                                <h2>
+                                                    @Model.FullName - Lazer Epilyasiyası
+                                                </h2>
+                                                <ul class="header-dropdown m-r--5">
+                                                    <li class="dropdown">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="material-icons">more_vert</i>
+                                                        </a>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Lazeroloq</th>
+                                                                    <th>Nahiyə</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Filial
+                                                                        </div>
+                                                                    </th>
+
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Lazeroloq</th>
+                                                                    <th>Nahiyə</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Filial
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.LazerAppointmentsHistory)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.ReservationDate.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <th>@item.LazerMaster.FullName</th>
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.LazerAppointmentReports)
+                                                                            {
+                                                                                if (categories.LazerCategory.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.LazerCategory.Name,</div>
+                                                                                }
+
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                @item.ReservationDate.ToString("HH:mm")
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.EndTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.EndTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                                                        <td>
+                                                                            @if (item.IsStart == true && item.IsCompleted == false)
+                                                                            {
+                                                                                <b style="color:#2196F3">Seans başladı</b>
+                                                                            }
+                                                                            else if (item.IsCompleted == true && item.IsContiued == true && item.IsCompleted == true)
+                                                                            {
+                                                                                <b style="color:#FF9800">Bədən ardı</b>
+                                                                            }
+                                                                            else if (item.IsCompleted == true && item.IsContiued == false && item.IsStart == true && item.IsContiued == false)
+                                                                            {
+                                                                                <b style="color:#8BC34A">Uğurlu</b>
+                                                                            }
+                                                                            else if (item.IsDeleted == true && item.IsCompleted == false)
+                                                                            {
+                                                                                <b style="color:#F44336">İmtina edilmiş</b>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <b style="color:#4CAF50">Rezervasiya</b>
+                                                                            }
+
+                                                                        </td>
+                                                                        <td>@if (item.PriceUpdateDescription==null)
+                                                                            {
+                                                                                @item.Decription
+                                                                            }
+                                                                            else if (item.Decription==null)
+                                                                            {
+                                                                              <div>@item.PriceUpdateDescription</div> 
+                                                                            }
+                                                                            else if (item.Price==null && item.PriceUpdateDescription==null)
+                                                                            {
+                                                                                <div>Qeyd yoxdur!</div>
+                                                                            }
+                                                                         
+                                                                            
+                                                                        </td>
+
+                                                                        <td style="padding-top:17px" class="text-center">
+                                                                          
+                                                                            @item.Filial.FilialName
+                                                                        </td>
+                                                                    </tr>
+
+                                                                }
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in " id="profile_settings">
+                                <div class="panel panel-default panel-post">
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <h2>
+                                                        @Model.FullName - Kosmetologiya
+                                                    </h2>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Kosmetoloq</th>
+                                                                    <th>Kategoriyalar</th>
+                                                                    <th>Giriş saatı</th>
+                                                                    <th>Çıxış saatı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Filial</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Kosmetoloq</th>
+                                                                    <th>Kategoriyalar</th>
+                                                                    <th>Giriş saatı</th>
+                                                                    <th>Çıxış saatı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Status</th>
+                                                                    <th>Filial</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.CosmetologyAppointments)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td> @item.StartTime.Value.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.Cosmetolog.FullName</td>
+                                                                    
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.CosmetologyReports)
+                                                                            {
+                                                                                if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.CosmetologyCategory.CategoryName,</div>
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+
+                                                                            @item.StartTime.Value.ToString("HH:mm")
+
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.OutTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.OutTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                                                        <td>
+                                                                            @if (item.IsStart == true && item.IsCompleted == false)
+                                                                            {
+                                                                                <b style="color:#2196F3">Seans başladı</b>
+                                                                            }
+                                                                            else if (item.IsCompleted == true && item.IsStart == true)
+                                                                            {
+                                                                                <b style="color:#8BC34A">Uğurlu</b>
+                                                                            }
+
+
+                                                                        </td>
+
+                                                                        <td style="padding-top:17px" class="text-center">
+
+                                                                        @item.Filial.FilialName
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                <div class="container-fluid">
+
+                                    <!-- Exportable Table -->
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            @Model.FullName - Solarium 
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover dataTable js-basic-example">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Alınma tarixi</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                   
+                                                                 
+                                                                    <th>İstifadə olunan müddət</th>
+                                                                    <th>Qalan müddət</th>
+                                                                    <th>Paket limiti</th>
+                                                                    <th>Bitməsinə qalan vaxt</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Qaytarılan pul</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+
+                                                                    <th>Alınma tarixi</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                               
+                                                                    
+                                                                    <th>İstifadə olunan müddət</th>
+                                                                    <th>Qalan müddət</th>
+                                                                    <th>Paket limiti</th>
+                                                                    <th>Bitməsinə qalan vaxt</th>
+                                                                      <th>Ödəniş</th>
+                                                                    <th>Qaytarılan pul</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-right ">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.SolariumAppointments)
+                                                                {
+                                                                 
+
+                                                                        <tr>
+                                                                        <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                                                          
+                                                                            <td>@item.AppUser.UserName</td>
+                                                                          
+                                                                            <td>@item.UsingMinute dəqiqə</td>
+                                                                            <td>@item.RemainingMinute dəqiqə</td>
+                                                                            <td>@item.MinuteLimit dəqiqə</td>
+                                                                            <td>
+                                                                                @{
+                                                                                    TimeSpan kalanSure = item.RemainingTime - DateTime.Now;
+                                                                                    string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
+                                                                                }
+                                                                                <span id="geriSayim">@kalanSureMetni</span>
+                                                                            </td>
+                                                                        <td>@item.Price.ToString("#0.#") AZN</td>
+                                                                        <td>@item.ReturnMoney.ToString("#0.#") AZN</td>
+                                                                        <td>
+                                                                            @if (item.IsCompleted)
+                                                                            {
+                                                                                <div><span style="color:green"><b>Uğurlu!</b></span></div>
+                                                                            }
+                                                                            else if (item.IsDeleted)
+                                                                            {
+                                                                                <div><span style="color:red"><b>İmtina!</b></span></div>
+                                                                            }
+                                                                            else if (item.IsTimeOut)
+                                                                            {
+                                                                                <div><span style="color:orange"><b>Vaxtı bitib!</b></span></div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div><span style="color:blue"><b>Davam edir!</b></span></div>
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Description</td>
+                                                                        <td style="display:flex;justify-content:end">
+                                                                            <div style="margin-right:10px">
+                                                                                <a  asp-controller="SolariumAppointment" asp-action="MonthlySessionList" asp-route-CustomerId="@item.Customer.Id" asp-route-SolariumId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                    <i class="material-icons">list</i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </td>
+                                                                        </tr>
+                                                                   
+                                                                    }
+
+                                                                
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password">
+                                <div class="container-fluid">
+
+                                    <!-- Exportable Table -->
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            @Model.FullName - Bədən Şəkilləndirmə
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                   <th>Usta</th>
+                                                                    <th>Paket</th>
+                                                                    <th>Seans sayı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Qaytarılan pul</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                            Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Usta</th>
+                                                                    <th>Paket</th>
+                                                                    <th>Seans sayı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Qaytarılan pul</th>
+                                                                    <th>Status</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th class="text-center">
+                                                                        <div style="margin-right:20px">
+                                                                          Əməliyyatlar
+                                                                        </div>
+                                                                    </th>
+                                                                 
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+                                                                @foreach (var item in Model.BodyshapingAppointments)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.BodyShapingMaster.FullName</td>
+                                                                        <td>
+                                                                            @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                            {
+
+
+                                                                                <div style="padding:2px">
+                                                                                    @packetName.BodyShapingPackets.Packet
+                                                                                </div>
+
+
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @foreach (var packetName in item.BodyShapingPacketReports)
+                                                                            {
+                                                                                <div style="padding:2px">
+                                                                                    @packetName.BodyShapingPackets.SessionCount Seans
+                                                                                </div>
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("0.##") AZN</td>
+                                                                        <td>@item.ReturnMoney.ToString("0.##") AZN</td>
+                                                                        <td>
+                                                                            @if (item.IsDeactive == false && item.IsCompleted == false)
+                                                                            {
+                                                                                <span style="color:blue"><b>Davam edir!</b></span>
+                                                                            }
+                                                                            else if (item.IsDeactive == true && item.IsCompleted == true)
+                                                                            {
+                                                                                <span style="color:red"><b>İmtina edilib!</b></span>
+                                                                            }
+                                                                            else if (item.IsDeactive == false && item.IsCompleted == true)
+                                                                            {
+                                                                                <span style="color:green"><b>Paket tamamlanıb!</b></span>
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Description</td>
+                                     
+                                                                        <td style="display:flex;justify-content:center">
+
+                                                                            <div style="margin-right:10px">
+                                                                                <a asp-controller="BodyShapingAppointment" asp-action="SessionList" asp-route-BodyShapingMasterId="@item.BodyshapingMasterId" asp-route-BodyShapingAppointmentId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                                                    <i class="material-icons">list</i>
+                                                                                </a>
+
+                                                                            </div>
+                                                                         </td>
+                                                                    </tr>
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_settings_lipucka">
+                                <div class="container-fluid">
+
+                                    <!-- Exportable Table -->
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            @Model.FullName - Lipuçka
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Lazeroloq</th>
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th id="priceValueMaster1">Ödəniş</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th style="padding-top:17px" class="text-center">
+
+                                                                        Filial
+                                                                    </th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Lazeroloq</th>
+                                                                  
+                                                                    <th>Kategoriya</th>
+                                                                    <th>Giriş</th>
+                                                                    <th>Çıxış</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th style="padding-top:17px" class="text-center">
+
+                                                                        Filial
+                                                                    </th>
+
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.LipuckaAppointments)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@item.EndTime.Value.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.LazerMaster.FullName</td>
+                        
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.LipuckaReports)
+                                                                            {
+                                                                                if (categories.LipuckaCategories.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.LipuckaCategories.Name,</div>
+                                                                                }
+
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.StartTime == null)
+                                                                            {
+                                                                                <h5 class="btn btn-primary">Seans başlamayıb!</h5>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.StartTime.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.EndTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.EndTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+                                                                        <td>
+                                                                            @if (item.Description == null)
+                                                                            {
+                                                                                <div>Qeyd yoxdur!</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div>@item.Description</div>
+                                                                            }
+                                                                        </td>
+                                                                        <td style="padding-top:17px" class="text-center">
+
+                                                                            @item.Filial.FilialName
+                                                                        </td>
+
+                                                                    </tr>
+
+                                                              
+
+
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade in" id="change_password_pirsinq">
+                                <div class="container-fluid">
+
+                                  
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <div style="display:flex;justify-content:space-between;align-items:center">
+                                                        <h2>
+                                                            @Model.FullName - Pirsinq
+                                                        </h2>
+
+                                                    </div>
+                                                    <ul class="header-dropdown m-r--5">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="material-icons">more_vert</i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable dataTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Lazeroloq</th>
+                                                                    <th>Nahiyələr</th>
+                                                                    <th>Giriş saatı</th>
+                                                                    <th>Çıxış saatı</th>
+                                                                    <th id="priceValueMaster1">Ödəniş</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th style="padding-top:17px" class="text-center">
+
+                                                                        Filial
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Tarix</th>
+                                                                    <th>Qeydiyyatçı</th>
+                                                                    <th>Lazeroloq</th>
+                                                                    <th>Nahiyələr</th>
+                                                                    <th>Giriş saatı</th>
+                                                                    <th>Çıxış saatı</th>
+                                                                    <th>Ödəniş</th>
+                                                                    <th>Qeyd</th>
+                                                                    <th style="padding-top:17px" class="text-center">
+
+                                                                       Filial
+                                                                    </th>
+                                                                </tr>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                                @foreach (var item in Model.PirsinqAppointments)
+                                                                {
+
+                                                                    <tr>
+                                                                        <td>@item.EndTime.Value.ToString("dd.MM.yyyy")</td>
+                                                                        <td>@item.AppUser.UserName</td>
+                                                                        <td>@item.LazerMaster.FullName</td>
+                                                                       
+                                                                      
+
+                                                                        <td style="display:flex">
+                                                                            @foreach (var categories in item.PirsinqReports)
+                                                                            {
+                                                                                if (categories.PirsinqCategory.MainCategoryId != null)
+                                                                                {
+                                                                                    <div style="padding:2px">@categories.PirsinqCategory.CategoryName,</div>
+                                                                                }
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+
+                                                                            @item.StartTime.ToString("HH:mm")
+
+
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (item.EndTime == null)
+                                                                            {
+                                                                                <div>Bitməyib</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @item.EndTime.Value.ToString("HH:mm")
+                                                                            }
+                                                                        </td>
+                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+                                                                        <td>
+                                                                            @if (item.Description == null)
+                                                                            {
+                                                                                <div>Qeyd yoxdur!</div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div>@item.Description</div>
+                                                                            }
+                                                                        </td>
+                                                                        <td style="padding-top:17px" class="text-center">
+
+                                                                            @item.Filial.FilialName
+                                                                        </td>
+
+
+
+                                                                    </tr>
+
+
+                                                                }
+
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -9,10 +9,12 @@ namespace Business.IServices
 {
     public interface ICustomerService : IGenericService<Customer>
     {
-        public List<Customer> GetFemaleList();
+        public Task<List<Customer>> GetFemaleList();
 
-        public List<Customer> MaleList();
+        public Task<List<Customer>> MaleList();
 
-        public Customer SelectedCustomer(int id);
+        public Task<Customer> SelectedCustomer(int id);
+
+        public Task<List<Customer>> DailyBirthDate(int FilialId);
     }
 }

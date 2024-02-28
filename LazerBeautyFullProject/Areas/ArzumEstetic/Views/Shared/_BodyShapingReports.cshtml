@@ -1,0 +1,216 @@
+﻿@model IEnumerable<Entity.Concrete.BodyshapingAppointment>
+
+<div class="container-fluid">
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                           Bədən Şəkilləndirmə hesabatı
+
+                        </h2>
+
+                        <div style="padding-right:30px">
+
+
+                            <button id="calculatePriceButtonMaster1" class="btn btn-primary">Hesabla</button>
+
+                        </div>
+                    </div>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Paket</th>
+                                    <th>Seans sayı</th>
+                                    <th id="price">Ödəniş</th>
+                                    <th id="returnPrice">Qaytarılan pul</th>
+                                    <th>Bitməsinə qalan müddət</th>
+                              
+                                    <th>Status</th>
+                                    <th>Qeyd</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Paket</th>
+                                    <th>Seans sayı</th>
+                                    <th >Ödəniş</th>
+                                    <th>Qaytarılan pul</th>
+                                    <th>Bitməsinə qalan müddət</th>
+                                    <th>Status</th>
+                                    <th>Qeyd</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.Customer.FullName</td>
+                                        <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+
+                                        <td>
+                                            @foreach (var packetName in item.BodyShapingPacketReports)
+                                            {
+
+
+                                                <div style="padding:2px">
+                                                    @packetName.BodyShapingPackets.Packet
+                                                </div>
+
+
+                                            }
+                                        </td>
+                                        <td>
+                                            @foreach (var packetName in item.BodyShapingPacketReports)
+                                            {
+                                                <div style="padding:2px">
+                                                    @packetName.BodyShapingPackets.SessionCount Seans
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>@item.Price.ToString("#.##") AZN</td>
+                                        <td>@item.ReturnMoney.ToString("0.##") AZN</td>
+                                        <td>
+                                            @{
+                                                TimeSpan kalanSure = item.RemaingDate - DateTime.Now;
+                                                string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
+                                            }
+                                            @if (kalanSure.TotalMinutes >= 0)
+                                            {
+                                                <span class="geriSayim">@kalanSureMetni</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="geriSayimBitmis" style="color:red">Vaxt bitib!</span>
+                                            }
+                                        </td>
+
+                                      <td>
+                                          @if (item.IsDeactive==false && item.IsCompleted==false)
+                                            {
+                                                <span  style="color:blue"><b>Davam edir!</b></span>
+                                            }
+                                            else if (item.IsDeactive==true && item.IsCompleted==true)
+                                            {
+                                                <span style="color:red"><b>İmtina edilib!</b></span>
+                                            }
+                                            else if (item.IsDeactive == false && item.IsCompleted == true)
+                                            {
+                                                <span  style="color:green"><b>Paket tamamlanıb!</b></span>
+                                            }
+                                      </td>
+                                        <td>@item.Description</td>
+                                        <td style="display:flex;justify-content:center">
+
+                                            <div style="margin-right:10px">
+                                                <a asp-controller="BodyShapingAppointment" asp-action="SessionList" asp-route-BodyShapingMasterId="@item.BodyshapingMasterId" asp-route-BodyShapingAppointmentId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                    <i class="material-icons">list</i>
+                                                </a>
+                                              
+                                            </div>
+
+
+
+                                            @if (kalanSure.TotalMinutes <= 0)
+                                            {
+                                                <div style="margin-right:10px">
+                                                    <a asp-action="SessionList" asp-route-BodyShapingAppointmentId="@item.Id" class="btn bg-blue-grey waves-effect">
+                                                        <i class="material-icons">list</i>
+                                                    </a>
+                                                </div>
+                                            }
+                                        </td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Jquery DataTable Plugin Js -->
+<script src="~/plugins/jquery-datatable/jquery.dataTables.js"></script>
+<script src="~/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+<script src="~/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+<script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+<script src="~/plugins/jquery-countto/jquery.countTo.js"></script>
+<script src="~/js/pages/tables/jquery-datatable.js"></script>
+<script src="~/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Function to calculate and display the sum of prices
+        function calculateTotalPrice() {
+            var total1 = 0;
+            var total2 = 0;
+            // Loop through all the table rows and sum the prices
+            $("tbody tr").each(function () {
+                var price = parseFloat($(this).find("td:eq(4)").text().replace(" AZN", ""));
+                total1 += price;
+            });
+            $("tbody tr").each(function () {
+                var price = parseFloat($(this).find("td:eq(5)").text().replace(" AZN", ""));
+                total2 += price;
+            });
+
+            // Display the total price in the th with id "priceValueMaster1"
+            $("#price").text("Ümumi:" + total1.toFixed(2).replace(/\.00$/, '') + " AZN");
+            $("#returnPrice").text("Qaytarılan:" + total2.toFixed(2).replace(/\.00$/, '') + " AZN");
+        }
+
+        // Add a click event handler to the "Hesabla" button
+        $("#calculatePriceButtonMaster1").click(function () {
+            calculateTotalPrice();
+        });
+
+        // Calculate the total price when the page loads
+
+    });
+</script>

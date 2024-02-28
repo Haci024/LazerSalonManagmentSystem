@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<Entity.Concrete.LazerAppointment>
-
 @{
     ViewData["Title"] = "Bütün rezervasiyalar";
     Layout = "~/Areas/ArzumBeauty/Views/Shared/_ArzumBeautyLayout.cshtml";
@@ -58,7 +57,8 @@
 
                                 @foreach (var item in Model)
                                 {
-                                
+                                    if(item.IsCompleted==false && item.IsDeleted==false)
+                                    {
                                         <tr>
                                             <th>@item.ReservationDate.ToString("dd.MM.yyyy")</th>
                                             <td>@item.Customers.FullName</td>
@@ -127,7 +127,7 @@
                                                 }
                                             </td>
                                         </tr>
-                                    
+                                    }
 
                                 }
 

@@ -12,7 +12,7 @@ namespace Business.ValidationRules.IncomeValidator
     {
         public InComeUpdateValidator()
         {
-            RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət boş ola bilmz!");
+           
             RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama  boş ola bilmz!");
             RuleFor(x => x.Name).NotEmpty().WithMessage("Gəlir adı boş ola bilmz!");
             RuleFor(x => x.Count).NotEmpty().WithMessage("Say 0 ola bilməz!");

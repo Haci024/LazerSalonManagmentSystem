@@ -17,24 +17,28 @@ namespace Data.Repositories
         {
             _db = db;
         }
-        public List<Customer> GetFemaleList()
+        public async Task<List<Customer>> GetFemaleList()
         {
-            return _db.Customers.Where(x=>x.Female==true).ToList();
+            return await _db.Customers.Where(x=>x.Female==true && x.IsDeactive==false).ToListAsync();
         }
 
 
-        public  Customer SelectedCustomer(int CustomerId)
+        public async Task<Customer> SelectedCustomer(int CustomerId)
         {
-            return  _db.Customers.Include(x => x.LazerAppointments).ThenInclude(x=>x.LazerMaster).Include(x=>x.LazerAppointments)
-                .ThenInclude(x=>x.LazerAppointmentReports).ThenInclude(x=>x.LazerCategory).Where(x => x.Id == CustomerId).FirstOrDefault();
+            return await _db.Customers.Include(x => x.LazerAppointments).ThenInclude(x => x.LazerMaster).Include(x => x.LazerAppointments)
+                .ThenInclude(x=>x.LazerAppointmentReports).ThenInclude(x=>x.LazerCategory).Where(x => x.Id == CustomerId && x.IsDeactive==false).FirstOrDefaultAsync();
         }
 
-        public  List<Customer> GetMaleList()
+        public async Task<List<Customer>> GetMaleList()
         {
-            return _db.Customers.Where(x=>x.Female==false).ToList();
+            return await _db.Customers.Where(x=>x.Female==false && x.IsDeactive==false).ToListAsync();
         }
-        
 
-        
+        public async Task<List<Customer>> DailyBirthDate(int FilialId)
+        {
+            DateTime date = DateTime.Today;
+
+            return await _db.Customers.Where(x => x.BirthDate.Month == date.Month && x.BirthDate.Day == date.Day && x.FilialId==FilialId && x.IsDeactive==false).ToListAsync();
+        }
     }
 }

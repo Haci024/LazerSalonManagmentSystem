@@ -40,5 +40,14 @@ namespace Business.Manager
         {
             _lazerMasterDAL.Update(t);
         }
+        public async Task<List<LazerMaster>> GetLazeroloqListByFilial(int filialId) {
+
+            return await _lazerMasterDAL.GetLazeroloqListByFilial(filialId);
+        }
+
+        public async Task<List<LazerMaster>> AllLazeroloq()
+        {
+            return await _lazerMasterDAL.AllLazeroloq();
+        }
     }
 }

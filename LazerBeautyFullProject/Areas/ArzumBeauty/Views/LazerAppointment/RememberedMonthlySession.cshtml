@@ -11,7 +11,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Korreksiya günü olan müştərilərin siyahısı
+                       Növbəti Seans
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -29,7 +29,7 @@
                                 <tr>
                                    
                                     <th>Ad və Soyad</th>
-                                    <th>Telefon nömrəsi</th>
+                                    <th>Telefon</th>
                                     <th>Nahiyələr</th>
                                     <th>Lazeroloq</th>
                                     <th>Əməliyyatlar</th>
@@ -38,7 +38,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Ad və Soyad</th>
-                                    <th>Telefon nömrəsi</th>
+                                    <th>Telefon</th>
                                     <th>Nahiyələr</th>
                                     <th>Lazeroloq</th>
                                     <th>Əməliyyatlar</th>
@@ -51,7 +51,7 @@
                                     <tr>
                                          
                                             <td>@item.Customers.FullName</td>
-                                            <td>@item.Customers.PhoneNumber</td>
+                                            <td>@item.Customers.PhoneNumber.ToString("0000000000")</td>
                                             <td style="display:flex">
                                                 @foreach (var categories in item.LazerAppointmentReports)
                                                 {

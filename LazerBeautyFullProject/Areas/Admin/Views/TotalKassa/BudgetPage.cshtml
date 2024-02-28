@@ -1,0 +1,235 @@
+﻿@model DTO.DTOS.ReportDTO.SelectFilterDTO
+@{
+    ViewData["Title"] = "BudgetPage";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row clearfix">
+   
+    
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box bg-cyan hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">point_of_sale</i>
+                </div>
+                <div class="content">
+                    <div class="text">Arzum Mini</div>
+                    <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">@Model.ArzumMiniBudget.ToString("0.00") AZN</div>
+                </div>
+            </div>
+        </div>
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div class="info-box bg-red hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">point_of_sale</i>
+                </div>
+                <div class="content">
+                    <div class="text">Arzum Beauty</div>
+                    <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">@Model.ArzumBeautyBudget.ToString("0.00") AZN</div>
+                </div>
+            </div>
+        </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="info-box bg-green hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">point_of_sale</i>
+            </div>
+            <div class="content">
+                <div class="text">Arzum Estetic</div>
+                <div class="number count-to" data-from="0" data-to="125" data-speed="15" data-fresh-interval="20">@Model.ArzumEsteticBudget.ToString("0.00") AZN</div>
+            </div>
+        </div>
+    </div>
+    
+
+ 
+
+</div>
+<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:center;align-items:center">
+                        <h2>Filter ilə Hesabat</h2>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Başlanıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Filial</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="filialId">
+                                    <option value="all" selected>Hamısı</option> 
+                                    @foreach (var item in Model.Filials)
+                                    {
+                                        <option value="@item.Id">@item.FilialName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row container-fluid">
+                        <div class="col-lg-3 ">
+                            <label for="email_address_2">Lazer Epilyasiya</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="lazerEarning" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Kosmetologiya</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="cosmetologyEarning" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Solarium</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="solariumEarning" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 ">
+                            <label for="email_address_2">Bədən şəkilləndirmə</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="bodyShapingEarning" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row container-fluid">
+                         <div class="col-lg-3">
+                            <label for="email_address_2">Pirsinq</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="pirsinqEarning" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Lipuçka</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="lipuckaEarning" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Satışdan gələn gəlir</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="inCome" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="email_address_2">Xərclər</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="outMoney" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        </div>
+                        <div class="row container-fluid">
+                        <div class="col-lg-4">
+                         </div>   
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Ümumi  gəlir</label>
+                            <div class="form-group">
+                                <h1 class="form-line">
+                                   <input type="text" style="font-size:30px" class="form-control" id="totalEarning" readonly>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+
+                        </div>
+                       </div>
+                        <div class="row">
+                            <div class="col-lg-12 text-center">
+
+                                <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#calculateButton').on('click', function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var filialId = $('#filialId').val();
+
+            console.log(startDate);
+            console.log(endDate);
+            console.log(filialId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/TotalKassa/CalculateNetPrice',
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    filialId: filialId,
+                },
+                success: function (response) {
+                    if (filialId === 'all') {
+                        $("#lazerEarning").val(response.totalLazerEarningAll + " AZN");
+                        $("#cosmetologyEarning").val(response.totalCosmetologyEarningAll + " AZN");
+                        $("#solariumEarning").val(response.totalSolariumEarningAll + " AZN");
+                        $("#bodyShapingEarning").val(response.totalBodyShapingEarningAll + " AZN");
+                        $("#pirsinqEarning").val(response.pirsinqEarningAll + " AZN");
+                        $("#lipuckaEarning").val(response.totalLipuckaForAll + " AZN");
+                        $("#inCome").val(response.totalIncomeForAll + " AZN");
+                        $("#outMoney").val(response.totalOutMoneyForAll + " AZN");
+                        $("#totalEarning").val(response.totalEarningAll +" AZN");
+                    } else {
+                        $("#lazerEarning").val(response.totalLazerEarningForFilial + " AZN");
+                        $("#cosmetologyEarning").val(response.totalCosmetologyEarningForFilial + " AZN");
+                        $("#solariumEarning").val(response.totalSolariumEarningForFilial + " AZN");
+                        $("#bodyShapingEarning").val(response.totalBodyShapingEarningForFilial + " AZN");
+                        $("#pirsinqEarning").val(response.pirsinqForFilial + " AZN");
+                        $("#lipuckaEarning").val(response.totalLipuckaEarningForFilial + " AZN");
+                        $("#inCome").val(response.totalIncomeForFilial + " AZN");
+                        $("#outMoney").val(response.totalOutMoneyForFilial + " AZN");
+                        $("#totalEarning").val(response.totalEarningForFilial + " AZN");
+                    }
+                },
+                error: function (error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
+    });
+
+</script>
+
+
+

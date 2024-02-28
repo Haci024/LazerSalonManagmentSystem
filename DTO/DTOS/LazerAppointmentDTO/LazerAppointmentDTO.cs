@@ -16,7 +16,7 @@ namespace DTO.DTOS.LazerAppointmentDTO
 
         public string CustomerName { get; set; }
 
-        
+        public bool IsStart { get;set; }
         public List<LazerCategory> MainCategory { get; set; }
 
         public List<LazerCategory> ChildCategory { get; set; }
@@ -24,7 +24,7 @@ namespace DTO.DTOS.LazerAppointmentDTO
         public decimal Price { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime ReservationDate { get; set; }
-
+      
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }
@@ -33,12 +33,10 @@ namespace DTO.DTOS.LazerAppointmentDTO
 
         public int ImpulsCount { get; set; }
 
-       
-
         public int[] lazerCategoriesId { get; set; }
 
      
 
-        public string RequestName { get; set; }
+    
     }
 }

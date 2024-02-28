@@ -16,7 +16,7 @@
                         <div class="form-group form-float">
                             <label class="form-label">Ödəniş məbləği</label>
                             <div class="form-line">
-                                <input type="number" asp-for="Price" class="form-control" >
+                                <input type="number" asp-for="Price" class="form-control" step="0.1" min="0">
 
                             </div>
 
@@ -24,14 +24,14 @@
                         <div class="form-group form-float">
                             <label class="form-label">Açıqlama</label>
                             <div class="form-line">
-                                <input type="text" asp-for="Desciption" class="form-control">
+                                <input type="text" asp-for="Description" class="form-control">
 
                             </div>
 
                      </div>
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
                             <a asp-action="LazerMasterPage" asp-route-LazerMasterId="@Model.LazerMasterId" class="btn btn-success">Geri</a>
                         </div>
                     </form>

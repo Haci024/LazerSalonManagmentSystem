@@ -15,7 +15,7 @@
                     <form id="form_validation" method="post">
                     
                         <div class="col-md-12 dateInput1">
-                            <b id="timeLabel"> Giriş saatı</b>
+                            <b id="timeLabel">Rezervasiya tarixi</b>
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="material-icons">access_time</i>
@@ -27,9 +27,9 @@
                         </div>
 
 
-                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
-                            <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Yenilə</button>
                             <a asp-controller="LazerAppointment" asp-action="AllReservations"  class="btn btn-success">Geri</a>
                         </div>
                     </form>
@@ -38,3 +38,15 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById("myForm").addEventListener("submit", function (event) {
+        // Form gönderildiğinde butonu devre dışı bırak
+        document.getElementById("submitButton").disabled = true;
+
+        // 3 saniye sonra butonu tekrar etkinleştir
+        setTimeout(function () {
+            document.getElementById("submitButton").disabled = false;
+        }, 5000); // 3 saniye (3000 milisaniye)
+    });
+
+</script>
