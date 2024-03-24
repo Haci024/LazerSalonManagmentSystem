@@ -33,24 +33,18 @@
                         <div class="form-group form-float">
                             <label class="form-label">Nahiyə</label>
                             <div>
-                                <select class="form-control show-tick" asp-for="PirsinqCategoryIds" id="childCategoryId" >
+                                <select class="form-control show-tick" asp-for="PirsinqCategoryIds" id="childCategoryId" data-live-search="true">
                                     
                                     @foreach (var item in Model.PirsinqCategories)
                                     {
 
-                                        <option value="@item.Id" selected> @item.CategoryName</option>
+                                        <option style="margin-left:20px" value="@item.Id"> @item.CategoryName</option>
 
                                     }
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group form-float" style="padding-top:14px">
-                            <label class="form-label">Açıqlama... <span class="font-bold col-pink"></span></label>
-                            <div class="form-line">
-                                <textarea asp-for="Description" class="form-control"></textarea>
-                            </div>
-                            <span class="font-bold col-pink"></span>
-                        </div>
+                   
                         <p>
                             <label>Giriş saatı</label>
                         </p>

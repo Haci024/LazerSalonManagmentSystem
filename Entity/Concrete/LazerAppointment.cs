@@ -62,6 +62,8 @@ namespace Entity.Concrete
 
         public int FilialId { get; set; }
 
+        public string? EditorName { get; set; }
+
 
     }
 }

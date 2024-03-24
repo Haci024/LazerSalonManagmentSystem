@@ -1,8 +1,10 @@
 ﻿using Business.IServices;
 using Data.Concrete;
+using DTO.DTOS.LazerAppointmentDTO;
 using DTO.DTOS.ReportDTO;
 using Entity.Concrete;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,16 +12,20 @@ namespace LazerBeautyFullProject.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles ="Admin,SuperSupporter,Supporter")]
-    public class CosmetologyReportsController : Controller
+    public class EditReportsController : Controller
     {
         private readonly ICosmetologyAppointmentService _service;
         private readonly ICosmetologService _cosmetolog;
         private readonly AppDbContext _appDbContext;
-        public CosmetologyReportsController(ICosmetologyAppointmentService service,ICosmetologService cosmetolog,AppDbContext dbContext)
+        private readonly UserManager<AppUser> _appUser;
+        private readonly ILazerAppointmentService _lazerService;
+        public EditReportsController(ICosmetologyAppointmentService service,UserManager<AppUser> user,ICosmetologService cosmetolog,ILazerAppointmentService lazerService,AppDbContext dbContext)
         {
             _service = service;
             _cosmetolog = cosmetolog;
             _appDbContext = dbContext;
+            _lazerService= lazerService;
+            _appUser = user;
         }
 
         [HttpGet]
@@ -43,7 +49,6 @@ namespace LazerBeautyFullProject.Areas.Admin.Controllers
 
             var response = new
             {
-
                 totalEarnings= AllEarnings,
                 totalSessionCount = AllSession,
                 totalFilialEarnings = totalFilialEarnings,
@@ -141,8 +146,50 @@ namespace LazerBeautyFullProject.Areas.Admin.Controllers
 
             return cosmetologyAppointments;
         }
+        [HttpGet]
+        public IActionResult ReservationListForUpdate()
+        {
+
+            List<LazerAppointment> lazerAppointments=_appDbContext.LazerAppointments.Include(x=>x.Customers).Include(x=>x.Filial).Include(x=>x.AppUser).Include(x=>x.LazerAppointmentReports).ThenInclude(x=>x.LazerCategory).Include(x=>x.LazerMaster).Where(x=>x.IsCompleted==true).ToList();
+           
+            return View(lazerAppointments);
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdateLazerInfo(int AppointmentId)
+        {
+            LazerAppointment lazerAppointment=await _lazerService.SelectLazerAppointment(AppointmentId);
+            EditLazerInfoDTO editLazerInfoDTO = new EditLazerInfoDTO();
+            editLazerInfoDTO.ReservationDate= lazerAppointment.ReservationDate;
+            editLazerInfoDTO.Price= lazerAppointment.Price;
+            
+        
+           
 
 
+            return View(editLazerInfoDTO);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateLazerInfo(int AppointmentId, EditLazerInfoDTO editLazerInfoDTO)
+        {
+            AppUser AppUser = await _appUser.FindByNameAsync(User.Identity.Name);
+            
+            LazerAppointment lazerAppointment = await _lazerService.SelectLazerAppointment(AppointmentId);
+            lazerAppointment.Price = editLazerInfoDTO.Price;
+            lazerAppointment.StartTime = lazerAppointment.StartTime.Value.Date + editLazerInfoDTO.StartDate;
+            lazerAppointment.EndTime = lazerAppointment.EndTime.Value.Date + editLazerInfoDTO.EndDate;
+            lazerAppointment.Decription=editLazerInfoDTO.Description;
+            lazerAppointment.EditorName = AppUser.UserName;
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Giriş və çıxış saatları yenidən daxil edilməlidir.Açıqlama boş ola bilməz!!!");
+       
+
+                return View(editLazerInfoDTO);  
+            }
+            _lazerService.Update(lazerAppointment);
+            return RedirectToAction("ReservationListForUpdate", "EditReports");
+        }
+        
 
 
 

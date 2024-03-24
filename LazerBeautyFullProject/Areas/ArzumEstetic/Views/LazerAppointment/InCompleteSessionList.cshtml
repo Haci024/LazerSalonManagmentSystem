@@ -120,22 +120,22 @@
                                             <td style="padding-top:17px" class="text-center">
                                                     @if (item.StartForSecond==false)
                                                         {
-                                                    <div>
-                                                        <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect ">
-                                                            <i class="material-icons">directions_run</i>
+                                                   
+                                                        <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect " style="padding:2px">
+                                                            Seansı başlat
                                                         </a>
 
                                                         <a asp-action="SesstionTime" asp-route-AppointmentId="@item.Id" class="btn bg-green waves-effect ">
                                                             <i class="material-icons">timer</i>
                                                         </a>
-                                                    </div>
+                                                    
                                                    
                                                         }
                                                         else
                                                         {
                                                         <div>   
                                                             <a asp-action="CompletelySecondSessionEnd" asp-route-AppointmentId="@item.Id" class="btn bg-primary waves-effect ">
-                                                                <i class="material-icons">hourglass_empty</i>
+                                                                Seansı bitir
                                                             </a>
                                                         </div>
                                                         }

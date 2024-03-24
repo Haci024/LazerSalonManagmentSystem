@@ -23,12 +23,12 @@
                     <form id="form_validation" method="POST">
                         <div class="form-group form-float">
                             <div>
-                                <select class="form-control show-tick" asp-for="StockId" id="productSelect">
-                                    <option>Seçim edin...</option>
+                                <select class="form-control show-tick" asp-for="StockId" id="productSelect" data-live-search="true">
+                                    <option style="margin-left:20px">Seçim edin...</option>
                                     @foreach (var item in Model.Stocks)
                                     {
 
-                                        <option value="@item.Id" data-price="@item.SellingPrice">@item.ProductName</option>
+                                        <option value="@item.Id" data-price="@item.SellingPrice" style="margin-left:20px">@item.ProductName</option>
 
                                     }
                                 </select>

@@ -16,21 +16,16 @@
                             Seans tarixçəsi  
                         </h3>
                         <div style="padding-right:30px">
-                          
-                                <a asp-action="AddG8TurboSessions" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-primary waves-effect ">
-                                    <i class="material-icons">add </i>
+                                <a asp-action="AddG8TurboSessions" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-primary waves-effect">
+                                    G8 Turbo
                                 </a>
-                                <a asp-action="AddMioStimulyasiyaSession" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-danger waves-effect ">
-                                    <i class="material-icons">add</i>
+                                <a asp-action="AddMioStimulyasiyaSession" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-danger waves-effect">
+                                    MioStimulyasiya
                                 </a>
-                                <a asp-action="AddTermoYorganSession" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-warning waves-effect ">
-                                    <i class="material-icons">add </i>
+                                <a asp-action="AddTermoYorganSession" asp-route-AppointmentId="@ViewBag.AppointmentId" class="btn btn-warning waves-effect">
+                                    Termoyorğan
                                 </a>
-
-                           
-                        
-
-                        <a asp-action="BodyShapingMasterPage" asp-route-BodyShapingMasterId="@ViewBag.BodyShapingMasterId" class="btn btn-success waves-effect ">
+                        <a asp-action="BodyShapingMasterPage" asp-route-BodyShapingMasterId="@ViewBag.BodyShapingMasterId" class="btn btn-success waves-effect">
                             <i class="material-icons">keyboard_return</i>
                         </a>
                         </div>
@@ -92,16 +87,16 @@
                                         else
                                         {
                                             <td>
-                                                <p class="font-bold col-pink">Seans baş tutmayıb</p>
+                                                <span class="font-bold col-pink">Seans baş tutmayıb</span>
                                             </td>
                                             <td>
-                                                <p class="font-bold col-pink">Seans tarixi təyin edilməyib!</p>
+                                                <span class="font-bold col-pink">Seans tarixi təyin edilməyib!</span>
                                             </td>
                                               <td>
-                                                <p class="font-bold col-pink">Seans baş tutmayıb</p>
+                                                <span class="font-bold col-pink">Seans baş tutmayıb</span>
                                             </td>
                                             <td>
-                                                <p class="font-bold col-pink">Seans baş tutmayıb</p>
+                                                <span class="font-bold col-pink">Seans baş tutmayıb</span>
                                             </td>
                                           
                                         }
@@ -116,12 +111,12 @@
                                         <td>
                                             @if (item.IsCompleted)
                                             {
-                                                <p class="btn btn-success">Seans tamamlanıb!</p>
+                                                <b style="color:green">Seans tamamlanıb!</b>
 
                                             }
                                             else
                                             {
-                                                <p class="btn btn-warning">Seans baş tutmayıb!</p>
+                                                <b style="color:red">Seans baş tutmayıb!</b>
 
                                             }
                                         </td>
@@ -130,7 +125,7 @@
                                             {
                                                 <div style="padding-right:30px">
                                                     <a asp-action="EditSession" asp-route-SessionId="@item.Id" class="btn btn-success waves-effect ">
-                                                        <i class="material-icons">edit</i>
+                                                      Qeyd et
                                                     </a>
                                                 </div>
                                             }

@@ -21,5 +21,9 @@ namespace Data.Repositories
         {
             return await _db.CosmetologyAppointments.Include(x => x.Cosmetolog).Include(x=>x.Customers).Include(x => x.AppUser).Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).ThenInclude(x=>x.MainCategory).Where(x=>x.IsCompleted==false).ToListAsync();
         }
+        public async Task<CosmetologyAppointment> SelectedAppointment(int appointmentId)
+        {
+            return await _db.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.Cosmetolog).Include(x=>x.CosmetologyReports).ThenInclude(x=>x.CosmetologyCategory).ThenInclude(x=>x.MainCategory).ThenInclude(x=>x.ChildCategory).Include(x=>x.AppUser).Include(x => x.Filial).FirstOrDefaultAsync(x=>x.Id==appointmentId);
+        }
     }
 }

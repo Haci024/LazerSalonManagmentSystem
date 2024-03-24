@@ -84,7 +84,7 @@ namespace   LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             bodyshapingAppointment.ReturnMoney = 0;
             bodyshapingAppointment.Price =(decimal)bodyShapingComboDTO.Price;
            
-            bodyshapingAppointment.RemaingDate = _timeHelper.ConvertToAzerbaijanTime(DateTime.Now.AddDays(60));
+            bodyshapingAppointment.RemaingDate = _timeHelper.ConvertToAzerbaijanTime(DateTime.Now.AddDays(30));
            
                List<BodyShapingPacketsReports> bodyShapingPacketsReports = new List<BodyShapingPacketsReports>();
           
@@ -231,70 +231,76 @@ namespace   LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
 
             return View(newSessionDTO);
         }
-        [HttpPost]
-        public async Task<IActionResult> EditSession(int SessionId, NewSessionDTO newSessionDTO)
-        {
-            
-            BodyShapingSessionList bodyShapingSessionList =await _db.BodyShapingSessionList.Include(x => x.BodyShapingAppointment).ThenInclude(x => x.Customer).Where(x => x.Id == SessionId).FirstOrDefaultAsync();
-            AppUser appUser =await _userManager.FindByNameAsync(User.Identity.Name);
-            newSessionDTO.SessionId = bodyShapingSessionList.BodyShapingAppointmentId;
-            var validator = new NewSessionValidator();
-            var validationresult=validator.Validate(newSessionDTO);
-            if (!validationresult.IsValid)
+    
+            [HttpPost]
+            public async Task<IActionResult> EditSession(int SessionId, NewSessionDTO newSessionDTO)
             {
-                foreach (var item in validationresult.Errors)
+               
+                BodyShapingSessionList session = await _db.BodyShapingSessionList.Include(x => x.BodyShapingAppointment).ThenInclude(x => x.Customer).Where(x => x.Id == SessionId).FirstOrDefaultAsync();
+                BodyshapingAppointment appointment = _db.BodyShapingAppointments.Include(x => x.BodyShapingMaster).Where(x => x.Id == session.BodyShapingAppointmentId).FirstOrDefault();
+                ViewBag.BodyShapingMasterId = appointment.BodyshapingMasterId;
+            newSessionDTO.SessionId = session.BodyShapingAppointmentId;
+            AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                int lastSessionId = _db.BodyShapingSessionList.Include(x => x.BodyShapingAppointment)
+                       .Where(x => x.BodyShapingAppointmentId == session.BodyShapingAppointmentId).OrderBy(x => x.Id).
+                      Select(x => x.Id).LastOrDefault();
+                var validator = new NewSessionValidator();
+                var validationresult = validator.Validate(newSessionDTO);
+                if (!validationresult.IsValid)
                 {
-                    ModelState.AddModelError("", item.ErrorMessage);
+                    foreach (var item in validationresult.Errors)
+                    {
+                        ModelState.AddModelError("", item.ErrorMessage);
+                    }
+                    return View(newSessionDTO);
+
                 }
-                return View(newSessionDTO);
+                if (newSessionDTO.Duration > session.Duration)
+                {
+                    ModelState.AddModelError("", "Qeyd edilmiş müddət seans müddətindən çoxdur!");
 
-            } 
-            bodyShapingSessionList.StartDate=newSessionDTO.StartDate;
-            bodyShapingSessionList.EndDate=newSessionDTO.EndDate;
-            bodyShapingSessionList.AppUserId = appUser.Id;
-            if (newSessionDTO.Duration<bodyShapingSessionList.Duration)
-            {
-
-                BodyShapingSessionList lastSession = _db.BodyShapingSessionList.Include(x=>x.BodyShapingAppointment)
-                   .Where(x => x.BodyShapingAppointmentId == bodyShapingSessionList.BodyShapingAppointmentId).OrderBy(x=>x.Id)
-                    .LastOrDefault();
-                
-                if (SessionId==lastSession.Id)
-                {       
-                    ModelState.AddModelError("", "Bu seans sonuncudur! Buna görə tam istifadə edilməlidir və ya tam qeyd edilməlidir!");
                     return View(newSessionDTO);
                 }
-                if (SessionId==lastSession.Id)
+                if (session.Id == lastSessionId)
                 {
-                    BodyshapingAppointment bodyshapingAppointment = _appointment.GetById(bodyShapingSessionList.BodyShapingAppointmentId);
-                    bodyshapingAppointment.IsCompleted = true;                
-                    bodyShapingSessionList.Duration = newSessionDTO.Duration;
-                    bodyShapingSessionList.IsCompleted = true;
-                    _sessionList.Update(bodyShapingSessionList);
-                    _appointment.Update(bodyshapingAppointment);    
-                    return RedirectToAction("SessionList", new { BodyShapingAppointmentId = bodyShapingSessionList.BodyShapingAppointmentId });
-                  
-                    
+                    session.StartDate = newSessionDTO.StartDate;
+                    session.EndDate = newSessionDTO.EndDate;
+                    session.AppUserId = appUser.Id;
+                    if (newSessionDTO.Duration < session.Duration)
+                    {
+                        ModelState.AddModelError("", "Bu seans sonuncudur! Buna görə tam istifadə edilməlidir və ya tam qeyd edilməlidir!");
+                        return View(newSessionDTO);
+                    }
+                    session.Duration = newSessionDTO.Duration;
+                    session.IsCompleted = true;
+                    _sessionList.Update(session);
+                    appointment.IsCompleted = true;
+                    _appointment.Update(appointment);
+                    return RedirectToAction("SessionList", new { BodyShapingAppointmentId = session.BodyShapingAppointmentId });
                 }
+                else
+                {
+                    session.StartDate = newSessionDTO.StartDate;
+                    session.EndDate = newSessionDTO.EndDate;
+                    session.AppUserId = appUser.Id;
+                    if (newSessionDTO.Duration < session.Duration)
+                    {
+                        BodyShapingSessionList nextSession = _db.BodyShapingSessionList.FirstOrDefault(x => x.Id == SessionId + 1);
+                        int addTime = session.Duration - newSessionDTO.Duration;
+                        session.Duration = session.Duration - addTime;
+                        nextSession.Duration = nextSession.Duration + addTime;
+                        session.IsCompleted = true;
+                        _sessionList.Update(session);
+                        _sessionList.Update(nextSession);
+                        return RedirectToAction("SessionList", new { BodyShapingAppointmentId = session.BodyShapingAppointmentId });
+                    }
+                    session.Duration = newSessionDTO.Duration;
+                    session.IsCompleted = true;
+                    _sessionList.Update(session);
+                    return RedirectToAction("SessionList", new { BodyShapingAppointmentId = session.BodyShapingAppointmentId });
 
-                BodyShapingSessionList nextSession = _db.BodyShapingSessionList.FirstOrDefault(x=>x.Id==SessionId+1);
-                var addTime=bodyShapingSessionList.Duration-newSessionDTO.Duration;
-                bodyShapingSessionList.Duration = bodyShapingSessionList.Duration - addTime;
-                nextSession.Duration = nextSession.Duration + addTime;
-                bodyShapingSessionList.IsCompleted = true;
-                _sessionList.Update(bodyShapingSessionList);
-                _sessionList.Update(nextSession);
-                return RedirectToAction("SessionList", new { BodyShapingAppointmentId = bodyShapingSessionList.BodyShapingAppointmentId });
-            }
-            else if(newSessionDTO.Duration>bodyShapingSessionList.Duration)
-            {
-                ModelState.AddModelError("","Qeyd edilmiş müddət seans müddətindən çoxdur!");
-
-                return View(newSessionDTO);
-            }
-            bodyShapingSessionList.IsCompleted = true;
-            _sessionList.Update(bodyShapingSessionList);
-            return RedirectToAction("SessionList", new { BodyShapingAppointmentId = bodyShapingSessionList.BodyShapingAppointmentId });
+                }
+            
         }
         [HttpGet]
         public IActionResult AddG8TurboSessions(int AppointmentId)

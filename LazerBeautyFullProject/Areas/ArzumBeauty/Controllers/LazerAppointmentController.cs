@@ -45,7 +45,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             var appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewBag.LazerMaster = lazerMaster.FullName;
             LazerMasterPageDTO lazerMasterPageDTO = new LazerMasterPageDTO();
-            lazerMasterPageDTO.CustomerList = await _customerService.GetFemaleList();
+            lazerMasterPageDTO.CustomerList =await _customerService.GetActiveCustomerList();
             lazerMasterPageDTO.LazerAppointments = await _appointmentService.ReservationsForMaster(2, LazerMasterId);
             lazerMasterPageDTO.Injections = await _appointmentService.InjectionsForMaster(2, LazerMasterId);
 
@@ -63,11 +63,11 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             var AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
             if (Female == true)
             {
-                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 5).ToListAsync();
+                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 3).ToListAsync();
             }
             else
             {
-                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 5).ToListAsync();
+                lazerAppointmentDTO.ChildCategory = await _db.LazerCategories.Include(x => x.MainCategory).ThenInclude(x => x.ChildCategories).Where(x => x.MainCategoryId == 4).ToListAsync();
             }
 
             lazerAppointmentDTO.CustomerName = customer.FullName;
@@ -250,6 +250,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
 
             return View(lazerPriceUpdateDTO);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdatePrice(int LazerId, LazerPriceUpdateDTO lazerPriceUpdateDTO)
         {
@@ -438,6 +439,14 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             lazerAppointment.InCompleteEndTime = korreksionDateDTO.InCompleteEnd;
             _appointmentService.Update(lazerAppointment);
             return RedirectToAction("InCompleteSessionList");
+        }
+        [HttpGet]
+        public IActionResult DeleteSessionFromIncompleteList(int AppointmentId)
+        {
+            var LazerAppointment = _appointmentService.GetById(AppointmentId);
+            LazerAppointment.IsContiued = false;
+            _appointmentService.Update(LazerAppointment);
+            return RedirectToAction("InCompleteSessionList", "LazerAppointment");
         }
     }
 }

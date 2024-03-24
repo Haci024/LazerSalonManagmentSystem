@@ -39,14 +39,14 @@
                                     <label class="form-label">Paket seçin</label>
                                 </p>
 
-                                <select class="show-tick form-control" asp-for="CategoriesId" id="childCategoryId">
+                                <select class="show-tick form-control" asp-for="CategoriesId" id="childCategoryId" data-live-search="true">
 
                                     @foreach (var item in Model.CosmetologyCategories)
                                     {
 
                                         if (item.MainCategoryId != null)
                                         {
-                                            <option value="@item.Id"> @item.MainCategory.CategoryName - @item.CategoryName</option>
+                                            <option style="margin-left:25px" value="@item.Id"> @item.MainCategory.CategoryName - @item.CategoryName</option>
 
                                         }
                                     }
@@ -60,7 +60,7 @@
                             <label class="form-label">Açıqlama<span class="font-bold col-pink"></span></label>
 
                             <div class="form-line">
-                                <input type="text" asp-for="Description" class="form-control">
+                                <textarea  asp-for="Description" class="form-control"></textarea>
                             </div>
                             <span class="font-bold col-pink"></span>
                         </div>

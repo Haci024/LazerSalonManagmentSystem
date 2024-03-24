@@ -21,12 +21,20 @@
                 </div>
                 <div class="body">
                     <form id="form_validation" method="POST">
- 
                         <div class="form-group form-float">
                             <label class="form-label">Kategoriya adı...</label>
                             <div class="form-line">
                                 <input type="text" class="form-control" asp-for="Category">
 
+                            </div>
+                        </div>
+                        <div class="demo-radio-button">
+                            <label class="form-label">Tarix daxiletmə tipi</label>
+                            <div class="form-line">
+                                <input name="AutoDate" asp-for="AutoDate" type="radio" value="True" id="radio_30" class="with-gap radio-col-red">
+                                <label for="radio_30"> Qeyd olunma zamanı</label>
+                                <input name="AutoDate" asp-for="AutoDate" type="radio" value="False" id="radio_31" class="with-gap radio-col-blue">
+                                <label for="radio_31">Əl ilə daxil etmə</label>
                             </div>
                         </div>
                         <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>

@@ -829,6 +829,88 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
 
 
         #endregion
+        #region FilterAddOutMoneyReports
+
+        [HttpGet]
+        public IActionResult FilterAddOutMoney()
+        {
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult CalculateAddOutMoney(DateTime startDate, DateTime endDate)
+        {
+            var totalAddingMoney = TotalAddingMoney(startDate, endDate);
+            var totalOutMoney = TotalOutMoney(startDate, endDate);
+
+
+
+            var response = new
+            {
+                totalAddingMoney = totalAddingMoney,
+                totalOutMoney = totalOutMoney,
+
+            };
+
+            return Json(response);
+        }
+
+        public decimal TotalAddingMoney(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = _appDbContext.KassaActionLists.Include(x => x.AppUser).Include(x => x.Filial).Where(x => x.FilialId == 1 && x.LastOutMoneyDate >= startDate && x.LastOutMoneyDate <= endDate && x.Status == true).ToList();
+            decimal earning = kassaActionLists.Sum(x => x.OutMoneyQuantity);
+            return earning;
+        }
+        public decimal TotalOutMoney(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = _appDbContext.KassaActionLists.Include(x => x.AppUser).Include(x => x.Filial).Where(x => x.FilialId == 1 && x.LastOutMoneyDate >= startDate && x.LastOutMoneyDate <= endDate && x.Status == false).ToList();
+            decimal earning = kassaActionLists.Sum(x => x.OutMoneyQuantity);
+            return earning;
+        }
+        [HttpPost]
+        public IActionResult SelectKassaActionListAddMoney(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = GetKassaActionListAddMoney(startDate, endDate);
+
+            return PartialView("~/Areas/ArzumBeauty/Views/Shared/_KassaActionList.cshtml", kassaActionLists);
+        }
+        public List<KassaActionList> GetKassaActionListAddMoney(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = _appDbContext.KassaActionLists.Include(x => x.Filial).Include(x => x.AppUser).Where(x => x.LastOutMoneyDate >= startDate && x.LastOutMoneyDate <= endDate && x.FilialId == 2 && x.Status == true).ToList();
+
+            return kassaActionLists;
+        }
+
+        [HttpPost]
+        public IActionResult SelectKassaActionListOutMoney(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = GetKassaActionListOutMoney(startDate, endDate);
+
+            return PartialView("~/Areas/ArzumBeauty/Views/Shared/_KassaActionList.cshtml", kassaActionLists);
+        }
+        public List<KassaActionList> GetKassaActionListOutMoney(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = _appDbContext.KassaActionLists.Include(x => x.Filial).Include(x => x.AppUser).Where(x => x.LastOutMoneyDate >= startDate && x.LastOutMoneyDate <= endDate && x.FilialId == 2 && x.Status == false).ToList();
+
+            return kassaActionLists;
+        }
+        [HttpPost]
+        public IActionResult SelectKassaActionListAllReports(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActions = GetKassaActionAllReports(startDate, endDate);
+
+            return PartialView("~/Areas/ArzumBeauty/Views/Shared/_KassaActionList.cshtml", kassaActions);
+        }
+        public List<KassaActionList> GetKassaActionAllReports(DateTime startDate, DateTime endDate)
+        {
+            List<KassaActionList> kassaActionLists = _appDbContext.KassaActionLists.Include(x => x.Filial).Include(x => x.AppUser).Where(x => x.LastOutMoneyDate >= startDate && x.LastOutMoneyDate <= endDate && x.FilialId == 2).ToList();
+
+            return kassaActionLists;
+        }
+        #endregion
 
     }
 

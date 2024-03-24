@@ -19,17 +19,19 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
     {
 
         private readonly IOutMoneyService _outMoneyService;
+        private readonly IKassaService _kassaService;
         private readonly ISpendCategoryService _spendCategoryService;
         private readonly AppDbContext _db;
         private readonly TimeHelper _timeHelper;
         private readonly UserManager<AppUser> _userManager;
-        public OutMoneyController(IOutMoneyService OutMoneyService, AppDbContext db,ISpendCategoryService spendCategoryService, UserManager<AppUser> userManager)
+        public OutMoneyController(IOutMoneyService OutMoneyService, AppDbContext db,IKassaService kassaService,ISpendCategoryService spendCategoryService, UserManager<AppUser> userManager)
         {
             _outMoneyService = OutMoneyService;
             _db = db;
             _spendCategoryService = spendCategoryService;   
             _timeHelper = new TimeHelper();
             _userManager = userManager;
+            _kassaService = kassaService;
           
 
         }
@@ -55,7 +57,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         public async Task<IActionResult> AddOutMoney(OutMoneyAddDTO outMoneyAddDTO)
         {
             outMoneyAddDTO.SpendCategories = _db.SpendCategories.Include(x => x.Filial).Where(x => x.FilialId == 2 && x.Status == false).ToList();
-            var validator = new OutMoneyValidator();
+            var validator = new OutMoneyValidator(_kassaService);
             var validationResult = validator.Validate(outMoneyAddDTO);
             if (!validationResult.IsValid)
             {
@@ -114,8 +116,9 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
 
             OutMoney outMoney = _outMoneyService.GetById(Id);
             outMoney.AppUserId = appUser.Id;
-            outMoney.AddingDate = _timeHelper.GetAzerbaijanTime();;
+            outMoney.AddingDate = _timeHelper.GetAzerbaijanTime();
             outMoney.Description = updateOutMoneyDTO.Description;
+
             outMoney.SpendCategoryId = updateOutMoneyDTO.SpendCategoryId;
             if (updateOutMoneyDTO.Price < outMoney.Price)
             {
@@ -171,6 +174,8 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             spendCategory.Category = spendCategoryDTO.Category;
             spendCategory.Status = false;
             spendCategory.FilialId = 2;
+
+            spendCategory.AutoDate = spendCategoryDTO.AutoDate;
             _spendCategoryService.Create(spendCategory);
             return RedirectToAction("SpendCategoryList");
         }

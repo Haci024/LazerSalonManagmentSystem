@@ -9,6 +9,6 @@ namespace Business.IServices
 {
     public interface ICosmetologCategoryService:IGenericService<CosmetologyCategory>
     {
-
+        public Task<List<CosmetologyCategory>> GetAllCategories();
     }
 }

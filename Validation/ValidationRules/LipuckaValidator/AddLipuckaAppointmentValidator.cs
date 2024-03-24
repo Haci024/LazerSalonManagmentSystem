@@ -16,7 +16,7 @@ namespace Validation.ValidationRules.LipuckaValidator
             RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət 0 ola bilməz!");
             RuleFor(x => x.StartDate).NotEmpty().WithMessage("Çıxış saatı daxil edilməyib!");
             RuleFor(x => x.LipuckaCategoryIds).NotEmpty().WithMessage("Nahiyə seçimi etmədiniz!");
-            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama qeyd edin...");
+      
         }
 
     }

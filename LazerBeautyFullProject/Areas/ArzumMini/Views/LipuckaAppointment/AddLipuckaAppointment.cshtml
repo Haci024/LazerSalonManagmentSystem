@@ -33,23 +33,18 @@
                         <div class="form-group form-float">
                             <label class="form-label">Nahiyə</label>
                             <div>
-                                <select class="form-control show-tick" asp-for="LipuckaCategoryIds" id="childCategoryId" multiple>
+                                <select class="form-control show-tick" asp-for="LipuckaCategoryIds" id="childCategoryId" multiple data-live-search="true">
                                     
                                     @foreach (var item in Model.LipuckaCategories)
                                     {
 
-                                        <option value="@item.Id" selected>@item.Name</option>
+                                        <option value="@item.Id"  style="margin-left:20px">@item.Name</option>
 
                                     }
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group form-float">
-                            <label class="form-label">Açıqlama</label>
-                            <div class="form-line">
-                                <textarea  asp-for="Description" class="form-control"></textarea>
-                            </div>
-                        </div>
+                    
                         <p>
                             <label>Giriş saatı</label>
                         </p>

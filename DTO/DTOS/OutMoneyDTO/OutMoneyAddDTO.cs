@@ -16,5 +16,7 @@ namespace DTO.DTOS.OutMoneyDTO
         public List<SpendCategory> SpendCategories { get; set; }
 
         public int SpendCategoryId { get; set; }
+
+        public DateTime? AddingDate { get; set; }
     }
 }

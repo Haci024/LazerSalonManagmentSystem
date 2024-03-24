@@ -31,7 +31,7 @@
 
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover js-basic-example">
+                        <table class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Tarix</th>
@@ -200,12 +200,12 @@
                 total2 += price;
             });
 
-            // Display the total price in the th with id "priceValueMaster1"
+           
             $("#price").text("Ümumi:" + total1.toFixed(2).replace(/\.00$/, '') + " AZN");
             $("#returnPrice").text("Qaytarılan:" + total2.toFixed(2).replace(/\.00$/, '') + " AZN");
         }
 
-        // Add a click event handler to the "Hesabla" button
+       
         $("#calculatePriceButtonMaster1").click(function () {
             calculateTotalPrice();
         });

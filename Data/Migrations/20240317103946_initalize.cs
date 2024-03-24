@@ -339,7 +339,8 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    FilialId = table.Column<int>(type: "int", nullable: false)
+                    FilialId = table.Column<int>(type: "int", nullable: false),
+                    AutoDate = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -644,7 +645,8 @@ namespace Data.Migrations
                     EndForSecond = table.Column<bool>(type: "bit", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    FilialId = table.Column<int>(type: "int", nullable: false)
+                    FilialId = table.Column<int>(type: "int", nullable: false),
+                    EditorName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1090,9 +1092,33 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Cosmetologs",
-                columns: new[] { "Id", "FullName", "IsDeactive" },
-                values: new object[] { 1, "Nuray", false });
+                table: "BodyShapingPacketCategories",
+                columns: new[] { "Id", "IsDeactive", "MainCategoryId", "Packet", "Price", "SessionCount", "SessionDuration" },
+                values: new object[,]
+                {
+                    { 1, false, null, "G8 Turbo", null, 0, 0 },
+                    { 2, false, null, "Miostimuliyasiya", null, 0, 0 },
+                    { 3, false, null, "Termoyorğan", null, 0, 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CosmetologyCategories",
+                columns: new[] { "Id", "CategoryName", "IsDeactive", "MainCategoryId" },
+                values: new object[,]
+                {
+                    { 1, "Plazmaliftinq", false, null },
+                    { 2, "Mezoterapiya", false, null },
+                    { 3, "Plazma + Mezo", false, null },
+                    { 4, "Lipalitik", false, null },
+                    { 5, "Birovetializasiya", false, null },
+                    { 6, "Dolğu", false, null },
+                    { 7, "Botoks", false, null },
+                    { 8, "Saplarla liftinq", false, null },
+                    { 9, "Pilinq", false, null },
+                    { 10, "Hicama ", false, null },
+                    { 11, "Pirsinq", false, null },
+                    { 12, "Üz təmizləməsi", false, null }
+                });
 
             migrationBuilder.InsertData(
                 table: "Filials",
@@ -1107,16 +1133,21 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "LazerMasters",
-                columns: new[] { "Id", "FullName", "IsDeactive" },
+                table: "LipuckaCategories",
+                columns: new[] { "Id", "IsDeactive", "MainCategoryId", "Name", "Price" },
                 values: new object[,]
                 {
-                    { 1, "Ellada", false },
-                    { 2, "Aidə", false },
-                    { 3, "Nuridə", false },
-                    { 4, "Gülnar", false },
-                    { 5, "Nəzrin", false },
-                    { 6, "Əminə", false }
+                    { 1, false, null, "Lipuçka Qadın", 0m },
+                    { 2, false, null, "Lipuçka Kişi", 0m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PirsinqCategories",
+                columns: new[] { "Id", "CategoryName", "IsDeactive", "MainCategoryId", "Price" },
+                values: new object[,]
+                {
+                    { 1, "Pirsinq Qadın", false, null, 0m },
+                    { 2, "Pirsinq Kişi", false, null, 0m }
                 });
 
             migrationBuilder.InsertData(
@@ -1145,13 +1176,13 @@ namespace Data.Migrations
                 columns: new[] { "Id", "IsDeactive", "MainCategoryId", "Minute", "Name", "Price", "UsingPeriod" },
                 values: new object[,]
                 {
-                    { 3, false, 1, 5, "MiniPacket", 4m, 1 },
+                    { 3, false, 1, 5, "MiniPacket", 5m, 1 },
                     { 4, false, 1, 10, "MediumPacket", 8m, 1 },
-                    { 5, false, 1, 15, "LargePacket", 10m, 1 },
-                    { 6, false, 1, 20, "ExtraLarge", 12m, 30 },
-                    { 7, false, 2, 50, "MiniPacket", 19m, 30 },
-                    { 8, false, 2, 100, "MediumPacket", 29m, 30 },
-                    { 9, false, 2, 150, "LargePacket", 39m, 60 }
+                    { 5, false, 1, 15, "LargePacket", 12m, 1 },
+                    { 6, false, 1, 20, "ExtraLarge", 15m, 1 },
+                    { 7, false, 2, 50, "MiniPacket", 20m, 30 },
+                    { 8, false, 2, 100, "MediumPacket", 35m, 60 },
+                    { 9, false, 2, 150, "LargePacket", 45m, 60 }
                 });
 
             migrationBuilder.CreateIndex(

@@ -104,7 +104,7 @@
                                             <td>
                                                 @{
                                                     TimeSpan kalanSure = item.EndTime.Value.AddHours(168) - DateTime.Now;
-                                                    string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə {3} saniyə", (int)kalanSure.TotalDays, kalanSure.Hours,kalanSure.Minutes,(int)kalanSure.Seconds);
+                                                    string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours,kalanSure.Minutes);
                                                 }
                                             @if (kalanSure.TotalMinutes >= 0)
                                             {
@@ -116,39 +116,42 @@
                                             }
                                         </td>
 
-                                            <td style="padding-top:17px" class="text-center">
+                                            <td style="padding-top:17px;display:flex" class="text-center">
+                                                
                                                 @if (kalanSure.TotalMinutes >= 0)
                                                 {
-                                              
+
                                                     @if (item.StartForSecond == false)
                                                     {
-                                                        <div>
-                                                            <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect ">
-                                                                <i class="material-icons">directions_run</i>
+                                                       
+                                                            <a asp-action="CompletelySecondSessionStart" asp-route-AppointmentId="@item.Id" class="btn bg-deep-purple waves-effect" style="margin:2px">
+                                                                Əlavə et
                                                             </a>
 
-                                                            <a asp-action="SessionTime" asp-route-AppointmentId="@item.Id" class="btn bg-green waves-effect ">
+                                                            <a asp-action="SessionTime" asp-route-AppointmentId="@item.Id" class="btn bg-green waves-effect" style="margin:2px">
                                                                 <i class="material-icons">timer</i>
                                                             </a>
-                                                        </div>
+                                                      
 
                                                     }
                                                     else
                                                     {
                                                         <div>
                                                             <a asp-action="CompletelySecondSessionEnd" asp-route-AppointmentId="@item.Id" class="btn bg-primary waves-effect ">
-                                                                <i class="material-icons">hourglass_empty</i>
+                                                                Seansı bitir
                                                             </a>
                                                         </div>
                                                     }
-                                                  
+
                                                 }
                                                 else
                                                 {
-                                                <a asp-controller="LazerAppointment" asp-action="DeleteSessionFromIncompleteList" asp-route-AppointmentId="@item.Id" class="btn bg-red waves-effect ">
-                                                    <i class="material-icons">delete</i>
-                                                </a>
+                                                    <a asp-controller="LazerAppointment" asp-action="DeleteSessionFromIncompleteList" asp-route-AppointmentId="@item.Id" class="btn bg-red waves-effect ">
+                                                        Sil
+                                                    </a>
                                                 }
+                                             
+                                               
                                             </td>
                                                
                                           

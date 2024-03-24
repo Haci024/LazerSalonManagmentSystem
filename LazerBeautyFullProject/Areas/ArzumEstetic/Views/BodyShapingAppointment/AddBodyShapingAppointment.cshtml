@@ -37,13 +37,13 @@
                         <div class="row clearfix">
                             <div class="col-lg-12 form-line">
                                
-                                <select class="show-tick form-control" asp-for="ChildCategoryId" id="ChildCategoryId">
-                                    <option selected> Paket Seçin...</option>
+                                <select class="show-tick form-control" asp-for="ChildCategoryId" id="ChildCategoryId" data-live-search="true">
+                                    <option selected style="margin-left:30px"> Paket Seçin...</option>
                                     @foreach (var item in Model.ChildCategories)
                                     {
 
-                                 
-                                            <option value="@item.Id" data-mainid="@item.MainCategoryId" data-minute="@item.SessionDuration" data-price="@item.Price">@item.Packet @item.SessionCount Seans @item.SessionDuration dəqiqə @item.Price Manat</option>
+
+                                        <option style="margin-left:30px" value="@item.Id" data-mainid="@item.MainCategoryId" data-minute="@item.SessionDuration" data-price="@item.Price">@item.Packet @item.SessionCount Seans @item.SessionDuration dəqiqə @item.Price Manat</option>
 
                                         
 

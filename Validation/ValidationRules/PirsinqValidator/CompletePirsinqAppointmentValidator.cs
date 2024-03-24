@@ -14,7 +14,7 @@ namespace Validation.ValidationRules.PirsinqValidator
         {
             RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət 0 ola bilməz!");
             RuleFor(x => x.EndTime).NotEmpty().WithMessage("Çıxış saatı daxil edilməyib!");
-            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama boş ola bilməz!");
+          
         }
     }
 }

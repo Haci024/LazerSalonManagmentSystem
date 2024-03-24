@@ -70,13 +70,16 @@
                                         <td>@item.Customers.FullName</td>
                                         <td>@item.Customers.PhoneNumber.ToString("0000000000")</td>
                                         <td style="display:flex">
-                                            @foreach (var categories in item.CosmetologyReports)
-                                            {
-                                                if (categories.CosmetologyCategory.MainCategoryId != null)
+                                            <ul>
+                                                @foreach (var categories in item.CosmetologyReports)
                                                 {
-                                                    <div style="padding:2px">@categories.CosmetologyCategory.CategoryName,</div>
+                                                    if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                    {
+                                                        <li style="padding:2px">@categories.CosmetologyCategory.MainCategory.CategoryName  @categories.CosmetologyCategory.CategoryName,</li>
+                                                    }
+
                                                 }
-                                            }
+                                            </ul>
                                         </td>
                                         <td>
 

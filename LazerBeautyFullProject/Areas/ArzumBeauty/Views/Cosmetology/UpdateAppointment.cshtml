@@ -39,14 +39,14 @@
                                     <label class="form-label">Kategoriya seçin</label>
                                 </p>
 
-                                <select class="show-tick form-control" asp-for="CategoriesId" id="childCategoryId">
+                                <select class="show-tick form-control" asp-for="CategoriesId" id="childCategoryId" data-live-search="true">
 
                                     @foreach (var item in Model.CosmetologyCategories)
                                     {
 
                                         if (item.MainCategoryId != null)
                                         {
-                                            <option value="@item.Id"> @item.MainCategory.CategoryName - @item.CategoryName</option>
+                                            <option style="margin-left:20px" value="@item.Id"> @item.MainCategory.CategoryName - @item.CategoryName</option>
 
                                         }
                                     }

@@ -38,12 +38,12 @@
                         <div class="col-xs-4">
                             <h2 class="card-inside-title">Paket</h2>
                             <div class="form-group">
-                                <select class="form-control show-tick" name="filialId" id="SolariumCategoriesId" multiple>
-                                    <option value="all" selected>Hamısı</option>
+                                <select class="form-control show-tick" name="filialId" id="SolariumCategoriesId" multiple data-live-search="true">
+                                    <option style="margin-left:20px" value="all" selected>Hamısı</option>
                                     @foreach (var item in Model.SolariumCategories)
                                     {
 
-                                        <option value="@item.Id">@item.Minute dəqiqə -- @item.MainCategory.Name </option>
+                                        <option style="margin-left:20px" value="@item.Id">@item.Minute dəqiqə -- @item.MainCategory.Name </option>
 
                                     }
                                 </select>

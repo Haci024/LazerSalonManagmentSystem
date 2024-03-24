@@ -30,8 +30,11 @@ namespace Entity.Concrete
 
         public List<BodyShapingSessionList> BodyshapingSessionList { get; set; }
 
-
         public List<CosmetologyAppointment> CosmetologyAppointments { get; set; }
+
+        public List<Income> Incomes { get; set; }
+
+        public List<OutMoney> OutMoney { get; set; }
 
     }
 }

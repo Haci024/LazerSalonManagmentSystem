@@ -61,5 +61,9 @@ namespace Business.Manager
         {
             return await _customerAccountDAL.DailyBirthDate(FilialId);
         }
+        public async Task<List<Customer>> GetActiveCustomerList()
+        {
+            return await _customerAccountDAL.GetActiveCustomerList();
+        }
     }
 }

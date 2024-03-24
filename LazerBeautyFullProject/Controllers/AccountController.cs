@@ -52,15 +52,15 @@ namespace LazerBeautyFullProject.Controllers
                 }
                 if(user.FilialId == 1)
                 {
-                    return RedirectToAction("AllReservations", "Customer", new { area = "ArzumMini" });
+                    return RedirectToAction("BudgetPage", "Kassa", new { area = "ArzumMini" });
                 }
                 else if (user.FilialId==2) 
                 {
-                    return RedirectToAction("AllReservations", "LazerAppointment", new { area = "ArzumBeauty" });
+                    return RedirectToAction("BudgetPage", "Kassa", new { area = "ArzumBeauty" });
                 }
                 else if(user.FilialId==3)
                 {
-                    return RedirectToAction("AllReservations", "LazerAppointment", new { area = "ArzumEstetic" });
+                    return RedirectToAction("BudgetPage", "Kassa", new { area = "ArzumEstetic" });
                 }
                 else if (user.FilialId==4)
                 {

@@ -15,14 +15,7 @@
                         <h2>
                             Aktiv Solarium Paketləri
                         </h2>
-                        <div style="padding-right:30px">
-                            <a asp-action="SuccessfullyPacketsList" class="btn bg-deep-orange waves-effect ">
-                                <i class="material-icons">list</i>
-                            </a>
-                            <a asp-action="AddSolariumAppointment" class="btn bg-deep-purple waves-effect ">
-                                <i class="material-icons">assignment_add </i>
-                            </a>
-                        </div>
+                     
                     </div>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -94,7 +87,7 @@
                                             </td>
                                             <td style="display:flex;justify-content:end">
                                                 <div style="margin-right:10px">
-                                                    <a asp-action="DeleteSolarium"  asp-route-SolariumId="@item.Id" class="btn bg-red waves-effect">
+                                                <a asp-action="DeleteSolariumSession" asp-route-SolariumId="@item.Id" class="btn bg-red waves-effect">
                                                         <i class="material-icons">delete</i>
                                                     </a>
                                                 </div>

@@ -9,5 +9,7 @@ namespace Data.DAL
 {
     public interface IPirsinqCategoriesDAL : IGenericDAL<PirsinqCategory>
     {
+        public  Task<List<PirsinqCategory>> GetFemaleCategories();
+        public  Task<List<PirsinqCategory>> GetMaleCategories();
     }
 }

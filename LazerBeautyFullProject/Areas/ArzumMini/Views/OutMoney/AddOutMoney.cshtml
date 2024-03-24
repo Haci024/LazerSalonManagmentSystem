@@ -21,13 +21,14 @@
                 <div class="body">
                     <form id="form_validation" method="POST">
                         <div class="form-group form-float">
+                            <label class="form-label">Kategoriya seçin</label>
                             <div>
-                                <select class="form-control show-tick" asp-for="SpendCategoryId" id="productSelect">
-                                    <option>Seçim edin...</option>
+                                <select class="form-control show-tick" asp-for="SpendCategoryId" id="productSelect" data-live-search="true">
+                                    <option style="margin-left:30px">Seçim edin...</option>
                                     @foreach (var item in Model.SpendCategories)
                                     {
 
-                                        <option value="@item.Id" >@item.Category</option>
+                                        <option style="margin-left:30px" value="@item.Id" data-status="@item.AutoDate">@item.Category</option>
 
                                     }
                                 </select>
@@ -37,8 +38,8 @@
                         <div class="form-group form-float">
                             <label class="form-label">Qiymət</label>
                             <div class="form-line">
-                                <input asp-for ="Price" type="number" class="form-control" step="0.1" min="0">
-                              
+                                <input asp-for="Price" type="number" class="form-control" step="0.1" min="0">
+
                             </div>
                         </div>
 
@@ -46,14 +47,24 @@
                         <div class="form-group form-float">
                             <label class="form-label">Açıqlama...</label>
                             <div class="form-line">
-                                <textarea  class="form-control"  asp-for="Description" ></textarea>
-                               
+                                <input type="text" class="form-control" asp-for="Description">
+
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <p>
+                                <label>Əməliyyat tarixi</label>
+                            </p>
+
+                            <div class="form-line">
+                                <input type="datetime-local" asp-for="AddingDate" class="form-control datetime" placeholder="Ex: 30/07/2016 23:59">
                             </div>
                         </div>
                         <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
                             <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
-                            <a asp-action="OutMoneyList" class="btn btn-success" >Geri</a>
+                            <a asp-action="OutMoneyList" class="btn btn-success">Geri</a>
                         </div>
                     </form>
                 </div>
@@ -62,15 +73,32 @@
     </div>
 
 </div>
+
 <script>
-    document.getElementById("myForm").addEventListener("submit", function (event) {
-        // Form gönderildiğinde butonu devre dışı bırak
+    document.getElementById("form_validation").addEventListener("submit", function (event) {
         document.getElementById("submitButton").disabled = true;
 
-        // 3 saniye sonra butonu tekrar etkinleştir
         setTimeout(function () {
             document.getElementById("submitButton").disabled = false;
-        }, 5000); // 3 saniye (3000 milisaniye)
+        }, 5000);
     });
 
+    // Add event listener for category selection change
+    document.getElementById("productSelect").addEventListener("change", function () {
+        var selectedCategory = this.options[this.selectedIndex];
+        var status = selectedCategory.getAttribute("data-status");
+
+        // Get the time input element
+        var timeInput = document.getElementById("AddingDate");
+
+        // Check if the status is true, and hide/show the time input accordingly
+        if (status === "True") {
+            timeInput.parentElement.parentElement.style.display = "none";
+        } else {
+            timeInput.parentElement.parentElement.style.display = "block";
+        }
+    });
+
+    // Trigger the change event initially to handle the default category value
+    document.getElementById("productSelect").dispatchEvent(new Event('change'));
 </script>

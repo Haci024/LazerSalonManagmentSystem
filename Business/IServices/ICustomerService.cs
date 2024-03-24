@@ -16,5 +16,7 @@ namespace Business.IServices
         public Task<Customer> SelectedCustomer(int id);
 
         public Task<List<Customer>> DailyBirthDate(int FilialId);
+
+        public  Task<List<Customer>> GetActiveCustomerList();
     }
 }

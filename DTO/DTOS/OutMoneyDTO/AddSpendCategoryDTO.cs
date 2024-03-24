@@ -9,6 +9,8 @@ namespace DTO.DTOS.OutMoneyDTO
     public class AddSpendCategoryDTO
     {
         public string Category {  get; set; }
+
+        public bool AutoDate { get; set; }
         
     }
 }

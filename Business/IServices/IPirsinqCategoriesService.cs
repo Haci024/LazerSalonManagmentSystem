@@ -9,5 +9,8 @@ namespace Business.IServices
 {
     public interface IPirsinqCategoriesService:IGenericService<PirsinqCategory>
     {
+        public Task<List<PirsinqCategory>> GetFemaleCategoryList();
+
+        public Task<List<PirsinqCategory>> GetMaleCategoryList();
     }
 }

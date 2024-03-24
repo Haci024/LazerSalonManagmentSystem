@@ -18,6 +18,8 @@ namespace Entity.Concrete
 
         public int FilialId { get; set; }
 
+        public bool AutoDate { get; set; }
+
         
 
 

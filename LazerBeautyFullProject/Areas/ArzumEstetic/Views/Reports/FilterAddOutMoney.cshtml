@@ -1,0 +1,163 @@
+﻿<div class="container-fluid">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header text-center">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+
+                        <h2>Mədaxil və Məxaric hesabatı</h2>
+
+
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="row clearfix">
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Başlanğıc tarix</h2>
+                            <div class="form-group">
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="startDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Son tarix</h2>
+                            <div class="input-group date" id="bs_datepicker_component_container">
+                                <div class="form-line">
+                                    <input type="datetime-local" class="form-control" placeholder="Please choose a date..." id="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <h2 class="card-inside-title">Status</h2>
+                            <div class="form-group">
+                                <select class="form-control show-tick" id="statusId">
+                                    <option value="all">Hamısı</option>
+                               <option value="1">Mədaxil</option>
+                               <option value="2">Məxaric</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Kassadan çıxarılan pul</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="outMoneyQuantity" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Kassaya daxil olan pul</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="addMoneyQuantity" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="email_address_2">Ümumi  çıxarış</label>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" id="totalOutMoneyQuantity" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+
+                            <button id="calculateButton" class="btn btn-primary">Hesabla</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="kassaActionList"></div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#calculateButton').on('click', function () {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var status = $('#statusId').val();
+         
+            $.ajax({
+                type: 'POST',
+                url: '/ArzumEstetic/Reports/CalculateAddOutMoney',
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: status
+                },
+                success: function (response) {
+                    $('#outMoneyQuantity').val(response.totalOutMoney + " " + "AZN");
+                    $('#addMoneyQuantity').val(response.totalAddingMoney + " " + "AZN");
+                    $('#totalOutMoneyQuantity').val(response.totalOutMoney-response.totalAddingMoney + " " + "AZN");
+                    
+                   
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+
+
+            });
+            if (status=='all') {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectKassaActionListAllReports",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                        console.log("Salam");
+                        $("#kassaActionList").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else if (status=='1') {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectKassaActionListAddMoney",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                       
+                        $("#kassaActionList").html(result);
+
+
+                    },
+                });
+            }
+            else {
+                $.ajax({
+
+                    url: "/ArzumEstetic/Reports/SelectKassaActionListOutMoney",
+                    type: "POST",
+                    data: { startDate: startDate, endDate: endDate, },
+                    success: function (result) {
+                        
+                        $("#kassaActionList").html(result);
+
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+          
+        });
+    });
+</script>
+
+

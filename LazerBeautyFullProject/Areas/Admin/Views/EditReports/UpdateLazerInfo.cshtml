@@ -1,0 +1,97 @@
+﻿@model DTO.DTOS.LazerAppointmentDTO.EditLazerInfoDTO
+@{
+    ViewData["Title"] = "UpdateReservationInfo";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+
+    <!-- Basic Validation -->
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Seans məlumatlarını dəyiş</h2>
+                </div>
+                <div class="body">
+                    <span class="font-bold col-pink">Burda ediləcək dəyişikliklər sistemə qeyd edilir və qeydiyyatın kim tərəfindən aparıldığı müəyyən edilir!</span>
+                    <form id="form_validation" method="post">
+                      
+
+                       
+                     
+                        <label class="form-label">Rezervasiya Tarixi <span class="font-bold col-pink"> - gün/ay/il</span>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+
+                                <i class="material-icons">date_range</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="datetime-local" asp-for="ReservationDate" class="form-control date" placeholder="Ex: 30/07/2016" wfd-id="id9">
+                            </div>
+                        </div>
+                       
+                        
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+
+                                <i class="material-icons">timer</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="time" asp-for="StartDate" class="form-control date" placeholder="Ex: 30/07/2016 23:59" wfd-id="id9">
+                            </div>
+                        </div>
+                            <label class="form-label"> Çıxış saatı <span class="font-bold col-pink"> - gün/ay/il saat:dəqiqə</span></label>
+                           
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+
+                                <i class="material-icons">timer</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="time" asp-for="EndDate" class="form-control date" placeholder="Ex: 30/07/2016" wfd-id="id9">
+                            </div>
+                        </div>
+                        <label class="form-label"> Ödəniş</label>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+
+                                <i class="material-icons">money</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="number" asp-for="Price" step="0.1" class="form-control date">
+                            </div>
+                        </div>
+                        <label class="form-label"> Açıqlama</label>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+
+                                <i class="material-icons">edit</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="text" asp-for="Description" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit">Əlavə et</button>
+                            <a  asp-action="ReservationListForUpdate" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+

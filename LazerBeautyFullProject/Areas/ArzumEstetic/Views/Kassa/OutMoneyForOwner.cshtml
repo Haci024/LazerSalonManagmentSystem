@@ -34,17 +34,30 @@
                         <div class="form-group form-float">
                             <label class="form-label">Açıqlama</label>
                             <div class="form-line">
-                                <textarea  asp-for="Description" class="form-control"></textarea>
+                                <textarea asp-for="Description" class="form-control"></textarea>
 
                             </div>
 
                         </div>
-                      
-                        
+                        <p>
+                            <label>Əlavə edilmə  tarixi</label>
+                        </p>
+                        <div class="input-group">
+
+                            <span class="input-group-addon">
+                                <i class="material-icons">date_range</i>
+                            </span>
+                            <div class="form-line">
+                                <input type="datetime-local" asp-for="ProcessDate" class="form-control datetime" placeholder="Ex: 30/07/2016 23:59">
+                            </div>
+                        </div>
+
+
+
                         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
                             <button class="btn btn-primary waves-effect" type="submit">Yenilə</button>
-                            <a asp-action="KassaActionList"  class="btn btn-success">Geri</a>
+                            <a asp-action="KassaActionList" class="btn btn-success">Geri</a>
                         </div>
                     </form>
                 </div>

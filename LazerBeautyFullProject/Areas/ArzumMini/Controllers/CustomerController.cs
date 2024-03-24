@@ -109,6 +109,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             customerUpdateDTO.PhoneNumber = customer.PhoneNumber;
             customerUpdateDTO.FullName = customer.FullName;
             customerUpdateDTO.BirthDate = customer.BirthDate;
+            customerUpdateDTO.Female = customer.Female;
             return View(customerUpdateDTO);
         }
         [HttpPost]
@@ -129,6 +130,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             customer.FullName = customerUpdateDTO.FullName;
             customer.BirthDate = customerUpdateDTO.BirthDate;
             customer.PhoneNumber = customerUpdateDTO.PhoneNumber;
+            customer.Female= customerUpdateDTO.Female;
          
             _customerService.Update(customer);
             if (customer.Female)
@@ -149,12 +151,9 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         [HttpGet]
         public IActionResult CustomerHistory(int CustomerId) {
             CustomerUsingHistoryDTO customerUsingHistoryDTO = new CustomerUsingHistoryDTO();
-            customerUsingHistoryDTO.LazerAppointmentsHistory = _db.LazerAppointments.Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Include(x => x.Filial).Where(x => x.CustomerId == CustomerId).ToList();
-            customerUsingHistoryDTO.CosmetologyAppointments = _db.CosmetologyAppointments.Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).Include(x => x.Filial).Include(x => x.AppUser).Include(x => x.Customers).Where(x => x.CustomerId == CustomerId).ToList();
-            customerUsingHistoryDTO.SolariumAppointments = _db.SolariumAppointments.Include(x => x.SolariumCategories).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.Customer).Where(x => x.CustomerId == CustomerId).ToList();
-            customerUsingHistoryDTO.BodyshapingAppointments = _db.BodyShapingAppointments.Include(x => x.BodyShapingMaster).Include(x => x.BodyShapingPacketReports).Include(x => x.AppUser).Include(x => x.Customer).Where(x => x.CustomerId == CustomerId).ToList();
-            customerUsingHistoryDTO.LipuckaAppointments = _db.LipuckaAppointments.Include(x => x.Customer).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.LipuckaReports).ThenInclude(x => x.LipuckaCategories).Where(x=>x.CustomerId==CustomerId).ToList();
-            customerUsingHistoryDTO.PirsinqAppointments = _db.PirsinqAppointments.Include(x => x.Customer).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.LazerAppointmentsHistory = _db.LazerAppointments.Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.Customers).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).ThenInclude(x=>x.MainCategory).Include(x => x.Filial).Where(x => x.CustomerId == CustomerId).ToList();
+            customerUsingHistoryDTO.LipuckaAppointments = _db.LipuckaAppointments.Include(x => x.Customer).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.LipuckaReports).ThenInclude(x => x.LipuckaCategories).ThenInclude(x=>x.MainCategory).Where(x=>x.CustomerId==CustomerId).ToList();
+            customerUsingHistoryDTO.PirsinqAppointments = _db.PirsinqAppointments.Include(x => x.Customer).Include(x => x.AppUser).Include(x => x.Filial).Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).ThenInclude(x=>x.MainCategory).Where(x => x.CustomerId == CustomerId).ToList();
             customerUsingHistoryDTO.FullName = _db.Customers.Where(x => x.Id == CustomerId).Select(x => x.FullName).FirstOrDefault();
             customerUsingHistoryDTO.BirthDate = _db.Customers.Where(x => x.Id == CustomerId).Select(x => x.BirthDate).FirstOrDefault();
 

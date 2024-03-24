@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Entity.Concrete.CosmetologyAppointment>
+@{
+    ViewData["Title"] = "CosmetologyAppointmentList";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+<div class="panel panel-default panel-post">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h1>Kosmetologiya  Seansları</h1>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Kategoriya</th>
+                                    <th>Giriş</th>
+                                    <th>Çıxış</th>
+                                    <th>Ödəniş</th>
+                                    <th>Status</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Qeydiyyatçı</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Kategoriya</th>
+                                    <th>Giriş</th>
+                                    <th>Çıxış</th>
+                                    <th>Ödəniş</th>
+                                    <th>Status</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.StartTime.Value.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AppUser.UserName</td>
+                                        <td>@item.Customers.FullName</td>
+                                        <td style="display:flex">
+                                            <ul>
+                                                @foreach (var categories in item.CosmetologyReports)
+                                                {
+                                                    if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                    {
+                                                        <li style="padding:2px">@categories.CosmetologyCategory.MainCategory.CategoryName  @categories.CosmetologyCategory.CategoryName,</li>
+                                                    }
+
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            @if (item.StartTime == null)
+                                            {
+                                                @item.StartTime.Value.ToString("HH:mm")
+                                            }
+                                            else
+                                            {
+                                                @item.StartTime.Value.ToString("HH:mm")
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.OutTime == null)
+                                            {
+                                                <div>Bitməyib</div>
+                                            }
+                                            else
+                                            {
+                                                @item.OutTime.Value.ToString("HH:mm")
+                                            }
+                                        </td>
+                                        <td>@item.Price.ToString("#0.##") AZN</td>
+
+                                        <td>
+                                            @if (item.IsStart == false)
+                                            {
+                                                <b style="color:green">Rezervasiya</b>
+                                            }
+                                            else
+                                            {
+                                                <b style="color:blue">Seans başladı</b>
+                                            }
+                                        </td>
+
+                                        <td style="padding-top:17px" class="text-center">
+                                            <a asp-action="DeleteCosmetologyAppointment" asp-route-AppointmentId="@item.Id" class="btn bg-red waves-effect ">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                          
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

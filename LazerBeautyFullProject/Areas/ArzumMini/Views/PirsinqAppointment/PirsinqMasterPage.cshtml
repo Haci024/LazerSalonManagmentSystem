@@ -19,7 +19,7 @@
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Qeydiyyatlar</a></li>
-                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni qeydiyyat</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni Qeydiyyat</a></li>
                             <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">İmtina olunan seanslar</a></li>
                         </ul>
 
@@ -84,8 +84,8 @@
 
                                                    
                                                                         <div style="padding-right:30px">
-                                                                            <a asp-action="AddPirsinqAppointment" asp-route-CustomerId="@item.Id"  asp-route-PirsinqMasterId="@Model.PirsinqMasterId" asp-route-Female="@item.Female" class="btn bg-deep-purple waves-effect ">
-                                                                                <i class="material-icons">assignment_add</i>
+                                                                            <a asp-action="AddPirsinqAppointment" asp-route-CustomerId="@item.Id"  asp-route-PirsinqMasterId="@Model.PirsinqMasterId" class="btn bg-deep-purple waves-effect ">
+                                                                               Yeni Seans
                                                                             </a>
                                                                         </div>
 
@@ -153,8 +153,8 @@
                                                                     <th>Giriş</th>
                                                                     <th>Çıxış</th>
                                                                     <th>Ödəniş</th>
-                                                                    <th>Status</th>
                                                                     <th>Açıqlama</th>
+                                                                    <th>Status</th>
                                                                     <th class="text-center">
                                                                         <div style="margin-right:20px">
                                                                             Əməliyyatlar
@@ -166,53 +166,59 @@
 
                                                                 @foreach (var item in Model.ReservationList)
                                                                 {
+
                                                                     <tr>
                                                                         <td>@item.StartTime.ToString("dd.MM.yyyy")</td>
                                                                         <td>@item.AppUser.UserName</td>
                                                                         <td>@item.Customer.FullName</td>
-                                                                        <td style="display:flex">
-                                                                          @item.Description
+                                                                        <td>
+                                                                            @foreach (var category in item.PirsinqReports)
+                                                                            {
+                                                                                <div>@category.PirsinqCategory.CategoryName</div>
+                                                                            }
+                                                                        <td>
+
+                                                                                @if (item.StartTime == null)
+                                                                                {
+                                                                                <b class="btn btn-primary">Seans başlamayıb!</b>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @item.StartTime.ToString("HH:mm")
+                                                                                }
                                                                         </td>
                                                                         <td>
-                                                                            @if (item.StartTime == null)
-                                                                            {
-                                                                                <h5 class="btn btn-primary">Seans başlamayıb!</h5>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                @item.StartTime.ToString("HH:mm")
-                                                                            }
-                                                                        </td>
-                                                                        <td>
-                                                                            @if (item.EndTime == null)
-                                                                            {
+                                                                                @if (item.EndTime == null)
+                                                                                {
                                                                                 <div>Bitməyib</div>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                @item.EndTime.Value.ToString("HH:mm")
-                                                                            }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    @item.EndTime.Value.ToString("HH:mm")
+                                                                                }
                                                                         </td>
                                                                         <td>@item.Price.ToString("#0.##") AZN</td>
                                                                         <td>@item.Description</td>
+
+
                                                                         <td>
-                                                                            @if (item.IsStart)
-                                                                            {
-                                                                                <h5 class="btn btn-primary">Seans başladı</h5>
-                                                                            }
-                                  
+                                                                                @if (item.IsStart)
+                                                                                {
+                                                                                <h5 style="color:blue">Seans başladı</h5>
+                                                                                }
+
                                                                         </td>
 
                                                                         <td style="padding-top:17px" class="text-center">
 
                                                                             <a asp-action="CompletePirsinqSession" asp-route-AppointmentId="@item.Id" class="btn btn-success waves-effect">
-                                                                                    <i class="material-icons">hourglass_empty</i>
-                                                                                </a>
+                                                                                Seansı bitir
+                                                                            </a>
                                                                             <a asp-action="UpdateMoney" asp-route-AppointmentId="@item.Id" class="btn btn-primary waves-effect">
                                                                                 <i class="material-icons">credit_card</i>
                                                                             </a>
-                                                                              
-                                                                       
+
+
 
                                                                         </td>
                                                                     </tr>

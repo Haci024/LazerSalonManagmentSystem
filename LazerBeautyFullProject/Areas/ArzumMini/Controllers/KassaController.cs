@@ -144,9 +144,10 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
                 
                 return View(kassaActionsListDTO);
             }
+       
 
             KassaActionList kassaActionList= new KassaActionList();
-            kassaActionList.LastOutMoneyDate = _timeHelper.ConvertToAzerbaijanTime(DateTime.Now);
+            kassaActionList.LastOutMoneyDate =(DateTime)kassaActionsListDTO.ProcessDate ;
             kassaActionList.AppUserId = appUser.Id;
             kassaActionList.OutMoneyQuantity=kassaActionsListDTO.OutMoney;
             kassaActionList.Description = kassaActionsListDTO.Description;
@@ -182,19 +183,25 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
           
             kassaActionsDTO.Budget = _kassaService.Budget(1);
-        
+            var validator = new KassaActionListValidator();
+            var validationResult = validator.Validate(kassaActionsDTO);
+            if (!validationResult.IsValid)
+            {
+                foreach (var item in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", item.ErrorMessage);
+                }
+                return View(kassaActionsDTO);
+            }
             KassaActionList kassaActionList = new KassaActionList();
-            kassaActionList.LastOutMoneyDate =_timeHelper.ConvertToAzerbaijanTime(DateTime.Now);
+            kassaActionList.LastOutMoneyDate =(DateTime)kassaActionsDTO.ProcessDate;
             kassaActionList.AppUserId = appUser.Id;
             kassaActionList.FilialId=1;
             kassaActionList.Description = kassaActionsDTO.Description;
             kassaActionList.OutMoneyQuantity = kassaActionsDTO.OutMoney;
             kassaActionList.Status = true;
             _kassaActionListService.Create(kassaActionList);
-            
             return RedirectToAction("KassaActionList");
         }
-
-
     }
 }

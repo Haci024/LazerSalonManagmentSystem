@@ -16,5 +16,7 @@ namespace Data.DAL
         public Task<Customer> SelectedCustomer(int CustomerId);
 
         public Task<List<Customer>> DailyBirthDate(int FilialId);
+
+        public Task<List<Customer>> GetActiveCustomerList();
     }
 }

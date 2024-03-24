@@ -1,0 +1,53 @@
+﻿@model DTO.DTOS.LipuckaDTO.AddLipuckaCategoryDTO
+@{
+    ViewData["Title"] = "UpdateLipuckaCategory";
+    Layout = "~/Areas/Support/Views/Shared/_SupportLayout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
+            <div class="card">
+                <div class="header text-center">
+                    <h2>Yeni Lipuçka kateqoriyası</h2>
+                </div>
+                <div class="body">
+                    <form id="form_validation" method="post">
+                        <div class="form-group form-float">
+                            <div class="form-group form-float">
+                                <div>
+                                    <select class="form-control show-tick" asp-for="MainCategoryId" id="childCategoryId">
+                                        <option selected>Katgoriya seçin ...</option>
+                                        @foreach (var item in Model.MainCategories)
+                                        {
+
+                                            <option value="@item.Id">@item.Name</option>
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+
+                            <label class="form-label">Kategoriya</label>
+                            <div class="form-line">
+                                <input type="text" asp-for="CategoryName" class="form-control">
+
+                            </div>
+                        </div>
+                     
+                        <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
+                        <div class="text-center">
+                            <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
+                            <a asp-action="LipuckaCategoryList" class="btn btn-success">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

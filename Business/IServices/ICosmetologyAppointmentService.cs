@@ -10,5 +10,7 @@ namespace Business.IServices
     public interface ICosmetologyAppointmentService:IGenericService<CosmetologyAppointment>
     {
         public Task<List<CosmetologyAppointment>> CosmetologReservation();
+
+        public Task<CosmetologyAppointment> SelectedAppointment(int AppointmentId);
     }
 }

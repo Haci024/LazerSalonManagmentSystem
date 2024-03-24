@@ -85,7 +85,7 @@
                                                    
                                                                         <div style="padding-right:30px">
                                                                             <a asp-action="AddLipuckaAppointment" asp-route-CustomerId="@item.Id"  asp-route-LipuckaMasterId="@Model.LipuckaMasterId"  class="btn bg-deep-purple waves-effect ">
-                                                                                <i class="material-icons">assignment_add</i>
+                                                                               Yeni Seans
 
                                                                             </a>
                                                                         </div>
@@ -134,6 +134,7 @@
                                                                     <th>Giriş</th>
                                                                     <th>Çıxış</th>
                                                                     <th>Ödəniş</th>
+                                                                    <th>Açıqlama</th>
                                                                     <th>Status</th>
                                                                     <th class="text-center">
                                                                         <div style="margin-right:20px">
@@ -153,6 +154,7 @@
                                                                     <th>Giriş</th>
                                                                     <th>Çıxış</th>
                                                                     <th>Ödəniş</th>
+                                                                    <th>Açıqlama</th>
                                                                     <th>Status</th>
                                                                     <th class="text-center">
                                                                         <div style="margin-right:20px">
@@ -171,15 +173,15 @@
                                                                         <td>@item.AppUser.UserName</td>
                                                                         <td>@item.Customer.FullName</td>
                                                                         <td>
-                                                                        < style="display:flex">
-
-                                                                            @item.Description
-
-                                                                        </td>
+                                                                          @foreach (var category in item.LipuckaReports)
+                                                                            {
+                                                                                <div>@category.LipuckaCategories.Name</div>
+                                                                            }
                                                                         <td>
+                                                                          
                                                                             @if (item.StartTime == null)
                                                                             {
-                                                                                <h5 class="btn btn-primary">Seans başlamayıb!</h5>
+                                                                                <b class="btn btn-primary">Seans başlamayıb!</b>
                                                                             }
                                                                             else
                                                                             {
@@ -197,11 +199,13 @@
                                                                             }
                                                                         </td>
                                                                         <td>@item.Price.ToString("#0.##") AZN</td>
+                                                                        <td>@item.Description</td>
+                                                                      
 
                                                                         <td>
                                                                             @if (item.IsStart)
                                                                             {
-                                                                                <h5 class="btn btn-primary">Seans başladı</h5>
+                                                                                <h5 style="color:blue">Seans başladı</h5>
                                                                             }
                                   
                                                                         </td>
@@ -209,7 +213,7 @@
                                                                         <td style="padding-top:17px" class="text-center">
 
                                                                             <a asp-action="CompleteLipuckaSession" asp-route-AppointmentId="@item.Id" class="btn btn-success waves-effect">
-                                                                                    <i class="material-icons">hourglass_empty</i>
+                                                                                  Seansı bitir
                                                                                 </a>
                                                                             <a asp-action="UpdateMoney" asp-route-AppointmentId="@item.Id" class="btn btn-primary waves-effect">
                                                                                 <i class="material-icons">credit_card</i>

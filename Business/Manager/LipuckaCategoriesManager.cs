@@ -32,14 +32,25 @@ namespace Business.Manager
             return _dal.GetById(id);    
         }
 
+        public Task<List<LipuckaCategories>> GetFemaleCategoryList()
+        {
+            return _dal.GetFemaleCategoryList();
+        }
+
         public List<LipuckaCategories> GetList()
         {
             return _dal.GetList();
+        }
+
+        public Task<List<LipuckaCategories>> GetMaleCategoryList()
+        {
+            return _dal.GetMaleCategoryList();
         }
 
         public void Update(LipuckaCategories t)
         {
             _dal.Update(t);
         }
+        
     }
 }

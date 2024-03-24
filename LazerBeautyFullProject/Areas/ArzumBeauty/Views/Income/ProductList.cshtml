@@ -36,11 +36,11 @@
                                                     </h2>
                                                     <div style="padding-right:30px;">
                                                         <a asp-action="ArchiveProducts" class="btn btn-outline-warning waves-effect ">
-                                                            <i class="material-icons">list</i>
+                                                            Tükənmiş məhsullar
 
                                                         </a>
                                                         <a asp-action="AddProduct" class="btn bg-deep-purple waves-effect ">
-                                                            <i class="material-icons">add</i>
+                                                            Yeni məhsul
 
                                                         </a>
                                                     </div>
@@ -67,6 +67,7 @@
                                                                 <th>Ümumi gətirilib</th>
                                                                 <th>Maya qiyməti</th>
                                                                 <th>Satış qiyməti</th>
+                                                                <th>Əməliyyatlar</th>
                                                             </tr>
                                                         </thead>
                                                         <tfoot>
@@ -79,6 +80,7 @@
                                                                 <th>Ümumi gətirilib</th>
                                                                 <th>Maya qiyməti</th>
                                                                 <th>Satış qiyməti</th>
+                                                                <th>Əməliyyatlar</th>
                                                             </tr>
                                                         </tfoot>
                                                         <tbody>
@@ -95,7 +97,11 @@
                                                                     <td>@item.TotalCount</td>
                                                                         <td>@item.BuyingPrice.ToString("#0.0#") AZN</td>
                                                                         <td>@item.SellingPrice.ToString("#0.0#") AZN</td>
-
+                                                                    <td>
+                                                                        <a asp-controller="Income" asp-action="UpdateProductCount" asp-route-ProductId="@item.Id" class="btn btn-success">
+                                                                           Düzəliş
+                                                                        </a>
+                                                                    </td>
                                                                     </tr>
                                                                 
 

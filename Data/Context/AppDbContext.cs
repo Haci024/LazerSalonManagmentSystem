@@ -22,7 +22,7 @@ namespace Data.Concrete
         public DbSet<OutMoney> OutMoney { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Cosmetologs> Cosmetologs { get; set; } 
-        public DbSet<CosmetologyAppointment>CosmetologyAppointments { get; set; }
+        public DbSet<CosmetologyAppointment>CosmetologyAppointments { get; set;}
         public DbSet<CosmetologyCategory> CosmetologyCategories { get; set; }
         public DbSet<KassaActionList> KassaActionLists { get; set; }
         public DbSet<Stock> Stock { get; set; }
@@ -48,7 +48,7 @@ namespace Data.Concrete
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("server=Odissey;initial catalog=LazerFullProjectForManagment;integrated Security=true;TrustServerCertificate=true;");
+            optionsBuilder.UseSqlServer("server=ODISSEY\\SQLEXPRESS01;initial catalog=SakinaBeautySalon;integrated Security=true;TrustServerCertificate=true;");
             optionsBuilder.ConfigureWarnings(warnings =>
             {
                 warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored);
@@ -60,7 +60,7 @@ namespace Data.Concrete
         {
             base.OnModelCreating(modelBuilder);
 
-     
+   
 
             modelBuilder.Entity<Customer>()
         .HasOne(o => o.Filial)
@@ -205,34 +205,56 @@ namespace Data.Concrete
            );
 
            
-            modelBuilder.Entity<LazerMaster>().HasData(
-                new LazerMaster { Id = 1, FullName="Ellada"},
-                new LazerMaster { Id = 2, FullName = "Aidə"},
-                new LazerMaster { Id = 3, FullName = "Nuridə"},
-                new LazerMaster { Id = 4, FullName = "Gülnar"},
-                 new LazerMaster { Id =5, FullName = "Nəzrin" },
-                  new LazerMaster { Id = 6, FullName = "Əminə" }
-                );
+    
        
 
             modelBuilder.Entity<SolariumCategories>().HasData(
              new SolariumCategories { Id = 1, MainCategoryId = null,Name="Günlük" ,Price =0,Minute=0 },
              new SolariumCategories { Id = 2, MainCategoryId = null,Name="Aylıq" ,Price = 0, Minute = 0 },
-             new SolariumCategories { Id = 3, MainCategoryId = 1,Name="MiniPacket" ,Price = 4, Minute = 5,UsingPeriod=1},
+             new SolariumCategories { Id = 3, MainCategoryId = 1,Name="MiniPacket" ,Price = 5, Minute = 5,UsingPeriod=1},
              new SolariumCategories { Id = 4, MainCategoryId = 1, Name="MediumPacket",Price = 8, Minute = 10,UsingPeriod=1},
-             new SolariumCategories { Id = 5, MainCategoryId =1 ,Name="LargePacket" ,Price = 10, Minute = 15 ,UsingPeriod=1},
-             new SolariumCategories { Id = 6, MainCategoryId =1 ,Name="ExtraLarge" ,Price = 12, Minute = 20 ,UsingPeriod=30},
-             new SolariumCategories { Id = 7, MainCategoryId = 2,Name="MiniPacket", Price = 19, Minute = 50 ,UsingPeriod=30},
-             new SolariumCategories { Id = 8, MainCategoryId = 2,Name="MediumPacket" ,Price = 29, Minute = 100,UsingPeriod=30 },
-             new SolariumCategories { Id = 9, MainCategoryId = 2,Name="LargePacket", Price = 39, Minute = 150,UsingPeriod=60 }
-          
+             new SolariumCategories { Id = 5, MainCategoryId =1 ,Name="LargePacket" ,Price = 12, Minute = 15 ,UsingPeriod=1},
+             new SolariumCategories { Id = 6, MainCategoryId =1 ,Name="ExtraLarge" ,Price = 15, Minute = 20 ,UsingPeriod=1},
+             new SolariumCategories { Id = 7, MainCategoryId = 2,Name="MiniPacket", Price = 20, Minute = 50 ,UsingPeriod=30},
+             new SolariumCategories { Id = 8, MainCategoryId = 2,Name="MediumPacket" ,Price =35, Minute = 100,UsingPeriod=60 },
+             new SolariumCategories { Id = 9, MainCategoryId = 2,Name="LargePacket", Price = 45, Minute = 150,UsingPeriod=60 }
              );
-            modelBuilder.Entity<Cosmetologs>().HasData(
-         new Cosmetologs { Id = 1, FullName = "Nuray"}
-     
+            modelBuilder.Entity<BodyShapingPacketCategory>().HasData(
+               new BodyShapingPacketCategory { Id = 1, MainCategoryId = null, Packet = "G8 Turbo", IsDeactive = false, SessionCount = 0,SessionDuration=0},
+               new BodyShapingPacketCategory { Id=2, MainCategoryId = null, Packet = "Miostimuliyasiya", IsDeactive = false, SessionCount = 0, SessionDuration = 0 },
+                new BodyShapingPacketCategory { Id = 3, MainCategoryId = null, Packet = "Termoyorğan", IsDeactive = false, SessionCount = 0, SessionDuration = 0 }
+               );
+            modelBuilder.Entity<LipuckaCategories>().HasData(
 
-         );
- 
+                new LipuckaCategories { Id = 1, Name = "Lipuçka Qadın", MainCategoryId = null, Price = 0, IsDeactive = false },
+                new LipuckaCategories { Id = 2, Name = "Lipuçka Kişi", MainCategoryId = null, Price = 0, IsDeactive = false }
+
+           );
+            modelBuilder.Entity<CosmetologyCategory>().HasData(
+                new CosmetologyCategory { Id = 1, MainCategoryId = null, CategoryName = "Plazmaliftinq", IsDeactive = false },
+                new CosmetologyCategory { Id = 2, MainCategoryId = null, CategoryName = "Mezoterapiya", IsDeactive = false },
+                new CosmetologyCategory { Id = 3, MainCategoryId = null, CategoryName = "Plazma + Mezo", IsDeactive = false },
+                new CosmetologyCategory { Id = 4, MainCategoryId = null, CategoryName = "Lipalitik", IsDeactive = false },
+                new CosmetologyCategory { Id = 5, MainCategoryId = null, CategoryName = "Birovetializasiya", IsDeactive = false },
+                new CosmetologyCategory { Id = 6, MainCategoryId = null, CategoryName = "Dolğu", IsDeactive = false },
+                new CosmetologyCategory { Id = 7, MainCategoryId = null, CategoryName = "Botoks", IsDeactive = false },
+                new CosmetologyCategory { Id = 8, MainCategoryId = null, CategoryName = "Saplarla liftinq", IsDeactive = false },
+                new CosmetologyCategory { Id = 9, MainCategoryId = null, CategoryName = "Pilinq", IsDeactive = false },
+                new CosmetologyCategory { Id = 10, MainCategoryId = null, CategoryName = "Hicama ", IsDeactive = false },
+                new CosmetologyCategory { Id = 11, MainCategoryId = null, CategoryName = "Pirsinq", IsDeactive = false },
+                new CosmetologyCategory { Id = 12, MainCategoryId = null, CategoryName = "Üz təmizləməsi", IsDeactive = false }
+
+                ); ;
+            modelBuilder.Entity<PirsinqCategory>().HasData(
+
+             new PirsinqCategory { Id = 1, CategoryName = "Pirsinq Qadın", MainCategoryId = null, Price = 0, IsDeactive = false },
+             new PirsinqCategory { Id = 2, CategoryName = "Pirsinq Kişi", MainCategoryId = null, Price = 0, IsDeactive = false }
+
+        );
+
+
+
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<IdentityRole>().HasData(

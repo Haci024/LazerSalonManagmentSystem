@@ -24,34 +24,36 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         private readonly ILazerMasterService _master;
         private readonly IPirsinqAppointmentService _appointment;
         private readonly ICustomerService _customer;
+        private readonly IPirsinqCategoriesService _Categories;
     
         private readonly UserManager<AppUser> _userManager;
-        public PirsinqAppointmentController(AppDbContext appDbContext,UserManager<AppUser> user, ICustomerService customerService, ILazerMasterService lazerMasterService, IPirsinqAppointmentService appointment)
+        public PirsinqAppointmentController(AppDbContext appDbContext,UserManager<AppUser> user, IPirsinqCategoriesService categoryService, ICustomerService customerService, ILazerMasterService lazerMasterService, IPirsinqAppointmentService appointment)
         {
 
             _db = appDbContext;
             _master = lazerMasterService;
             _appointment = appointment;
             _customer = customerService;
+            _Categories = categoryService;
             _userManager = user;
            
 
         }
         [HttpGet]
-        public IActionResult PirsinqMasterPage(int PirsinqMasterId)
+        public async Task<IActionResult> PirsinqMasterPage(int PirsinqMasterId)
         {
             LazerMaster lazerMaster = _master.GetById(PirsinqMasterId);
             PirsinqMasterPageDTO masterPageDTO = new PirsinqMasterPageDTO();
             masterPageDTO.PirsinqMasterId = lazerMaster.Id;
             ViewBag.PirsinqMaster = lazerMaster.FullName;
-            masterPageDTO.Customers = _db.Customers.Include(x => x.Filial).Where(x => x.IsDeactive == false).ToList();
-            masterPageDTO.ReservationList = _db.PirsinqAppointments.Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).Include(x => x.LazerMaster).Include(x => x.AppUser).Where(x => x.IsCompleted == false && x.FilialId == 2).ToList();
-            masterPageDTO.InjectionList = _db.PirsinqAppointments.Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).Include(x => x.LazerMaster).Include(x => x.AppUser).Where(x => x.IsDeactive == true && x.FilialId == 2).ToList();
+            masterPageDTO.Customers = await _customer.GetActiveCustomerList();
+            masterPageDTO.ReservationList =await _db.PirsinqAppointments.Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).Include(x => x.LazerMaster).Include(x => x.AppUser).Where(x => x.IsCompleted == false && x.FilialId == 2).ToListAsync();
+            masterPageDTO.InjectionList =await _db.PirsinqAppointments.Include(x => x.PirsinqReports).ThenInclude(x => x.PirsinqCategory).Include(x => x.LazerMaster).Include(x => x.AppUser).Where(x => x.IsDeactive == true && x.FilialId == 2).ToListAsync();
 
             return View(masterPageDTO);
         }
         [HttpGet]
-        public IActionResult AddPirsinqAppointment(int CustomerId, int PirsinqMasterId, bool Female)
+        public async  Task<IActionResult> AddPirsinqAppointment(int CustomerId, int PirsinqMasterId)
         {
             AddPirsinqAppointmentDTO addNewAppointmentDTO = new AddPirsinqAppointmentDTO();
             addNewAppointmentDTO.PirsinqMasterId = PirsinqMasterId;
@@ -59,13 +61,13 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             LazerMaster master = _master.GetById(PirsinqMasterId);
             addNewAppointmentDTO.PirsinqMaster = master.FullName;
             addNewAppointmentDTO.Customer = customer.FullName;
-            if (Female == true)
+            if (customer.Female)
             {
-                addNewAppointmentDTO.PirsinqCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 1).ToList();
+                addNewAppointmentDTO.PirsinqCategories = await _Categories.GetFemaleCategoryList();
             }
             else
             {
-                addNewAppointmentDTO.PirsinqCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 1).ToList();
+                addNewAppointmentDTO.PirsinqCategories =await  _Categories.GetMaleCategoryList();
             }
 
 
@@ -73,18 +75,19 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPirsinqAppointment(int CustomerId, int PirsinqMasterId, bool Female, AddPirsinqAppointmentDTO addNewAppointmentDTO)
+        public async Task<IActionResult> AddPirsinqAppointment(int CustomerId, int PirsinqMasterId, AddPirsinqAppointmentDTO addNewAppointmentDTO)
         {
 
             ViewBag.PirsinqMaster = _db.LazerMasters.Where(x => x.Id == PirsinqMasterId).Select(x => x.FullName);
-            ViewBag.PirsinqMasterId = PirsinqMasterId;
-            if (Female == true)
+            ViewBag.PirsinqMasterId = PirsinqMasterId; LazerMaster master = _master.GetById(PirsinqMasterId);
+            Customer customer = _customer.GetById(CustomerId);
+            if (customer.Female)
             {
-                addNewAppointmentDTO.PirsinqCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 1).ToList();
+                addNewAppointmentDTO.PirsinqCategories =await _Categories.GetFemaleCategoryList();
             }
             else
             {
-                addNewAppointmentDTO.PirsinqCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 1).ToList();
+                addNewAppointmentDTO.PirsinqCategories = await _Categories.GetMaleCategoryList();
             }
             AddPirsinqAppointmentValidator validationRules = new AddPirsinqAppointmentValidator();
 
@@ -98,8 +101,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
                 return View(addNewAppointmentDTO);
             }
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            LazerMaster master = _master.GetById(PirsinqMasterId);
-            Customer customer = _customer.GetById(CustomerId);
+          
 
             addNewAppointmentDTO.PirsinqMaster = master.FullName;
             addNewAppointmentDTO.Customer = customer.FullName;

@@ -13,5 +13,6 @@ namespace Business.IServices
        
         public DailyReportDTO GetDailyReport(int FilialId,DailyReportDTO dailyReportDTO);
 
+       
     }
 }

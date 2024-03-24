@@ -42,10 +42,16 @@ namespace Business.Manager
             return _dal.GetList();
         }
 
+        public Task<CosmetologyAppointment> SelectedAppointment(int AppointmentId)
+        {
+           return _dal.SelectedAppointment(AppointmentId);
+        }
+
         public void Update(CosmetologyAppointment t)
         {
            _dal.Update(t);
         }
+
 
     }
 }

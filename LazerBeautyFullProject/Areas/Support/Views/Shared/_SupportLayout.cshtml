@@ -157,6 +157,9 @@
                             <li>
                                 <a asp-controller="Categories" asp-action="CosmetologyCategoryList">Alt Kateqoriyalar</a>
                             </li>
+                            <li>
+                                <a asp-controller="Session" asp-action="CosmetologyAppointmentList">Kosmetologiya Seansları</a>
+                            </li>
                         </ul>
 
                     </li>
@@ -170,10 +173,42 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a asp-controller="Personal" asp-action="SolariumSessions">Solarium seansları</a>
+                                <a asp-controller="Session" asp-action="SolariumSessions">Solarium seansları</a>
                             </li>
                             <li>
                                 <a asp-controller="Categories" asp-action="SolariumPacketList">Solarium kategoriyaları</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                person
+                            </i>
+                            <span>Lipuçka</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="Session" asp-action="LipuckaSessionList">Lipuçka seansları</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Categories" asp-action="LipuckaCategoryList">Lipuçka kategoriyaları</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                person
+                            </i>
+                            <span>Pirsinq</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a asp-controller="Session" asp-action="PirsinqSessionList">Pirsinq seansları</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Categories" asp-action="PirsinqCategoryList">Pirsinq kategoriyaları</a>
                             </li>
                         </ul>
                     </li>
@@ -196,6 +231,23 @@
                             </li>
                             <li>
                                 <a asp-controller="Categories" asp-action="BodyShapingComboPacketList">Kombo Paketlər</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Session" asp-action="BodyShapingAppointmentList">Bədən şəkilləndirmə seansları</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">
+                                person
+                            </i>
+                            <span>Xərclər</span>
+                        </a>
+                        <ul class="ml-menu">
+                         
+                            <li>
+                                <a asp-controller="Session" asp-action="OutMoneyList">Xərclər</a>
                             </li>
                         </ul>
                     </li>

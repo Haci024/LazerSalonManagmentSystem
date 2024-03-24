@@ -30,7 +30,7 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover js-basic-example">
+                        <table class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Tarix</th>
@@ -40,6 +40,7 @@
                                     <th>Kategoriyalar</th>
                                     <th>Giriş saatı</th>
                                     <th>Çıxış saatı</th>
+                                    <th>Açıqlama</th>
                                     <th id="priceValueMaster1">Ödəniş</th>
                                   
                                 </tr>
@@ -53,6 +54,7 @@
                                     <th>Kategoriyalar</th>
                                     <th>Giriş saatı</th>
                                     <th>Çıxış saatı</th>
+                                    <th>Açıqlama</th>
                                     <th>Ödəniş</th>
                                
                                    
@@ -69,13 +71,16 @@
                                         <td>@item.Customers.FullName</td>
                                         <td>@item.Customers.PhoneNumber</td>
                                         <td style="display:flex">
-                                            @foreach (var categories in item.CosmetologyReports)
-                                            {
-                                                if (categories.CosmetologyCategory.MainCategoryId != null)
+                                            <ul>
+                                                @foreach (var categories in item.CosmetologyReports)
                                                 {
-                                                    <div style="padding:2px">@categories.CosmetologyCategory.CategoryName,</div>
+                                                    if (categories.CosmetologyCategory.MainCategoryId != null)
+                                                    {
+                                                        <li style="padding:2px">@categories.CosmetologyCategory.MainCategory.CategoryName  @categories.CosmetologyCategory.CategoryName,</li>
+                                                    }
+
                                                 }
-                                            }
+                                            </ul>
                                         </td>
                                         <td>
 
@@ -92,6 +97,8 @@
                                                 @item.OutTime.Value.ToString("HH:mm")
                                             }
                                         </td>
+                                        <td>@item.CosmetologyDescription</td>
+
                                         <td>@item.Price.ToString("#0.0#") AZN</td>
 
                                  

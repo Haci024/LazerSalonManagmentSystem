@@ -18,7 +18,7 @@
                         <div style="padding-right:30px">
                             <button id="calculatePriceButtonMaster1" class="btn btn-primary">Hesabla</button>
                             <a asp-action="AddOutMoney" class="btn bg-deep-purple waves-effect ">
-                                <i class="material-icons">money_off</i>
+                               Xərc əlavə et
                             </a>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.AddingDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.AddingDate.ToString("dd.MM.yyyy  HH:mm")</td>
                                         <td>@item.AppUser.UserName</td>
                                         <td>@item.SpendCategory.Category</td>
                                         <td>@item.Price.ToString(".0") AZN</td>
@@ -75,7 +75,7 @@
                                             </div>
                                             <div style="margin-right:10px">
                                                 <a asp-action="UpdateOutMoney" asp-route-Id="@item.Id" class="btn bg-green waves-effect">
-                                                    <i class="material-icons">edit</i>
+                                                   Düzəliş
                                                 </a>
                                             </div>
                                         </td>

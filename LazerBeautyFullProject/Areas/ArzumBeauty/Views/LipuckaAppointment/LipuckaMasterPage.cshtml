@@ -18,9 +18,9 @@
                 <div class="body">
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Rezervasiyalar</a></li>
-                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni rezervasiya</a></li>
-                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Imtina olunan seanslar</a></li>
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Qeydiyyatlar</a></li>
+                            <li role="presentation"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Yeni Qeydiyyat</a></li>
+                            <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">İmtina olunan seanslar</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -85,7 +85,7 @@
                                                    
                                                                         <div style="padding-right:30px">
                                                                             <a asp-action="AddLipuckaAppointment" asp-route-CustomerId="@item.Id"  asp-route-LipuckaMasterId="@Model.LipuckaMasterId"  class="btn bg-deep-purple waves-effect ">
-                                                                                <i class="material-icons">assignment_add</i>
+                                                                               Yeni Seans
 
                                                                             </a>
                                                                         </div>
@@ -123,111 +123,113 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
-                                                            <thead>
+                                                    <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Qeydiyyatçı</th>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Kategoriya</th>
+                                                                <th>Giriş</th>
+                                                                <th>Çıxış</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Açıqlama</th>
+                                                                <th>Status</th>
+                                                                <th class="text-center">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>Tarix</th>
+                                                                <th>Qeydiyyatçı</th>
+                                                                <th>Ad və Soyad</th>
+                                                                <th>Kategoriya</th>
+                                                                <th>Giriş</th>
+                                                                <th>Çıxış</th>
+                                                                <th>Ödəniş</th>
+                                                                <th>Açıqlama</th>
+                                                                <th>Status</th>
+                                                                <th class="text-center">
+                                                                    <div style="margin-right:20px">
+                                                                        Əməliyyatlar
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+
+                                                            @foreach (var item in Model.ReservationList)
+                                                            {
+
                                                                 <tr>
-                                                                    <th>Tarix</th>
-                                                                    <th>Qeydiyyatçı</th>
-                                                                    <th>Ad və Soyad</th>
-                                                                    <th>Kategoriya</th>
-                                                                    <th>Giriş</th>
-                                                                    <th>Çıxış</th>
-                                                                    <th>Ödəniş</th>
-                                                                    <th>Status</th>
-                                                                    <th class="text-center">
-                                                                        <div style="margin-right:20px">
-                                                                            Əməliyyatlar
-                                                                        </div>
-                                                                    </th>
+                                                                    <td>@item.StartTime.ToString("dd.MM.yyyy")</td>
+                                                                    <td>@item.AppUser.UserName</td>
+                                                                    <td>@item.Customer.FullName</td>
+                                                                    <td>
+                                                                        @foreach (var category in item.LipuckaReports)
+                                                                        {
+                                                                            <div>@category.LipuckaCategories.Name</div>
+                                                                        }
+                                                                    <td>
 
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tfoot>
-                                                                <tr>
-                                                                    <th>Tarix</th>
-                                                                    <th>Qeydiyyatçı</th>
-                                                                    <th>Ad və Soyad</th>
-                                                                    <th>Kategoriya</th>
-                                                                    <th>Giriş</th>
-                                                                    <th>Çıxış</th>
-                                                                    <th>Ödəniş</th>
-                                                                    <th>Status</th>
-                                                                    <th class="text-center">
-                                                                        <div style="margin-right:20px">
-                                                                            Əməliyyatlar
-                                                                        </div>
-                                                                    </th>
-                                                                </tr>
-                                                            </tfoot>
-                                                            <tbody>
-
-                                                                @foreach (var item in Model.ReservationList)
-                                                                {
-
-                                                                    <tr>
-                                                                        <td>@item.StartTime.ToString("dd.MM.yyyy")</td>
-                                                                        <td>@item.AppUser.UserName</td>
-                                                                        <td>@item.Customer.FullName</td>
-                                                                        <td>
-                                                                            < style="display:flex">
-
-                                                                                @item.Description
-
-                                                                        </td>
-                                                                        <td>
                                                                             @if (item.StartTime == null)
                                                                             {
-                                                                                <h5 class="btn btn-primary">Seans başlamayıb!</h5>
+                                                                            <b class="btn btn-primary">Seans başlamayıb!</b>
                                                                             }
                                                                             else
                                                                             {
                                                                                 @item.StartTime.ToString("HH:mm")
                                                                             }
-                                                                        </td>
-                                                                        <td>
+                                                                    </td>
+                                                                    <td>
                                                                             @if (item.EndTime == null)
                                                                             {
-                                                                                <div>Bitməyib</div>
+                                                                            <div>Bitməyib</div>
                                                                             }
                                                                             else
                                                                             {
                                                                                 @item.EndTime.Value.ToString("HH:mm")
                                                                             }
-                                                                        </td>
-                                                                        <td>@item.Price.ToString("#0.##") AZN</td>
+                                                                    </td>
+                                                                    <td>@item.Price.ToString("#0.##") AZN</td>
+                                                                    <td>@item.Description</td>
 
-                                                                        <td>
+
+                                                                    <td>
                                                                             @if (item.IsStart)
                                                                             {
-                                                                                <h5 class="btn btn-primary">Seans başladı</h5>
+                                                                            <h5 style="color:blue">Seans başladı</h5>
                                                                             }
-                                  
-                                                                        </td>
 
-                                                                        <td style="padding-top:17px" class="text-center">
+                                                                    </td>
 
-                                                                            <a asp-action="CompleteLipuckaSession" asp-route-AppointmentId="@item.Id" class="btn btn-success waves-effect">
-                                                                                    <i class="material-icons">hourglass_empty</i>
-                                                                                </a>
-                                                                            <a asp-action="UpdateMoney" asp-route-AppointmentId="@item.Id" class="btn btn-primary waves-effect">
-                                                                                <i class="material-icons">credit_card</i>
-                                                                            </a>
-                                                                              
-                                                                       
+                                                                    <td style="padding-top:17px" class="text-center">
 
-                                                                        </td>
-                                                                    </tr>
+                                                                        <a asp-action="CompleteLipuckaSession" asp-route-AppointmentId="@item.Id" class="btn btn-success waves-effect">
+                                                                            Seansı bitir
+                                                                        </a>
+                                                                        <a asp-action="UpdateMoney" asp-route-AppointmentId="@item.Id" class="btn btn-primary waves-effect">
+                                                                            <i class="material-icons">credit_card</i>
+                                                                        </a>
 
 
 
+                                                                    </td>
+                                                                </tr>
 
 
-                                                                }
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+
+
+
+                                                            }
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
 

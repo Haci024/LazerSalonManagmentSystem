@@ -42,6 +42,7 @@
                                     <th>Ad Soyad</th>
                                     <th>İstifadəçi adı</th>     
                                     <th>Filial</th>
+                                  
                                     <th> Status</th>
                                     <th class="text-center">Əməliyyatlar</th>
                                   
@@ -60,13 +61,14 @@
                             <tbody>
                                 @foreach (var user in Model.Users)
                                 {
-                                    
+                                 
                                     
                                         <tr>
                                             <td>@(num = num + 1)</td>
                                             <td>@user.FullName</td>
                                             <td>@user.UserName</td>
                                             <td>@user.Filial.FilialName</td>
+                            
 
                                             <td>
                                                 @if (user.IsBlock == false)
@@ -79,35 +81,48 @@
                                                 }
                                             </td>
                                             <td style="padding-top:17px" class="text-center">
-                                                @if (User.IsInRole("SuperSupporter") || User.IsInRole("Supporter"))
+                                         
+                                                @if (User.Identity.Name != user.UserName)
                                                 {
-                                                    if (User.Identity.Name != user.UserName)
+                                                    @if (user.IsBlock == false)
                                                     {
-                                                        @if (user.IsBlock == false)
-                                                        {
-                                                            <a asp-controller="Users" asp-action="UserBlock" asp-route-AppUserId="@user.Id" class="btn bg-green waves-effect">
-                                                                <i class="material-icons">build</i>
-                                                            </a>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a asp-controller="Users" asp-action="UserBlock" asp-route-AppUserId="@user.Id" class="btn bg-red waves-effect">
-                                                                <i class="material-icons">block</i>
-                                                            </a>
-                                                        }
+                                                        <a asp-controller="Users" asp-action="UserBlock" asp-route-AppUserId="@user.Id" class="btn bg-green waves-effect">
+                                                            <i class="material-icons">build</i>
+                                                        </a>
                                                     }
+                                                    else
+                                                    {
+                                                        <a asp-controller="Users" asp-action="UserBlock" asp-route-AppUserId="@user.Id" class="btn bg-red waves-effect">
+                                                            <i class="material-icons">block</i>
+                                                        </a>
 
+                                                    }
+                                                <a asp-controller="Users" asp-action="UpdatePassword" asp-route-AppUserId="@user.Id" class="btn bg-indigo">
+                                                    <i class="material-icons">vpn_key</i>
+                                                </a>
+                                                <a asp-controller="Users" asp-action="AllInfo" asp-route-AppUserId="@user.Id" class="btn bg-yellow">
+                                                    <i class="material-icons">visibility</i>
+                                                </a>
 
-
-                                                    <a asp-controller="Users" asp-action="UpdatePassword" asp-route-AppUserId="@user.Id" class="btn bg-indigo">
-                                                        <i class="material-icons">vpn_key</i>
-                                                    </a>
+                                                }
+                                                else
+                                                {
                                                     <a asp-controller="Users" asp-action="AllInfo" asp-route-AppUserId="@user.Id" class="btn bg-yellow">
                                                         <i class="material-icons">visibility</i>
                                                     </a>
+                                                    <a asp-controller="Users" asp-action="UpdatePassword" asp-route-AppUserId="@user.Id" class="btn bg-indigo">
+                                                        <i class="material-icons">vpn_key</i>
+                                                    </a>
                                                 }
-     
+                                            
+                                         
 
+                                          
+                                             
+                                            
+
+                                               
+                                                
                                             </td>
                                         </tr>
                                     
@@ -124,3 +139,30 @@
     </div>
 </div>
 
+@* @if (User.IsInRole("SuperSupporter"))
+{
+
+
+
+}
+else
+{
+    if (User.Identity.Name == user.UserName)
+    {
+        <a asp-controller="Users" asp-action="AllInfo" asp-route-AppUserId="@user.Id" class="btn bg-yellow">
+            <i class="material-icons">visibility</i>
+        </a>
+        <a asp-controller="Users" asp-action="UpdatePassword" asp-route-AppUserId="@user.Id" class="btn bg-indigo">
+            <i class="material-icons">vpn_key</i>
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Users" asp-action="UpdatePassword" asp-route-AppUserId="@user.Id" class="btn bg-indigo">
+            <i class="material-icons">vpn_key</i>
+        </a>
+    }
+
+
+
+} *@

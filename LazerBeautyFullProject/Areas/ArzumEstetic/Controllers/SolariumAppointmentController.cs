@@ -38,11 +38,11 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
 
         }
         [HttpGet]
-        public IActionResult SolariumAppointmentList()
+        public async Task<IActionResult> SolariumAppointmentList()
         {
             SolariumPageDTO solariumPageDTO = new SolariumPageDTO();
             solariumPageDTO.ActivePackets = _appDbContext.SolariumAppointments.Include(x => x.AppUser).Include(x => x.Customer).Include(x => x.SolariumCategories).Include(x => x.AppUser).Where(x=>x.IsCompleted ==false && x.IsTimeOut==false && x.IsDeleted==false).ToList();
-            solariumPageDTO.Customers=_appDbContext.Customers.Include(x=>x.Filial).Where(x=>x.IsDeactive==false).ToList();
+            solariumPageDTO.Customers = await _customerService.GetFemaleList();
             solariumPageDTO.SuccessfullyPackets=_appDbContext.SolariumAppointments.Include(x => x.Customer).Include(x => x.SolariumCategories).Include(x => x.AppUser).Where(x=>x.IsCompleted==true).ToList();
             solariumPageDTO.TimeOutPackets = _appDbContext.SolariumAppointments.Include(x => x.Customer).Include(x=>x.AppUser).Include(x => x.SolariumCategories).Include(x => x.AppUser).Include(x => x.Filial).Where(x=>x.IsTimeOut==true).ToList();
             solariumPageDTO.InjectionList = _appDbContext.SolariumAppointments.Include(x => x.Customer).Include(x=>x.AppUser).Include(x => x.SolariumCategories).Include(x => x.AppUser).Include(x => x.Filial).Where(x=>x.IsDeleted==true).ToList();

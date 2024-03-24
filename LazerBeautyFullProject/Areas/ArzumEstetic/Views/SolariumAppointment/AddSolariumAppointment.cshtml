@@ -34,14 +34,14 @@
                                     <label class="form-label">Paket seçin</label>
                                 </p>   
                               
-                             <select class="show-tick form-control" asp-for="ChildCategoryId" id="childCategoryId">
-                                   <option selected>Seçin...</option>
+                             <select class="show-tick form-control" asp-for="ChildCategoryId" id="childCategoryId" data-live-search="true">
+                                   <option selected style="margin-left:20px">Seçin...</option>
                                     @foreach (var item in Model.SolariumCategories)
                                      {
                                     
                                     if (item.MainCategoryId != null)
                                      {
-                                          <option value="@item.Id" data-mainid="@item.MainCategoryId" data-minute="@item.Minute" data-price="@item.Price"> @item.Minute dəqiqə   @item.Price Azn  @item.UsingPeriod gün</option>
+                                          <option style="margin-left:20px" value="@item.Id" data-mainid="@item.MainCategoryId" data-minute="@item.Minute" data-price="@item.Price"> @item.Minute dəqiqə   @item.Price Azn  @item.UsingPeriod gün</option>
                                         
                                     }
                                     

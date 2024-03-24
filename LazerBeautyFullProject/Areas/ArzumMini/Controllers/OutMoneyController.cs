@@ -1,5 +1,4 @@
 ﻿using Business.IServices;
-
 using Business.ValidationRules.OutMoneyValidator;
 using Data.Concrete;
 using DTO.DTOS.InComeDTO;
@@ -20,16 +19,18 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
        
         private readonly IOutMoneyService _outMoneyService;
         private readonly ISpendCategoryService _spendCategoryService;
+        private readonly IKassaService _kassaService;
         private readonly AppDbContext _db;
         private readonly TimeHelper _timeHelper;
         private readonly UserManager<AppUser> _userManager;
-        public OutMoneyController(IOutMoneyService OutMoneyService,AppDbContext db,ISpendCategoryService spendCategoryService,UserManager<AppUser> userManager )
+        public OutMoneyController(IOutMoneyService OutMoneyService,AppDbContext db,IKassaService kassaService,ISpendCategoryService spendCategoryService,UserManager<AppUser> userManager )
         {
             _outMoneyService = OutMoneyService;
             _db = db;
             _timeHelper = new TimeHelper();
             _userManager = userManager;
             _spendCategoryService=spendCategoryService;
+            _kassaService=kassaService;
 
 
 
@@ -48,6 +49,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             OutMoneyAddDTO outMoneyAddDTO = new OutMoneyAddDTO();
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             outMoneyAddDTO.SpendCategories = _db.SpendCategories.Include(x => x.Filial).Where(x => x.FilialId == 1 && x.Status == false).ToList();
+           
 
             return View(outMoneyAddDTO);
         }
@@ -56,7 +58,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         public async Task<IActionResult> AddOutMoney(OutMoneyAddDTO outMoneyAddDTO)
         {
             outMoneyAddDTO.SpendCategories = _db.SpendCategories.Include(x => x.Filial).Where(x => x.FilialId == 1 && x.Status == false).ToList();
-            var validator = new OutMoneyValidator();
+            var validator = new OutMoneyValidator(_kassaService);
             var validationResult = validator.Validate(outMoneyAddDTO);
             if (!validationResult.IsValid)
             {
@@ -67,18 +69,36 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
                     return View(outMoneyAddDTO);
                 }
             }
+            bool autoDate = _db.SpendCategories.Where(x => x.Id == outMoneyAddDTO.SpendCategoryId).Select(x => x.AutoDate).FirstOrDefault();
             OutMoney outMoney = new OutMoney();
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             outMoney.Description = outMoneyAddDTO.Description;
 
             outMoney.Price = outMoneyAddDTO.Price;
-            outMoney.AddingDate = _timeHelper.GetAzerbaijanTime();
+
             outMoney.AppUserId = appUser.Id;
             outMoney.SpendCategoryId = outMoneyAddDTO.SpendCategoryId;
+            if (autoDate == true)
+            {
 
+                outMoney.AddingDate = _timeHelper.GetAzerbaijanTime();
+            }
+            else
+            {
+                if (outMoneyAddDTO.AddingDate == null)
+                {
+                    ModelState.AddModelError("", "Bu əməliyyat sistemə qeyd olunan zaman mütləq tarix daxil edilməlidir!");
+                    return View(outMoneyAddDTO);
+                }
+
+                outMoney.AddingDate = (DateTime)outMoneyAddDTO.AddingDate;
+
+
+
+            }
             _outMoneyService.Create(outMoney);
-
             return RedirectToAction("OutMoneyList", "OutMoney");
+
         }
         [HttpGet]
         public async Task<IActionResult> UpdateOutMoney(int Id)
@@ -88,6 +108,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
            
           OutMoney outMoney =_outMoneyService.GetById(Id);
             AppUser appUser =await _userManager.FindByNameAsync(User.Identity.Name);
+            updateOutMoneyDTO.SpendCategories = _db.SpendCategories.Where(x => x.FilialId == 1 && x.Status == false).ToList();
             updateOutMoneyDTO.Description = outMoney.Description;
             updateOutMoneyDTO.Price= outMoney.Price;
 
@@ -97,6 +118,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateOutMoney(int Id, UpdateOutMoneyDTO updateOutMoneyDTO)
         {
+            updateOutMoneyDTO.SpendCategories = _db.SpendCategories.Where(x=>x.FilialId==1 &&  x.Status==false).ToList();
             var validator = new UpdateOutMoneyValidator();
             var validationResult = validator.Validate(updateOutMoneyDTO);
             if (!validationResult.IsValid)
@@ -169,6 +191,7 @@ namespace LazerBeautyFullProject.Areas.ArzumMini.Controllers
             spendCategory.Category = spendCategoryDTO.Category;
             spendCategory.Status = false;
             spendCategory.FilialId = 1;
+            spendCategory.AutoDate = spendCategoryDTO.AutoDate;
             _spendCategoryService.Create(spendCategory);
             return RedirectToAction("SpendCategoryList");
         }

@@ -9,5 +9,8 @@ namespace Business.IServices
 {
     public interface ILipuckaCategoriesService:IGenericService<LipuckaCategories>
     {
+        public Task<List<LipuckaCategories>> GetFemaleCategoryList();
+
+        public Task<List<LipuckaCategories>> GetMaleCategoryList();
     }
 }

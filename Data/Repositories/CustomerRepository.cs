@@ -40,5 +40,10 @@ namespace Data.Repositories
 
             return await _db.Customers.Where(x => x.BirthDate.Month == date.Month && x.BirthDate.Day == date.Day && x.FilialId==FilialId && x.IsDeactive==false).ToListAsync();
         }
+
+        public async Task<List<Customer>> GetActiveCustomerList()
+        {
+            return await _db.Customers.Include(x=>x.Filial).Where(x=>x.IsDeactive==false).ToListAsync();
+        }
     }
 }

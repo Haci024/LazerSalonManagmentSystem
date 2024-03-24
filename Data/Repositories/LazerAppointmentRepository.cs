@@ -81,7 +81,7 @@ namespace Data.Repositories
         public async Task<List<LazerAppointment>> ReservationsForMaster(int filialId, int LazerMasterId)
         {
             using AppDbContext db = new AppDbContext();
-            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsCompleted == false && x.FilialId == filialId && x.LazerMasterId==LazerMasterId && x.IsDeleted==false).ToListAsync();
+            return await db.LazerAppointments.Include(x => x.Customers).Include(x => x.LazerMaster).Include(x => x.AppUser).Include(x => x.LazerAppointmentReports).ThenInclude(x => x.LazerCategory).Where(x => x.IsCompleted == false && x.FilialId == filialId && x.LazerMasterId==LazerMasterId && x.IsDeleted==false).OrderByDescending(x=>x.ReservationDate).ToListAsync();
         }
 
         public async Task<List<LazerAppointment>> InjectionsForMaster(int filialId ,int lazermasterId)

@@ -21,11 +21,11 @@
 
                             <button id="calculatePriceButtonMaster1" class="btn btn-primary">Hesabla</button>
                             <a asp-action="OutMoneyForOwner" class="btn btn-danger waves-effect ">
-                                <i class="material-icons">payments</i>
+                               Məxaric
 
                             </a>
                             <a asp-action="AddMoneyToKassa" class="btn btn-success waves-effect ">
-                                <i class="material-icons">payments</i>
+                               Mədaxil
 
                             </a>
                         </div>
@@ -69,7 +69,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.LastOutMoneyDate.ToString("dd.MM.yyyy hh:mm")</td>
+                                        <td>@item.LastOutMoneyDate.ToString("dd.MM.yyyy HH:mm")</td>
                                         <td>@item.AppUser.UserName</td>
                                         <td>
                                             @if (item.Status)

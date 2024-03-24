@@ -16,20 +16,23 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
     [Authorize]
     public class CosmetologyController : Controller
     {
-        private readonly ICosmetologyAppointmentService _cosmetologyAppointmentService;
+        private readonly ICosmetologyAppointmentService _appointment;
         private readonly ICosmetologService _cosmetologService;
         private readonly AppDbContext _appDbContext;
+        private readonly ICosmetologCategoryService _category;
         private readonly UserManager<AppUser> _userManager;
         private readonly ICustomerService _customerService;
+        
       
 
-        public CosmetologyController(ICosmetologyAppointmentService cosmetologyAppointmentService, ICustomerService customerService, UserManager<AppUser> userManager, AppDbContext dbContext, ICosmetologService cosmetologService)
+        public CosmetologyController(ICosmetologyAppointmentService cosmetologyAppointmentService,ICosmetologCategoryService category, ICustomerService customerService, UserManager<AppUser> userManager, AppDbContext dbContext, ICosmetologService cosmetologService)
         {
-            _cosmetologyAppointmentService = cosmetologyAppointmentService;
+            _appointment = cosmetologyAppointmentService;
             _cosmetologService = cosmetologService;
             _customerService = customerService;
             _appDbContext = dbContext;
             _userManager = userManager;
+            _category = category;
             
         }
 
@@ -40,14 +43,14 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             CosmetologPageDTO cosmetologPageDTO = new CosmetologPageDTO();
             ViewBag.Cosmetolog = cosmetologs.FullName;
             cosmetologPageDTO.CosmetologId = CosmetologId;
-            cosmetologPageDTO.Customers = _appDbContext.Customers.Include(x => x.Filial).Where(x => x.IsDeactive == false).ToList();
-            cosmetologPageDTO.CosmetologyAppointments = _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.AppUser).Include(x => x.Cosmetolog).Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).Where(x => x.IsCompleted == false && x.IsStart == true && x.FilialId == 3 && x.CosmetologId== CosmetologId).ToList();
-            cosmetologPageDTO.InJectionAppointments = _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.AppUser).Include(x => x.Cosmetolog).Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).Where(x => x.IsStart == false && x.FilialId == 3 && x.CosmetologId==CosmetologId).ToList();
+            cosmetologPageDTO.Customers =await _customerService.GetFemaleList();
+            cosmetologPageDTO.CosmetologyAppointments = _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.AppUser).Include(x => x.Cosmetolog).Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).ThenInclude(x=>x.MainCategory).Where(x => x.IsCompleted == false && x.IsStart == true && x.FilialId == 3 && x.CosmetologId== CosmetologId).ToList();
+            cosmetologPageDTO.InJectionAppointments = _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.AppUser).Include(x => x.Cosmetolog).Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).ThenInclude(x=>x.MainCategory).Where(x => x.IsStart == false && x.FilialId == 3 && x.CosmetologId==CosmetologId).ToList();
             ViewBag.CosmetologName = cosmetologs.FullName;
             return View(cosmetologPageDTO);
         }
         [HttpGet]
-        public IActionResult AddNewAppointment(int CosmetologId, int CustomerId)
+        public async Task<IActionResult> AddNewAppointment(int CosmetologId, int CustomerId)
         {
             Cosmetologs cosmetologs = _cosmetologService.GetById(CosmetologId);
             Customer customer = _customerService.GetById(CustomerId);
@@ -55,7 +58,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             addNewSessionDTO.CosmetologName = cosmetologs.FullName;
             addNewSessionDTO.CustomerName = customer.FullName;
             addNewSessionDTO.CosmetologId = CosmetologId;
-            addNewSessionDTO.CosmetologyCategories = _appDbContext.CosmetologyCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.MainCategoryId != null).ToList();
+            addNewSessionDTO.CosmetologyCategories =await _category.GetAllCategories();
 
             return View(addNewSessionDTO);
         }
@@ -64,7 +67,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
         public async Task<IActionResult> AddNewAppointment(int CosmetologId, int CustomerId, AddNewSessionDTO addNewSessionDTO)
         {
             var validator = new AddAppointmentValidator();
-            addNewSessionDTO.CosmetologyCategories = _appDbContext.CosmetologyCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.MainCategoryId != null).ToList();
+            addNewSessionDTO.CosmetologyCategories =await _category.GetAllCategories();
             var validationResult = validator.Validate(addNewSessionDTO);
             if (!validationResult.IsValid)
             {
@@ -76,7 +79,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             }
 
 
-            var AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            AppUser AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
 
             Cosmetologs cosmetologs = _cosmetologService.GetById(CosmetologId);
             Customer customer = _customerService.GetById(CustomerId);
@@ -101,14 +104,14 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             }
 
             appointment.CosmetologyReports = cosmetologyReports;
-            _cosmetologyAppointmentService.Create(appointment);
+            _appointment.Create(appointment);
 
             return RedirectToAction("CosmetologPage", "Cosmetology", new { CosmetologId = appointment.CosmetologId });
         }
         [HttpGet]
         public async Task<IActionResult> UpdateAppointment(int AppointmentId)
         {
-            CosmetologyAppointment cosmetologyAppointment = await _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.Cosmetolog).Include(x => x.CosmetologyReports).ThenInclude(x => x.CosmetologyCategory).FirstOrDefaultAsync(x => x.Id == AppointmentId);
+            CosmetologyAppointment cosmetologyAppointment = await _appointment.SelectedAppointment(AppointmentId);
             AddNewSessionDTO addNewSessionDTO = new AddNewSessionDTO();
             addNewSessionDTO.CustomerName = cosmetologyAppointment.Customers.FullName;
             addNewSessionDTO.CosmetologName = cosmetologyAppointment.Cosmetolog.FullName;
@@ -116,8 +119,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             addNewSessionDTO.Description = cosmetologyAppointment.CosmetologyDescription;
 
             addNewSessionDTO.CosmetologId = cosmetologyAppointment.CosmetologId;
-            addNewSessionDTO.CosmetologyCategories = _appDbContext.CosmetologyCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory)
-                .Where(x => x.MainCategoryId != null).ToList();
+            addNewSessionDTO.CosmetologyCategories =await _category.GetAllCategories();
 
 
 
@@ -127,7 +129,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAppointment(int AppointmentId, AddNewSessionDTO addNewSessionDTO)
         {
-            addNewSessionDTO.CosmetologyCategories = _appDbContext.CosmetologyCategories.Include(x => x.MainCategory).Include(x => x.ChildCategory).Where(x => x.MainCategoryId != null).ToList();
+            addNewSessionDTO.CosmetologyCategories =await _category.GetAllCategories();
             if (addNewSessionDTO.CategoriesId == null)
             {
                 ModelState.AddModelError("", "Kategoriya seçməyi unutdunuz!");
@@ -150,17 +152,17 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             }
 
             cosmetologyAppointment.CosmetologyReports = cosmetologyReports;
-            _cosmetologyAppointmentService.Update(cosmetologyAppointment);
+            _appointment.Update(cosmetologyAppointment);
 
             return RedirectToAction("CosmetologPage", "Cosmetology", new { CosmetologId = cosmetologyAppointment.CosmetologId });
         }
         [HttpGet]
-        public IActionResult CompleteAppointment(int AppointmentId)
+        public async  Task<IActionResult> CompleteAppointment(int AppointmentId)
         {
 
             CompleteSessionDTO completeSessionDTO = new CompleteSessionDTO();
 
-            CosmetologyAppointment cosmetologyAppointment = _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.Cosmetolog).Include(x => x.Filial).Where(x => x.Id == AppointmentId).FirstOrDefault();
+            CosmetologyAppointment cosmetologyAppointment =await _appointment.SelectedAppointment(AppointmentId);
             Customer customer = _customerService.GetById(cosmetologyAppointment.CustomerId);
             completeSessionDTO.CosmetologId = cosmetologyAppointment.CosmetologId;
             Cosmetologs cosmetologs = _cosmetologService.GetById(cosmetologyAppointment.CosmetologId);
@@ -176,7 +178,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
         public async Task<IActionResult> CompleteAppointment(int AppointmentId, CompleteSessionDTO completeSessionDTO)
         {
 
-            CosmetologyAppointment cosmetologyAppointment = await _appDbContext.CosmetologyAppointments.Include(x => x.Customers).Include(x => x.Cosmetolog).Include(x => x.Filial).Where(x => x.Id == AppointmentId).FirstOrDefaultAsync();
+            CosmetologyAppointment cosmetologyAppointment = await _appointment.SelectedAppointment(AppointmentId);
             var validator = new CompleteCosmetologyValidator();
            
             var validationResult = validator.Validate(completeSessionDTO);
@@ -194,7 +196,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             cosmetologyAppointment.CosmetologyDescription = completeSessionDTO.Description;
             cosmetologyAppointment.OutTime = completeSessionDTO.OutDate;
             cosmetologyAppointment.IsCompleted = true;
-            _cosmetologyAppointmentService.Update(cosmetologyAppointment);
+            _appointment.Update(cosmetologyAppointment);
             return RedirectToAction("CosmetologPage", "Cosmetology", new { CosmetologId = cosmetologyAppointment.CosmetologId });
         }
    

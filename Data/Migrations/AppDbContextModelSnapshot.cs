@@ -160,6 +160,32 @@ namespace Data.Migrations
                     b.HasIndex("MainCategoryId");
 
                     b.ToTable("BodyShapingPacketCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeactive = false,
+                            Packet = "G8 Turbo",
+                            SessionCount = 0,
+                            SessionDuration = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeactive = false,
+                            Packet = "Miostimuliyasiya",
+                            SessionCount = 0,
+                            SessionDuration = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDeactive = false,
+                            Packet = "Termoyorğan",
+                            SessionCount = 0,
+                            SessionDuration = 0
+                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.BodyShapingPacketsReports", b =>
@@ -322,14 +348,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cosmetologs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FullName = "Nuray",
-                            IsDeactive = false
-                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.CosmetologyAppointment", b =>
@@ -407,6 +425,80 @@ namespace Data.Migrations
                     b.HasIndex("MainCategoryId");
 
                     b.ToTable("CosmetologyCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryName = "Plazmaliftinq",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryName = "Mezoterapiya",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryName = "Plazma + Mezo",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryName = "Lipalitik",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryName = "Birovetializasiya",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryName = "Dolğu",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryName = "Botoks",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryName = "Saplarla liftinq",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryName = "Pilinq",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryName = "Hicama ",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryName = "Pirsinq",
+                            IsDeactive = false
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryName = "Üz təmizləməsi",
+                            IsDeactive = false
+                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.CosmetologyReport", b =>
@@ -614,6 +706,9 @@ namespace Data.Migrations
                     b.Property<string>("Decription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EditorName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("EndForSecond")
                         .HasColumnType("bit");
 
@@ -794,44 +889,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LazerMasters");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FullName = "Ellada",
-                            IsDeactive = false
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FullName = "Aidə",
-                            IsDeactive = false
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FullName = "Nuridə",
-                            IsDeactive = false
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FullName = "Gülnar",
-                            IsDeactive = false
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FullName = "Nəzrin",
-                            IsDeactive = false
-                        },
-                        new
-                        {
-                            Id = 6,
-                            FullName = "Əminə",
-                            IsDeactive = false
-                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.LazerMasterFilial", b =>
@@ -938,6 +995,22 @@ namespace Data.Migrations
                     b.HasIndex("MainCategoryId");
 
                     b.ToTable("LipuckaCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeactive = false,
+                            Name = "Lipuçka Qadın",
+                            Price = 0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeactive = false,
+                            Name = "Lipuçka Kişi",
+                            Price = 0m
+                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.LipuckaReports", b =>
@@ -1078,6 +1151,22 @@ namespace Data.Migrations
                     b.HasIndex("MainCategoryId");
 
                     b.ToTable("PirsinqCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryName = "Pirsinq Qadın",
+                            IsDeactive = false,
+                            Price = 0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryName = "Pirsinq Kişi",
+                            IsDeactive = false,
+                            Price = 0m
+                        });
                 });
 
             modelBuilder.Entity("Entity.Concrete.PirsinqReports", b =>
@@ -1228,7 +1317,7 @@ namespace Data.Migrations
                             MainCategoryId = 1,
                             Minute = 5,
                             Name = "MiniPacket",
-                            Price = 4m,
+                            Price = 5m,
                             UsingPeriod = 1
                         },
                         new
@@ -1248,7 +1337,7 @@ namespace Data.Migrations
                             MainCategoryId = 1,
                             Minute = 15,
                             Name = "LargePacket",
-                            Price = 10m,
+                            Price = 12m,
                             UsingPeriod = 1
                         },
                         new
@@ -1258,8 +1347,8 @@ namespace Data.Migrations
                             MainCategoryId = 1,
                             Minute = 20,
                             Name = "ExtraLarge",
-                            Price = 12m,
-                            UsingPeriod = 30
+                            Price = 15m,
+                            UsingPeriod = 1
                         },
                         new
                         {
@@ -1268,7 +1357,7 @@ namespace Data.Migrations
                             MainCategoryId = 2,
                             Minute = 50,
                             Name = "MiniPacket",
-                            Price = 19m,
+                            Price = 20m,
                             UsingPeriod = 30
                         },
                         new
@@ -1278,8 +1367,8 @@ namespace Data.Migrations
                             MainCategoryId = 2,
                             Minute = 100,
                             Name = "MediumPacket",
-                            Price = 29m,
-                            UsingPeriod = 30
+                            Price = 35m,
+                            UsingPeriod = 60
                         },
                         new
                         {
@@ -1288,7 +1377,7 @@ namespace Data.Migrations
                             MainCategoryId = 2,
                             Minute = 150,
                             Name = "LargePacket",
-                            Price = 39m,
+                            Price = 45m,
                             UsingPeriod = 60
                         });
                 });
@@ -1333,6 +1422,9 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AutoDate")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -1756,7 +1848,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Entity.Concrete.Income", b =>
                 {
                     b.HasOne("Entity.Concrete.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("Incomes")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1955,7 +2047,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Entity.Concrete.OutMoney", b =>
                 {
                     b.HasOne("Entity.Concrete.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("OutMoney")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2186,7 +2278,11 @@ namespace Data.Migrations
 
                     b.Navigation("CosmetologyAppointments");
 
+                    b.Navigation("Incomes");
+
                     b.Navigation("LazerAppointments");
+
+                    b.Navigation("OutMoney");
 
                     b.Navigation("SolariumAppointments");
 

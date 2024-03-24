@@ -18,7 +18,9 @@ namespace Business.ValidationRules.AppUserValidation
             RuleFor(x => x.UserName).NotEmpty().WithMessage("İstifadəçi adı boş ola bilməz!");            
 			RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage("Şifrə təkrarı boş ola bilməz!");
             RuleFor(x => x.Password).Equal(x => x.ConfirmPassword).WithMessage("Şifrələr eyni deyil!");
-          
+            RuleFor(x => x.FilialId).NotEmpty().WithMessage("Filial seçməyi unutdunuz!");
+            RuleFor(x => x.Role).NotEmpty().WithMessage("Rol seçməyi unutdunuz!");
+
         }
 
     }

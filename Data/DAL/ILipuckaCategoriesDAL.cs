@@ -9,6 +9,8 @@ namespace Data.DAL
 {
     public interface ILipuckaCategoriesDAL:IGenericDAL<LipuckaCategories>
     {
+        public Task<List<LipuckaCategories>> GetFemaleCategoryList();
 
+        public Task<List<LipuckaCategories>> GetMaleCategoryList();
     }
 }

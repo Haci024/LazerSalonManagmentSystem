@@ -45,6 +45,8 @@ namespace DTO.DTOS.ReportDTO
 
         public List<BodyShapingMaster> BodyShapingMaster { get; set; }
 
+        public List<KassaActionList> KassaActionLists { get; set; }
+
 
     }
 }

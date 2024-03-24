@@ -10,5 +10,7 @@ namespace Data.DAL
     public interface ICosmetologyAppointmentDAL:IGenericDAL<CosmetologyAppointment>
     {
         public  Task<List<CosmetologyAppointment>> CosmetologReservation();
+
+        public  Task<CosmetologyAppointment> SelectedAppointment(int appointmentId);
     }
 }

@@ -439,5 +439,13 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             _appointmentService.Update(lazerAppointment);
             return RedirectToAction("InCompleteSessionList");
         }
+        [HttpGet]
+        public IActionResult DeleteSessionFromIncompleteList(int AppointmentId)
+        {
+            var LazerAppointment = _appointmentService.GetById(AppointmentId);
+            LazerAppointment.IsContiued = false;
+            _appointmentService.Update(LazerAppointment);
+            return RedirectToAction("InCompleteSessionList", "LazerAppointment");
+        }
     }
 }

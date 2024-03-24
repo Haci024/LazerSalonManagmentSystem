@@ -13,5 +13,7 @@ namespace DTO.DTOS.KassaActionsDTO
         public decimal Budget { get; set; }
 
         public string Description { get; set; }
+
+        public DateTime? ProcessDate { get; set; }
     }
 }

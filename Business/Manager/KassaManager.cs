@@ -1,5 +1,6 @@
 ﻿using Business.IServices;
 using Data.Concrete;
+using DTO.DTOS.KassaActionsDTO;
 using DTO.DTOS.ReportDTO;
 using Entity.Concrete;
 using Microsoft.EntityFrameworkCore;
@@ -30,16 +31,16 @@ namespace Business.Manager
             List<KassaActionList> KassaActionList = _appDbContext.KassaActionLists.Include(x => x.Filial).Where(x => x.FilialId == FilialId).ToList();
             List<SolariumAppointment> solariumAppointments = _appDbContext.SolariumAppointments.Include(x => x.Filial).Where(x => x.FilialId == FilialId).ToList();
             List<BodyshapingAppointment> bodyshapingAppointments = _appDbContext.BodyShapingAppointments.Include(x => x.Filial).Where(x => x.FilialId == FilialId).ToList();
-            List<CosmetologyAppointment> cosmetologyAppointments = _appDbContext.CosmetologyAppointments.Include(x => x.Filial).Where(x => x.FilialId == FilialId).ToList();
+            List<CosmetologyAppointment> cosmetologyAppointments = _appDbContext.CosmetologyAppointments.Include(x => x.Filial).Where(x => x.FilialId == FilialId && x.IsCompleted==true).ToList();
             decimal TotalImcome = incomes.Where(x => x.IncomeDate.Date <= DateTime.Now.Date).Sum(x => x.Price);
             decimal TotalCosmetologyEarning = cosmetologyAppointments.Where(x => x.OutTime.Value.Date <= DateTime.Now.Date).Sum(x => x.Price);
             decimal TotalSolariumEarning = solariumAppointments.Where(x => x.BuyingDate.Date <= DateTime.Now.Date).Sum(x => x.Price);
             decimal TotalBodyShapingEarning = bodyshapingAppointments.Where(x => x.BuyingDate.Date <= DateTime.Now.Date).Sum(x => x.Price);
-            decimal TotalLazerEarning = lazerAppointments.Where(x => x.EndTime.Value.Date <= DateTime.Now).Sum(x => x.Price);
+            decimal TotalLazerEarning = lazerAppointments.Where(x => x.EndTime.Value.Date <= DateTime.Now.Date).Sum(x => x.Price);
             decimal TotalPirsinqEarning = pirsinqAppointments.Where(x => x.EndTime.Value.Date <= DateTime.Now.Date).Sum(x => x.Price);
             decimal TotalLipuckaEarning = lipuckaAppointments.Where(x => x.EndTime.Value.Date <= DateTime.Now.Date).Sum(x => x.Price);
-            decimal TotalKassaOutMoney = KassaActionList.Where(x => x.Status == false && x.LastOutMoneyDate.Date <= DateTime.Now.Date).Sum(x => x.OutMoneyQuantity);
-            decimal TotalKassaAddMoney = KassaActionList.Where(x => x.Status == true && x.LastOutMoneyDate.Date <= DateTime.Now.Date).Sum(x => x.OutMoneyQuantity);
+            decimal TotalKassaOutMoney = KassaActionList.Where(x => x.Status == false && x.LastOutMoneyDate.Date <= DateTime.Now.Date.AddDays(99999)).Sum(x => x.OutMoneyQuantity);
+            decimal TotalKassaAddMoney = KassaActionList.Where(x => x.Status == true && x.LastOutMoneyDate.Date <= DateTime.Now.Date.AddDays(99999)).Sum(x => x.OutMoneyQuantity);
             decimal TotalOutMoney = outMoneys.Where(x => x.AddingDate.Date <= DateTime.Now.Date).Sum(x => x.Price);
             decimal Budget = TotalImcome + TotalLazerEarning + TotalCosmetologyEarning + TotalKassaAddMoney + TotalSolariumEarning + TotalLipuckaEarning + TotalBodyShapingEarning + TotalPirsinqEarning - TotalKassaOutMoney - TotalOutMoney;
             return Budget;
@@ -61,13 +62,13 @@ namespace Business.Manager
             decimal DailyCosmetologyEarning = cosmetologyAppointments.Where(x => x.OutTime.Value.Date == DateTime.Today.Date).Sum(x => x.Price);
             decimal DailySolariumEarning = solariumAppointments.Where(x => x.BuyingDate.Date == DateTime.Today.Date).Sum(x => x.Price);
             decimal DailyBodyShapingEarning = bodyshapingAppointments.Where(x => x.BuyingDate.Date == DateTime.Today.Date).Sum(x => x.Price);
-            decimal DailyLipuckaEarning = lipuckaAppointments.Where(x => x.EndTime.Value.Date == DateTime.Today).Sum(x => x.Price);
+            decimal DailyLipuckaEarning = lipuckaAppointments.Where(x => x.EndTime.Value.Date == DateTime.Today.Date).Sum(x => x.Price);
             decimal DailyPirsinqEarning = pirsinqAppointments.Where(x => x.EndTime.Value.Date == DateTime.Today.Date).Sum(x => x.Price);
             decimal DailyIncome = incomes.Where(x => x.IncomeDate.Date == DateTime.Today.Date).Sum(x => x.Price);
             decimal DailyOutMoney = outMoneys.Where(x => x.AddingDate.Date == DateTime.Today.Date).Sum(x => x.Price);
-            decimal DailyOutMoneyFromKassa = KassaActionList.Where(x => x.LastOutMoneyDate.Date == DateTime.Today && x.Status == false).Sum(x => x.OutMoneyQuantity);
-            decimal DailyAddMoneyFromKassa = KassaActionList.Where(x => x.LastOutMoneyDate.Date == DateTime.Today && x.Status == true).Sum(x => x.OutMoneyQuantity);
-            int SumDailyImpulsCount = lazerAppointments.Where(x => x.EndTime.Value.Date == DateTime.Today).Sum(x => x.ImplusCount);
+            decimal DailyOutMoneyFromKassa = KassaActionList.Where(x => x.LastOutMoneyDate.Date == DateTime.Today.Date && x.Status == false).Sum(x => x.OutMoneyQuantity);
+            decimal DailyAddMoneyFromKassa = KassaActionList.Where(x => x.LastOutMoneyDate.Date == DateTime.Today.Date && x.Status == true).Sum(x => x.OutMoneyQuantity);
+            int SumDailyImpulsCount = lazerAppointments.Where(x => x.EndTime.Value.Date == DateTime.Today.Date).Sum(x => x.ImplusCount);
 
             decimal DailyTotalBenefit = DailyLazerEarning + DailySolariumEarning + DailyCosmetologyEarning + DailyIncome + DailyBodyShapingEarning + DailyLipuckaEarning + DailyPirsinqEarning - DailyOutMoney;
             dailyReportDTO.DailyLazerEarning = DailyLazerEarning;
@@ -86,5 +87,7 @@ namespace Business.Manager
 
             return dailyReportDTO;
         }
+
+      
     }
 }

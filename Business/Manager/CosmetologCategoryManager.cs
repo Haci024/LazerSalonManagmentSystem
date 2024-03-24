@@ -26,6 +26,11 @@ namespace Business.Manager
             _dal.Delete(t);
         }
 
+        public async Task<List<CosmetologyCategory>> GetAllCategories()
+        {
+            return await _dal.GetAllCosmetologCategory();
+        }
+
         public CosmetologyCategory GetById(int id)
         {
             return _dal.GetById(id);    

@@ -168,7 +168,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
             }
 
             KassaActionList kassaActionList = new KassaActionList();
-            kassaActionList.LastOutMoneyDate = _timeHelper.ConvertToAzerbaijanTime(DateTime.Now);
+            kassaActionList.LastOutMoneyDate =(DateTime)kassaActionsListDTO.ProcessDate;
             kassaActionList.AppUserId = appUser.Id;
             kassaActionList.OutMoneyQuantity = kassaActionsListDTO.OutMoney;
             kassaActionList.Description = kassaActionsListDTO.Description;
@@ -207,7 +207,7 @@ namespace LazerBeautyFullProject.Areas.ArzumEstetic.Controllers
                 return View(kassaActionsDTO);
             }
             KassaActionList kassaActionList = new KassaActionList();
-            kassaActionList.LastOutMoneyDate = _timeHelper.ConvertToAzerbaijanTime(DateTime.Now);
+            kassaActionList.LastOutMoneyDate = (DateTime)kassaActionsDTO.ProcessDate;
             kassaActionList.AppUserId = appUser.Id;
             kassaActionList.FilialId = 3;
             kassaActionList.Description = kassaActionsDTO.Description;

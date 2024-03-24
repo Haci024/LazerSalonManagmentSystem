@@ -9,5 +9,6 @@ namespace Data.DAL
 {
     public interface ICosmetologCategoryDAL:IGenericDAL<CosmetologyCategory>
     {
+        public Task<List<CosmetologyCategory>> GetAllCosmetologCategory();
     }
 }

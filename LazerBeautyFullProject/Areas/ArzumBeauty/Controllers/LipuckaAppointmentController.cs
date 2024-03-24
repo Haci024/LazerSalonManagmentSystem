@@ -21,34 +21,36 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         private readonly ILazerMasterService _master;
         private readonly ILipuckaAppointmentService _appointment;
         private readonly ICustomerService _customer;
+        private readonly ILipuckaCategoriesService _category;
      
         private readonly UserManager<AppUser> _userManager;
-        public LipuckaAppointmentController(AppDbContext appDbContext,UserManager<AppUser> user,ICustomerService customerService,ILazerMasterService lazerMasterService,ILipuckaAppointmentService appointment)
+        public LipuckaAppointmentController(AppDbContext appDbContext,UserManager<AppUser> user,ILipuckaCategoriesService categoryService,ICustomerService customerService,ILazerMasterService lazerMasterService,ILipuckaAppointmentService appointment)
         {
 
             _db = appDbContext;
             _master = lazerMasterService;
             _appointment = appointment;
             _customer= customerService;
+            _category = categoryService;
             _userManager = user;
            
 
         }
         [HttpGet]
-        public IActionResult LipuckaMasterPage(int LipuckaMasterId)
+        public async Task<IActionResult> LipuckaMasterPage(int LipuckaMasterId)
         {
             LazerMaster lazerMaster = _master.GetById(LipuckaMasterId);
             LipuckaMasterPageDTO masterPageDTO = new LipuckaMasterPageDTO();
             masterPageDTO.LipuckaMasterId = LipuckaMasterId;
             ViewBag.LipuckaMaster = lazerMaster.FullName;
-            masterPageDTO.Customers = _db.Customers.Include(x => x.Filial).Where(x=>x.IsDeactive==false).ToList();
-            masterPageDTO.ReservationList=_db.LipuckaAppointments.Include(x=>x.LipuckaReports).ThenInclude(x=>x.LipuckaCategories).Include(x=>x.LazerMaster).Include(x=>x.AppUser).Where(x=>x.IsCompleted==false && x.FilialId==2).ToList();
-            masterPageDTO.InjectionList=_db.LipuckaAppointments.Include(x => x.LipuckaReports).ThenInclude(x => x.LipuckaCategories).Include(x => x.LazerMaster).Include(x => x.AppUser).Where(x => x.IsDeleted == true && x.FilialId == 2).ToList();
+            masterPageDTO.Customers =await  _customer.GetActiveCustomerList();
+            masterPageDTO.ReservationList=await _db.LipuckaAppointments.Include(x=>x.LipuckaReports).ThenInclude(x=>x.LipuckaCategories).Include(x=>x.LazerMaster).Include(x=>x.AppUser).Where(x=>x.IsCompleted==false && x.FilialId==2).ToListAsync();
+            masterPageDTO.InjectionList=await _db.LipuckaAppointments.Include(x => x.LipuckaReports).ThenInclude(x => x.LipuckaCategories).Include(x => x.LazerMaster).Include(x => x.AppUser).Where(x => x.IsDeleted == true && x.FilialId == 2).ToListAsync();
 
             return View(masterPageDTO);
         }
         [HttpGet]
-        public IActionResult AddLipuckaAppointment(int CustomerId,int LipuckaMasterId,bool Female)
+        public async Task<IActionResult> AddLipuckaAppointment(int CustomerId,int LipuckaMasterId)
         {
             ViewBag.LipuckaMasterId=LipuckaMasterId;
             AddNewAppointmentDTO addNewAppointmentDTO = new AddNewAppointmentDTO();
@@ -57,13 +59,13 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             LazerMaster master=_master.GetById(LipuckaMasterId);       
             addNewAppointmentDTO.LipuckaMaster = master.FullName;
             addNewAppointmentDTO.Customer = customer.FullName;
-            if (Female==true)
+            if (customer.Female)
             {
-                addNewAppointmentDTO.LipuckaCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Include(x => x.ChildCategories).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId==4).ToList();
+                addNewAppointmentDTO.LipuckaCategories =await _category.GetFemaleCategoryList();
             }
             else
             {
-                addNewAppointmentDTO.LipuckaCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Include(x => x.ChildCategories).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 3).ToList();
+                addNewAppointmentDTO.LipuckaCategories =await _category.GetMaleCategoryList();
             }
          
             
@@ -71,18 +73,19 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddLipuckaAppointment(int CustomerId, int LipuckaMasterId,bool Female, AddNewAppointmentDTO addNewAppointmentDTO)
+        public async Task<IActionResult> AddLipuckaAppointment(int CustomerId, int LipuckaMasterId, AddNewAppointmentDTO addNewAppointmentDTO)
         {
 
             ViewBag.LipuckaMaster = _db.LazerMasters.Where(x => x.Id == LipuckaMasterId).Select(x => x.FullName);
-           ViewBag.LipuckaMasterId= LipuckaMasterId;
-            if (Female == true)
+            Customer customer = _customer.GetById(CustomerId);
+            ViewBag.LipuckaMasterId= LipuckaMasterId;
+            if (customer.Female)
             {
-                addNewAppointmentDTO.LipuckaCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Include(x => x.ChildCategories).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 4).ToList();
+                addNewAppointmentDTO.LipuckaCategories = await _category.GetFemaleCategoryList();
             }
             else
             {
-                addNewAppointmentDTO.LipuckaCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Include(x => x.ChildCategories).Where(x => x.IsDeactive == false && x.MainCategoryId != null && x.MainCategoryId == 3).ToList();
+                addNewAppointmentDTO.LipuckaCategories = await _category.GetMaleCategoryList();
             }
             AddLipuckaAppointmentValidator validationRules = new AddLipuckaAppointmentValidator();
            
@@ -97,7 +100,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             }
             AppUser appUser =await _userManager.FindByNameAsync(User.Identity.Name);
             LazerMaster master = _master.GetById(LipuckaMasterId);
-            Customer customer = _customer.GetById(CustomerId);
+           
 
             addNewAppointmentDTO.LipuckaMaster = master.FullName;
             addNewAppointmentDTO.Customer = customer.FullName;
@@ -137,9 +140,6 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             completeSession.Customer = customer.FullName;
             completeSession.Master = master.FullName;
             completeSession.Price=appointment.Price;
-            
-            
-
             return View(completeSession);
         }
   

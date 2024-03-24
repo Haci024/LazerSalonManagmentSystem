@@ -31,9 +31,19 @@ namespace Business.Manager
            return _dal.GetById(id);
         }
 
+        public  Task<List<PirsinqCategory>> GetFemaleCategoryList()
+        {
+            return  _dal.GetFemaleCategories();
+        }
+
         public List<PirsinqCategory> GetList()
         {
             return _dal.GetList();
+        }
+
+        public Task<List<PirsinqCategory>> GetMaleCategoryList()
+        {
+            return _dal.GetMaleCategories();
         }
 
         public void Update(PirsinqCategory t)

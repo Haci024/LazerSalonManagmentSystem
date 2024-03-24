@@ -29,10 +29,19 @@
 
                             </div>
                         </div>
+                        <div class="demo-radio-button">
+                            <label class="form-label">Tarix daxiletmə tipi</label>
+                            <div class="form-line">
+                                <input name="AutoDate" asp-for="AutoDate" type="radio" value="True" id="radio_30" class="with-gap radio-col-red">
+                                <label for="radio_30">Qeyd olunma zamanı</label>
+                                <input name="AutoDate" asp-for="AutoDate" type="radio" value="False" id="radio_31" class="with-gap radio-col-blue">
+                                <label for="radio_31">Əl ilə daxil etmə</label>
+                            </div>
+                        </div>
                         <div class="font-bold col-pink" asp-validation-summary="ModelOnly"></div>
                         <div class="text-center">
                             <button class="btn btn-primary waves-effect" type="submit" id="submitButton">Əlavə et</button>
-                            <a asp-action="OutMoneyList" class="btn btn-success">Geri</a>
+                            <a asp-action="SpendCategoryList" class="btn btn-success">Geri</a>
                         </div>
                     </form>
                 </div>

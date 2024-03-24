@@ -20,17 +20,23 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
         private readonly ILazerMasterService _masterService;
         private readonly ICosmetologService _cosmetologService;
         private readonly IBodyShapingMasterService _bodyShapingMasterService;
+        private readonly ISolariumAppointmentService _solariumAppointmentService;
+        private readonly IBodyShapingAppointmentService _bodyShapingAppointmentService; 
+        private readonly ICosmetologyAppointmentService _cosmetologyAppointmentService;
         private readonly AppDbContext _appDbContext;
         private readonly ICustomerService _customerService;
         private readonly ILazerAppointmentService _lazerAppointmentService;
-        public PersonalController(ICosmetologService cosmetologService,ICustomerService customerService,ILazerAppointmentService lazerAppointmentService,AppDbContext appDbContext,ILazerMasterService lazerMasterService,IBodyShapingMasterService bodyShapingMasterService)
+        public PersonalController(ICosmetologService cosmetologService,ICosmetologyAppointmentService cosmetologyAppointmentService,ISolariumAppointmentService solariumService,IBodyShapingAppointmentService bodyShapingAppointmentService,ICustomerService customerService,ILazerAppointmentService lazerAppointmentService,AppDbContext appDbContext,ILazerMasterService lazerMasterService,IBodyShapingMasterService bodyShapingMasterService)
         {
             _masterService = lazerMasterService;
             _cosmetologService = cosmetologService;
             _bodyShapingMasterService = bodyShapingMasterService;
             _appDbContext = appDbContext;
             _lazerAppointmentService = lazerAppointmentService;
+            _solariumAppointmentService = solariumService;
             _customerService = customerService;
+            _bodyShapingAppointmentService = bodyShapingAppointmentService;
+            _cosmetologyAppointmentService= cosmetologyAppointmentService;
         }
         #region Lazeroloqlar
         [HttpGet]
@@ -319,12 +325,7 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
             _customerService.Update(customer);           
             return RedirectToAction("AllCustomers","Personal");
         }
-        public IActionResult SolariumSessions()
-        {
-            List<SolariumAppointment> solariumAppointments = _appDbContext.SolariumAppointments.Include(x=>x.Customer).Include(x => x.SolariumCategories).Include(x => x.SolariumUsingList).Include(x => x.AppUser).Include(x => x.Filial).ToList();
-           
-            return View(solariumAppointments);
-        }
+
 
     }
 }

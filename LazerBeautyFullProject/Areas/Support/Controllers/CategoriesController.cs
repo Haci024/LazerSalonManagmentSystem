@@ -3,6 +3,8 @@ using Data.Concrete;
 using DTO.DTOS.BodyShapingDTO;
 using DTO.DTOS.CosmetologyDTO;
 using DTO.DTOS.LazerAppointmentDTO;
+using DTO.DTOS.LipuckaDTO;
+using DTO.DTOS.PirsinqDTO;
 using DTO.DTOS.SolariumDTO;
 using Entity.Concrete;
 using FluentValidation;
@@ -11,11 +13,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.Extensibility;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 using Validation.ValidationRules.BodyShapingValidator;
 using Validation.ValidationRules.CosmetologyValidator;
 using Validation.ValidationRules.LazerValidator;
+using Validation.ValidationRules.LipuckaValidator;
 using Validation.ValidationRules.PersonalValidation;
+using Validation.ValidationRules.PirsinqValidator;
 using Validation.ValidationRules.SolariumValidator;
 
 namespace LazerBeautyFullProject.Areas.Support.Controllers
@@ -26,18 +31,22 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
     public class CategoriesController : Controller
     {
         private readonly ISolariumCategoryService _SolariumService;
+        private readonly ILipuckaCategoriesService _lipuckaCategoriesService;
         private readonly AppDbContext _db;
+        private readonly IPirsinqCategoriesService _pirsinqCategoriesService;
         private readonly IBodyShapingPacketCategoriesService _bodyShapingCategoryService;
         private readonly ILazerCategoryService _lazerCategoryService;
        
         private readonly ICosmetologCategoryService _cosmetologCategoryService;
-        public CategoriesController(ISolariumCategoryService solariumCategories,ILazerCategoryService lazerCategoryService ,ICosmetologCategoryService cosmetologCategoryService, AppDbContext db, IBodyShapingPacketCategoriesService bodyShapingCategoryService)
+        public CategoriesController(ISolariumCategoryService solariumCategories,IPirsinqCategoriesService pirsinqCategoriesService,ILipuckaCategoriesService lipuckaCategories,ILazerCategoryService lazerCategoryService ,ICosmetologCategoryService cosmetologCategoryService, AppDbContext db, IBodyShapingPacketCategoriesService bodyShapingCategoryService)
         {
             _SolariumService = solariumCategories;
             _db = db;
             _bodyShapingCategoryService = bodyShapingCategoryService;
             _cosmetologCategoryService = cosmetologCategoryService;
             _lazerCategoryService = lazerCategoryService;
+            _lipuckaCategoriesService = lipuckaCategories;
+            _pirsinqCategoriesService= pirsinqCategoriesService;
 
         }
         #region Solarium Paketləri
@@ -601,6 +610,182 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
 
 
         }
+        #endregion
+        #region Lipuçka Kategoriyaları
+        [HttpGet]
+        public IActionResult LipuckaCategoryList()
+        {
+            List<LipuckaCategories> lipuckaKategories=_db.LipuckaCategories.Include(x=>x.MainCategory).Where(x=>x.MainCategoryId!=null).ToList();
+            return View(lipuckaKategories);
+        }
+        [HttpGet]
+        public IActionResult AddLipuckaCategory()
+        {
+            AddLipuckaCategoryDTO LipuckaCategoryDTO = new AddLipuckaCategoryDTO();
+            LipuckaCategoryDTO.MainCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+            
+            return View(LipuckaCategoryDTO);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddLipuckaCategory(AddLipuckaCategoryDTO LipuckaCategoryDTO)
+        {
+
+            LipuckaCategoryDTO.MainCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Where(x=>x.MainCategoryId==null).ToList();
+            var validator = new LipuckaCategoryValidator();
+            var validationResult = validator.Validate(LipuckaCategoryDTO);
+            if (!validationResult.IsValid)
+            {
+                foreach (var item in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", item.ErrorMessage);
+                }
+                return View(LipuckaCategoryDTO);
+            }
+            LipuckaCategories lipuckaCategories=new LipuckaCategories();
+            lipuckaCategories.MainCategoryId=LipuckaCategoryDTO.MainCategoryId;
+            lipuckaCategories.Price = 0;
+            lipuckaCategories.IsDeactive = false;
+            lipuckaCategories.Name = LipuckaCategoryDTO.CategoryName;
+            _lipuckaCategoriesService.Create(lipuckaCategories);
+            return RedirectToAction("LipuckaCategoryList", "Categories");
+        }
+        [HttpGet]
+        public IActionResult UpdateLipuckaCategory(int CategoryId)
+        {
+            AddLipuckaCategoryDTO LipuckaCategoryDTO = new AddLipuckaCategoryDTO();
+            LipuckaCategories category = _lipuckaCategoriesService.GetById(CategoryId);
+            LipuckaCategoryDTO.MainCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+            LipuckaCategoryDTO.CategoryName= category.Name;
+            LipuckaCategoryDTO.MainCategoryId = (int)category.MainCategoryId;
+            return View(LipuckaCategoryDTO);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateLipuckaCategory(int CategoryId, AddLipuckaCategoryDTO LipuckaCategoryDTO)
+        {
+
+            LipuckaCategoryDTO.MainCategories = _db.LipuckaCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+            var validator = new LipuckaCategoryValidator();
+            var validationResult = validator.Validate(LipuckaCategoryDTO);
+            if (!validationResult.IsValid)
+            {
+                foreach (var item in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", item.ErrorMessage);
+                }
+                return View(LipuckaCategoryDTO);
+            }
+            LipuckaCategories category=_lipuckaCategoriesService.GetById(CategoryId);
+            category.Name = LipuckaCategoryDTO.CategoryName;
+            category.MainCategoryId = LipuckaCategoryDTO.MainCategoryId;
+            _lipuckaCategoriesService.Update(category);
+            return RedirectToAction("LipuckaCategoryList", "Categories");
+        }
+        [HttpGet]
+        public IActionResult LipuckaCategoryOFF(int CategoryId)
+        {
+            LipuckaCategories category = _lipuckaCategoriesService.GetById(CategoryId);
+            if (category.IsDeactive == true)
+            {
+                category.IsDeactive = false;
+                _lipuckaCategoriesService.Update(category);
+                return RedirectToAction("LipuckaCategoryList", "Categories");
+            }
+            else
+            {
+                category.IsDeactive = true;
+                _lipuckaCategoriesService.Update(category);
+                return RedirectToAction("LipuckaCategoryList", "Categories");
+            }
+
+        }
+        #endregion
+        #region Pirsinq Kateqoriyaları
+        [HttpGet]
+        public IActionResult PirsinqCategoryList()
+        {
+            List<PirsinqCategory> pirsinqCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Where(x=>x.MainCategoryId!=null).ToList();
+            return View(pirsinqCategories);
+        }
+        [HttpGet]
+        public IActionResult AddPirsinqCategory()
+        {
+            AddPirsinqCategoryDTO dto = new AddPirsinqCategoryDTO();
+            dto.MainCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+
+            return View(dto);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPirsinqCategory(AddPirsinqCategoryDTO dto)
+        {
+            dto.MainCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+            var validator = new PirsinqCategoryValidator();
+            var validationResult = validator.Validate(dto);
+            if (!validationResult.IsValid)
+            {
+                foreach (var item in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", item.ErrorMessage);
+                }
+                return View(dto);
+            }
+            PirsinqCategory entity = new PirsinqCategory();
+            entity.CategoryName = dto.CategoryName;
+            entity.MainCategoryId=dto.MainCategoryId;
+            entity.Price = 0;
+            _pirsinqCategoriesService.Create(entity);
+            return RedirectToAction("PirsinqCategoryList", "Categories");
+        }
+        [HttpGet]
+        public IActionResult UpdatePirsinqCategory(int CategoryId)
+        {
+            AddPirsinqCategoryDTO dto = new AddPirsinqCategoryDTO();
+            PirsinqCategory category = _pirsinqCategoriesService.GetById(CategoryId);
+            dto.MainCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+            dto.CategoryName = category.CategoryName;
+            dto.Price=category.Price;
+
+            dto.MainCategoryId = (int)category.MainCategoryId;
+         
+            return View(dto);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePirsinqCategory(int CategoryId, AddPirsinqCategoryDTO dto)
+        {
+
+            dto.MainCategories = _db.PirsinqCategories.Include(x => x.MainCategory).Where(x => x.MainCategoryId == null).ToList();
+          
+            PirsinqCategory category = _pirsinqCategoriesService.GetById(CategoryId);
+      
+            category.CategoryName = dto.CategoryName;
+            category.Price = dto.Price;
+            category.MainCategoryId = dto.MainCategoryId;
+            _pirsinqCategoriesService.Update(category);
+            return RedirectToAction("PirsinqCategoryList", "Categories");
+        }
+        [HttpGet]
+        public IActionResult PirsinqCategoryOFF(int CategoryId)
+        {
+            PirsinqCategory category = _pirsinqCategoriesService.GetById(CategoryId);
+            if (category.IsDeactive==true)
+            {
+                category.IsDeactive = false;
+                _pirsinqCategoriesService.Update(category);
+                return RedirectToAction("PirsinqCategoryList", "Categories");
+            }
+            else
+            {
+                category.IsDeactive=true;
+                _pirsinqCategoriesService.Update(category);
+                return RedirectToAction("PirsinqCategoryList", "Categories");
+            }
+           
+        }
+ 
+
         #endregion
     }
 

@@ -1,0 +1,152 @@
+﻿@model IEnumerable<Entity.Concrete.BodyshapingAppointment>
+
+
+<div class="container-fluid">
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <h2>
+                            Bədən Şəkilləndirmə hesabatı
+
+                        </h2>
+
+                      
+                    </div>
+                    <ul class="header-dropdown m-r--5">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover data-table js-basic-example">
+                            <thead>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Paket</th>
+                                    <th>Seans sayı</th>
+                                    <th id="price">Ödəniş</th>
+                                    <th id="returnPrice">Qaytarılan pul</th>
+                                    <th>Bitməsinə qalan müddət</th>
+
+                                    <th>Status</th>
+                                    <th>Qeyd</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Tarix</th>
+                                    <th>Ad və Soyad</th>
+                                    <th>Telefon nömrəsi</th>
+                                    <th>Paket</th>
+                                    <th>Seans sayı</th>
+                                    <th>Ödəniş</th>
+                                    <th>Qaytarılan pul</th>
+                                    <th>Bitməsinə qalan müddət</th>
+                                    <th>Status</th>
+                                    <th>Qeyd</th>
+                                    <th class="text-center">
+                                        <div style="margin-right:20px">
+                                            Əməliyyatlar
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.BuyingDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@item.Customer.FullName</td>
+                                        <td>@item.Customer.PhoneNumber.ToString("0000000000")</td>
+
+                                        <td>
+                                            @foreach (var packetName in item.BodyShapingPacketReports)
+                                            {
+
+
+                                                <div style="padding:2px">
+                                                    @packetName.BodyShapingPackets.Packet
+                                                </div>
+
+
+                                            }
+                                        </td>
+                                        <td>
+                                            @foreach (var packetName in item.BodyShapingPacketReports)
+                                            {
+                                                <div style="padding:2px">
+                                                    @packetName.BodyShapingPackets.SessionCount Seans
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>@item.Price.ToString("#.##") AZN</td>
+                                        <td>@item.ReturnMoney.ToString("0.##") AZN</td>
+                                        <td>
+                                            @{
+                                                TimeSpan kalanSure = item.RemaingDate - DateTime.Now;
+                                                string kalanSureMetni = string.Format("{0} gün {1} saat {2} dəqiqə", (int)kalanSure.TotalDays, kalanSure.Hours, kalanSure.Minutes);
+                                            }
+                                            @if (kalanSure.TotalMinutes >= 0)
+                                            {
+                                                <span class="geriSayim">@kalanSureMetni</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="geriSayimBitmis" style="color:red">Vaxt bitib!</span>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @if (item.IsDeactive == false && item.IsCompleted == false)
+                                            {
+                                                <span style="color:blue"><b>Davam edir!</b></span>
+                                            }
+                                            else if (item.IsDeactive == true && item.IsCompleted == true)
+                                            {
+                                                <span style="color:red"><b>İmtina edilib!</b></span>
+                                            }
+                                            else if (item.IsDeactive == false && item.IsCompleted == true)
+                                            {
+                                                <span style="color:green"><b>Paket tamamlanıb!</b></span>
+                                            }
+                                        </td>
+                                        <td>@item.Description</td>
+                                        <td style="display:flex;justify-content:center">
+
+                                                <div style="margin-right:10px">
+                                                    <a asp-action="DeleteBodyShapingAppointment" asp-route-PacketId="@item.Id" class="btn bg-red red waves-effect">
+                                                        <i class="material-icons">delete</i>
+                                                    </a>
+                                                </div>
+                                            
+                                        </td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

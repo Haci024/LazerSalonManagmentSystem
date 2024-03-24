@@ -9,6 +9,6 @@ namespace Business.IServices
 {
     public interface ICosmetologService:IGenericService<Cosmetologs>
     {
-        
+       
     }
 }

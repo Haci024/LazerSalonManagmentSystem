@@ -18,7 +18,7 @@
                         <div style="padding-right:30px">
                          
                             <a asp-action="AddSpendCategory" class="btn bg-deep-purple waves-effect">
-                                <i class="material-icons">add</i>
+                               Yeni kategoriya
                             </a>
                         </div>
                     </div>
@@ -37,6 +37,7 @@
                                 <tr>
                                     <th class="text-center">Kategoriya</th>
                                     <th>Status</th>
+                                    <th>Tarix tipi</th>
                                     <th class="text-center">
                                         <div class="text-center">
                                             Əməliyyatlar
@@ -49,6 +50,7 @@
    
                                     <th class="text-center">Kategoriya</th>
                                     <th>Status</th>
+                                    <th>Tarix tipi</th>
                                     <th class="text-center">
                                         <div class="text-center">
                                             Əməliyyatlar
@@ -71,12 +73,22 @@
                                                 <b style="color:green">Aktiv</b>
                                             }
                                         </td>
+                                        <td>
+                                            @if (item.AutoDate == true)
+                                            {
+                                                <b style="color:blue">Qeyd edilmə tarixi</b>
+                                            }
+                                            else
+                                            {
+                                                <b style="color:greenyellow">Əl ilə daxiletmə</b>
+                                            }
+                                        </td>
                                         <td style="display:flex;justify-content:center">
                                             @if (item.Status == true)
                                             {
                                                 <div style="margin-right:10px" class="text-center">
                                                     <a asp-action="SpendCategoryOFF" asp-route-Id="@item.Id" class="btn bg-green waves-effect">
-                                                        <i class="material-icons">build</i>
+                                                              Aktivləşdir
                                                     </a>
                                                 </div>
                                             }
@@ -84,13 +96,13 @@
                                             {
                                                 <div style="margin-right:10px" class="text-center">
                                                     <a asp-action="SpendCategoryOFF" asp-route-Id="@item.Id" class="btn bg-red waves-effect">
-                                                        <i class="material-icons">delete</i>
+                                                        Deaktiv et
                                                     </a>
                                                 </div>
                                             }
                                             <div style="margin-right:10px" class="text-center">
                                                 <a asp-action="UpdateSpendCategory" asp-route-Id="@item.Id" class="btn bg-blue waves-effect">
-                                                    <i class="material-icons">edit</i>
+                                                   Düzəliş et
                                                 </a>
                                             </div>
                                         </td>

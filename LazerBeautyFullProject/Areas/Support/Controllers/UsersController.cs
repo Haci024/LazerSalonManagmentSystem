@@ -17,7 +17,7 @@ using Validation.ValidationRules.AppUserValidation;
 namespace LazerBeautyFullProject.Areas.Support.Controllers
 {
     [Area("Support")]
-    //[Authorize(Roles ="SuperSupporter,Supporter")]
+    [Authorize(Roles ="SuperSupporter,Supporter")]
     public class UsersController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -35,8 +35,17 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
         public IActionResult AllUsers()
         {
             AllUserListDTO allUserListDTO = new AllUserListDTO();
-            allUserListDTO.Users = _userManager.Users.Include(x=>x.Filial).ToList();
-            allUserListDTO.Roles = _role.Roles.Where(x=>x.Name!="SuperSupporter").ToList();
+            allUserListDTO.Users = _userManager.Users.Include(x=>x.Filial).Where(x=>x.UserName!="Odissey").ToList();
+            if (User.IsInRole("SuperSupporter"))
+            {
+                allUserListDTO.Users = _userManager.Users.Include(x => x.Filial).ToList();
+            }
+            else
+            {
+                allUserListDTO.Users = _userManager.Users.Include(x => x.Filial).Where(x => x.UserName != "Odissey").ToList();
+            }
+           
+            
          
 
 
@@ -47,7 +56,7 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
         { 
             NewUserDTO newUserDTO = new NewUserDTO();
 
-            newUserDTO.IdentityRoles = _role.Roles.ToList();
+            newUserDTO.IdentityRoles = _role.Roles.Where(x => x.Name != "SuperSupporter").ToList();
             newUserDTO.Filials=_db.Filials.ToList();
             return View(newUserDTO);
         }
@@ -55,7 +64,7 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
         public async Task<IActionResult>  AddNewUser(NewUserDTO newUserDTO)
         {
             newUserDTO.Filials = _db.Filials.ToList();
-            newUserDTO.IdentityRoles = _role.Roles.ToList();
+            newUserDTO.IdentityRoles = _role.Roles.Where(x=>x.Name!="SuperSupporter").ToList();
 
             if (newUserDTO.Role==null)
             {
@@ -63,7 +72,13 @@ namespace LazerBeautyFullProject.Areas.Support.Controllers
                
                 return View(newUserDTO);
             }
-     
+            bool IsExist = _db.Users.Any(x => x.UserName == newUserDTO.UserName);
+            if (IsExist)
+            {
+                ModelState.AddModelError("", "Bu  istifadəçi adı artıq sistemdə mövcuddur!");
+
+                return View(newUserDTO);
+            }
 
             if (newUserDTO.Password.IsNullOrEmpty() && newUserDTO.ConfirmPassword.IsNullOrEmpty())
             {

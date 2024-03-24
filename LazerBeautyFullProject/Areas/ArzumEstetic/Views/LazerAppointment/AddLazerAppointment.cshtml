@@ -32,12 +32,12 @@
                        
                         <div class="form-group form-float">
                             <div>
-                                <select class="form-control show-tick" asp-for="lazerCategoriesId" id="childCategoryId" multiple>
+                                <select class="form-control show-tick" asp-for="lazerCategoriesId" id="childCategoryId" multiple data-live-search="true">
 
                                     @foreach (var item in Model.ChildCategory)
                                     {
 
-                                        <option value="@item.Id" data-price="@item.Price">@item.Name</option>
+                                        <option style="margin-left:30px" value="@item.Id" data-price="@item.Price">@item.Name</option>
 
                                     }
                                 </select>

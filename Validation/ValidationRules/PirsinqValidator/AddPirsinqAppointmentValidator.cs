@@ -14,7 +14,7 @@ namespace Validation.ValidationRules.PirsinqValidator
         {
             RuleFor(x => x.PirsinqCategoryIds).NotEmpty().WithMessage("Kategoriya seçimi etmədiniz!");
             RuleFor(x => x.StartDate).NotEmpty().WithMessage("Giriş saatını daxil edin!");
-            RuleFor(x => x.Description).NotEmpty().WithMessage("Açıqlama qeyd edin...");
+           
             RuleFor(x => x.Price).NotEmpty().WithMessage("Qiymət 0 ola bilməz!");
 
         }

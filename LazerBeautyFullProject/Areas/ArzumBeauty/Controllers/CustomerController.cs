@@ -131,7 +131,7 @@ namespace LazerBeautyFullProject.Areas.ArzumBeauty.Controllers
             Customer customer = await _customerService.SelectedCustomer(CustomerId);
             customer.FullName = customerUpdateDTO.FullName;
             customer.BirthDate = customerUpdateDTO.BirthDate;
-       
+            customer.Female=customerUpdateDTO.Female;
             customer.PhoneNumber = customerUpdateDTO.PhoneNumber;
         
             _customerService.Update(customer);
